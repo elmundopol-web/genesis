@@ -31,11 +31,15 @@ ignorar herramientas o no resolver una tarea.
   original de GENESIS.
 - Expone al modelo herramientas para listar, leer, buscar, sustituir fragmentos,
   crear archivos y ejecutar pruebas. **No ofrece una terminal arbitraria**.
-- Algunos modelos escriben las llamadas a herramientas como objetos JSON en
-  texto, sin usar el formato nativo de Ollama. AutoDev puede interpretar solo
-  **JSON puro** con nombres de herramientas permitidos; rechaza texto adicional,
-  herramientas desconocidas y operaciones fuera de los archivos autorizados.
-- Ejecuta las pruebas Python (y JavaScript si hay Node.js) antes de dar por
+- Ollama elige **una acción estructurada por turno**. `edit_file` separa esa
+  decisión de la generación del código: el mismo modelo local recibe el archivo
+  y las referencias leídas, y devuelve el código sin tener que incluirlo en un
+  JSON largo. Se conserva la compatibilidad con historiales de llamadas JSON.
+- Debe leer antes de editar. Las reescrituras se limitan a archivos pequeños
+  leídos completos; se rechazan si cambiaron desde la lectura. Python con
+  sintaxis incorrecta no se guarda.
+- Comprueba primero los módulos de pruebas nuevos o modificados para devolver
+  rápidamente sus errores. Después ejecuta todas las pruebas Python (y JavaScript si hay Node.js) antes de dar por
   válido el resultado y hacer commit en esa rama local.
 - Guarda `state.json` y el historial en
   `<repositorio>-autodev-sessions/<id>/state.json`. Usa **Reanudar sesión** para
@@ -51,11 +55,16 @@ ignorar herramientas o no resolver una tarea.
 - Las pruebas y el código pueden fallar; ningún resultado se integra en `main`
   automáticamente. Revisa los cambios y sus pruebas antes de integrarlos.
 - El modelo tiene 8192 tokens de contexto configurados por defecto; el agente
-  compacta conversaciones largas. Esto limita su capacidad para cambios enormes.
+  limita el historial por tamaño, conserva el encargo y la revisión más reciente,
+  y agrupa cada llamada con su resultado. Esto limita su capacidad para cambios enormes.
 - Solo puede modificar archivos de código de texto (Python, JS, HTML, CSS, JSON,
   Markdown). No puede editar secretos, partidas, archivos ocultos ni `autodev/`.
 - Para evitar bucles, se detiene tras un máximo de 120 turnos, 4 acciones
-  idénticas seguidas o el tiempo configurado (de 5 a 480 minutos).
+  idénticas seguidas, 3 errores en la misma acción aunque alterne otras herramientas,
+  o el tiempo configurado (de 5 a 480 minutos).
+- En Windows sin privilegio para crear symlinks, esa prueba específica se omite.
+  Otra prueba crea una junction real sin elevar permisos y comprueba el bloqueo
+  de rutas que salen del proyecto.
 - No realiza auditorías de simulación largas ni toma decisiones de diseño por
   sí solo. Úsalo primero para errores menores o funciones bien delimitadas.
 - Si Node.js no está instalado, las pruebas de interfaz no se ejecutarán; eso
