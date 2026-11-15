@@ -166,6 +166,9 @@ También puedes enviar varios objetos JSON, uno por línea, sin texto adicional.
 Usa list_files para CARPETAS y read_file para ARCHIVOS. No inventes formatos.
 Solo hay herramientas enumeradas, no hay terminal libre. Nunca afirmes haber pasado pruebas
 que no hayas ejecutado. Si no puedes resolver la tarea, explícalo y detente.
+Después de escribir pruebas, ejecuta primero su módulo con run_tests(kind='module', module='pruebas.test_NOMBRE').
+Corrige todos los errores antes de finalizar. Comprueba cada requisito del encargo en el código real:
+si se piden varias entradas o claves, usa entradas distintas, no la misma entrada repetida.
 El resultado final debe ser breve y en español, con archivos cambiados, pruebas y límites.
 """
 
@@ -399,6 +402,18 @@ class Session:
     def _final_check(self, worktree: Path, tools: WorkspaceTools,
                      callback: Callable[[str], None]) -> tuple[bool, str]:
         """Devuelve (validado, errores para que el modelo intente repararlos)."""
+        # Detecta errores locales antes de gastar minutos en las simulaciones completas.
+        changed = set(_git(worktree, "diff", "--name-only", "HEAD").splitlines())
+        changed.update(_git(worktree, "ls-files", "--others", "--exclude-standard").splitlines())
+        modules = sorted(path[:-3].replace("/", ".") for path in changed
+                         if re.fullmatch(r"pruebas/test_[a-zA-Z0-9_]+\.py", path)
+                         and (worktree / path).is_file())
+        for module in modules:
+            self.record(f"Validación rápida: {module}…", callback)
+            result = tools.tool_run_tests("module", module)
+            self.record(result[-3500:], callback)
+            if not result.startswith("SALIDA 0\n"):
+                return False, "Prueba modificada o nueva:\n" + result[-6000:]
         self.record("Validación final de pruebas Python…", callback)
         py_result = tools.tool_run_tests("python")
         self.record(py_result[-1200:], callback)
@@ -473,11 +488,11 @@ class Session:
                         self.state["messages"].append({"role": "user", "content":
                             "La tarea aún NO está hecha: no has llamado a ninguna herramienta y "
                             "no se ha modificado ningún archivo. No escribas instrucciones de cómo hacerlo. "
-                            "Llama AHORA a read_file(path='genesis/motor/calendario.py') "
-                            "o list_files(folder='genesis/motor') para inspeccionar el proyecto. "
+                            "Llama AHORA a list_files(folder='.') o read_file sobre un archivo "
+                            "relevante para la TAREA del usuario para inspeccionar el proyecto. "
                             "Si no puedes emitir tool_calls nativos, escribe únicamente "
                             "un objeto JSON puro como "
-                            "{\"name\":\"read_file\",\"arguments\":{\"path\":\"genesis/motor/calendario.py\"}}. "
+                            "{\"name\":\"list_files\",\"arguments\":{\"folder\":\".\"}}. "
                             "No incluyas prosa alrededor del JSON."})
                         self.save()
                         continue

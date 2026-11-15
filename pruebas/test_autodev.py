@@ -9,6 +9,7 @@ import tempfile
 import threading
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 from autodev.core import AgentError, Session, WorkspaceTools, _safe_path, parse_text_tool_calls
 
@@ -211,6 +212,34 @@ class SessionTests(unittest.TestCase):
         result = session.run(lambda line: None, threading.Event(), client=FakeOllama())
         self.assertEqual(result, "paused")
         self.assertTrue(_git_status(Path(session.state["worktree"])))
+
+    def test_new_failing_module_is_checked_before_full_suite(self):
+        session = Session.create(self.repo, "Añade una prueba", "qwen2.5-coder:7b", minutes=5)
+        root = Path(session.state["worktree"])
+        (root / "pruebas/test_new.py").write_text(
+            "import unittest\nclass T(unittest.TestCase):\n"
+            "    def test_new(self):\n        self.assertEqual(unknown_value, 1)\n", encoding="utf-8")
+        tools = WorkspaceTools(root)
+        with patch.object(tools, "tool_run_tests", wraps=tools.tool_run_tests) as run:
+            passed, feedback = session._final_check(root, tools, lambda _: None)
+        self.assertFalse(passed)
+        self.assertIn("NameError", feedback)
+        run.assert_called_once_with("module", "pruebas.test_new")
+        self.assertTrue(_git_status(root))
+
+    def test_passing_new_module_still_requires_full_suite(self):
+        session = Session.create(self.repo, "Añade una prueba", "qwen2.5-coder:7b", minutes=5)
+        root = Path(session.state["worktree"])
+        (root / "pruebas/test_new.py").write_text(
+            "import unittest\nclass T(unittest.TestCase):\n"
+            "    def test_new(self):\n        self.assertEqual(2 + 2, 4)\n", encoding="utf-8")
+        tools = WorkspaceTools(root)
+        with patch.object(tools, "tool_run_tests", wraps=tools.tool_run_tests) as run:
+            passed, feedback = session._final_check(root, tools, lambda _: None)
+        self.assertTrue(passed, feedback)
+        self.assertEqual([call.args for call in run.call_args_list],
+                         [("module", "pruebas.test_new"), ("python",)])
+        self.assertEqual(_git_status(root), "")
 
     def test_branch_isolated_with_fake_model(self):
         session = Session.create(self.repo, "Cambia VALUE a 2", "qwen2.5-coder:7b", minutes=5)
