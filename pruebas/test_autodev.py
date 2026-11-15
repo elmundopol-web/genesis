@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import subprocess
 import shutil
+import sys
 import tempfile
 import threading
 import unittest
@@ -138,11 +139,32 @@ class PathsTests(unittest.TestCase):
         outside = self.root.parent / (self.root.name + "-outside.py")
         outside.write_text("secret", encoding="utf-8")
         try:
-            (self.root / "link.py").symlink_to(outside)
+            try:
+                (self.root / "link.py").symlink_to(outside)
+            except OSError as exc:
+                if sys.platform == "win32" and getattr(exc, "winerror", None) == 1314:
+                    self.skipTest("Windows no permite crear symlinks con los permisos actuales")
+                raise
             with self.assertRaises(AgentError):
                 _safe_path(self.root, "link.py", writable=True)
         finally:
             outside.unlink(missing_ok=True)
+
+    @unittest.skipUnless(sys.platform == "win32", "Las junctions son propias de Windows")
+    def test_junction_outside_denied(self):
+        # Las junctions de carpetas no necesitan el privilegio de crear symlinks.
+        # Mantienen una comprobación real de escapes en Windows sin elevar permisos.
+        with tempfile.TemporaryDirectory() as outside_dir:
+            outside = Path(outside_dir)
+            (outside / "secret.py").write_text("secret", encoding="utf-8")
+            junction = self.root / "external"
+            subprocess.run(["cmd", "/c", "mklink", "/J", str(junction), str(outside)],
+                           check=True, capture_output=True)
+            try:
+                with self.assertRaises(AgentError):
+                    _safe_path(self.root, "external/secret.py", writable=True)
+            finally:
+                junction.rmdir()
 
 
 @unittest.skipUnless(shutil.which("git"), "Git no está instalado; GENESIS no lo requiere para funcionar")
