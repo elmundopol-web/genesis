@@ -79,5 +79,11 @@ Elige una modificación con un criterio objetivo, por ejemplo:
 > Añade una prueba de regresión para [comportamiento concreto]. No cambies
 > las reglas F4.4. Ejecuta las pruebas y documenta el resultado.
 
-La primera meta es **conseguir una tarea correcta de principio a fin**.
-Solo después conviene aumentar su autonomía o dejarlo trabajar sin supervisión.
+Ya hay un [primer encargo completado y comprobado](PRIMER-ENCARGO.md): una
+propiedad pequeña del calendario y dos pruebas generadas con Qwen local.
+Se comprobó el resultado con entradas adicionales y pruebas de mutación.
+El encargo necesitó reanudar la validación tras corregir el registro de la consola
+de evaluación; no se editó a mano el código generado.
+
+Esto demuestra una tarea pequeña. La autonomía en cambios mayores todavía debe
+medirse con encargos nuevos y revisión del resultado.
