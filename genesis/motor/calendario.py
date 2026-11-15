@@ -49,6 +49,10 @@ class Calendario:
         return self.horas_por_dia
 
     @property
+    def ticks_por_semana(self) -> int:
+        return 7 * self.ticks_por_dia
+
+    @property
     def dias_por_anio(self) -> int:
         return self.dias_por_estacion * len(ESTACIONES)
 
