@@ -7,6 +7,7 @@ código Python/JS del repositorio: usar solo con proyectos de confianza.
 from __future__ import annotations
 
 import json
+import hashlib
 import os
 import re
 import shutil
@@ -92,6 +93,8 @@ TOOLS = [
             {"path": {"type": "string"}, "old": {"type": "string"}, "new": {"type": "string"}},
             ["path", "old", "new"]),
     _schema("create_file", "Crea un archivo de código nuevo; nunca sobrescribe uno existente.",
+            {"path": {"type": "string"}, "content": {"type": "string"}}, ["path", "content"]),
+    _schema("rewrite_file", "Reescribe un archivo pequeño existente, leído completo previamente, sin cambios externos desde esa lectura. Útil si replace_text falla por sangría.",
             {"path": {"type": "string"}, "content": {"type": "string"}}, ["path", "content"]),
     _schema("run_tests", "Ejecuta las pruebas permitidas: python, javascript o un módulo Python concreto.",
             {"kind": {"type": "string", "enum": ["python", "javascript", "module"]},
@@ -194,6 +197,7 @@ class WorkspaceTools:
         self.write_count = 0
         self.last_test_passed = False
         self.read_files: set[str] = set()
+        self.full_reads: dict[str, str] = {}
 
     def call(self, name: str, arguments: dict) -> str:
         fn = getattr(self, f"tool_{name}", None)
@@ -226,6 +230,8 @@ class WorkspaceTools:
         start = max(1, int(start))
         end = min(len(lines), start + 159, int(end) if end is not None else start + 159)
         self.read_files.add(file.relative_to(self.root).as_posix())
+        if start == 1 and end == len(lines):
+            self.full_reads[file.relative_to(self.root).as_posix()] = hashlib.sha256(file.read_bytes()).hexdigest()
         return "\n".join(f"{idx}: {lines[idx - 1]}" for idx in range(start, end + 1)) or "(vacío)"
 
     def tool_search_code(self, query: str) -> str:
@@ -259,7 +265,9 @@ class WorkspaceTools:
             raise AgentError("Fragmento vacío o demasiado grande.")
         data = file.read_text(encoding="utf-8")
         if data.count(old) != 1:
-            raise AgentError(f"El texto antiguo aparece {data.count(old)} veces; debe aparecer exactamente una.")
+            raise AgentError(f"El texto antiguo aparece {data.count(old)} veces; debe aparecer exactamente una. "
+                             "Conserva la sangría exacta; vuelve a leer el archivo. "
+                             "Para archivos pequeños puedes usar rewrite_file tras leerlos completos.")
         file.write_text(data.replace(old, new, 1), encoding="utf-8")
         self.write_count += 1
         self.last_test_passed = False
@@ -277,6 +285,27 @@ class WorkspaceTools:
         self.write_count += 1
         self.last_test_passed = False
         return f"CREADO: {path}"
+
+    def tool_rewrite_file(self, path: str, content: str) -> str:
+        file = _safe_path(self.root, path, writable=True)
+        key = file.relative_to(self.root).as_posix()
+        if not file.is_file() or file.stat().st_size > MAX_REPLACEMENT_BYTES:
+            raise AgentError("rewrite_file solo admite archivos existentes de hasta 25 KB.")
+        if key not in self.full_reads:
+            raise AgentError("Lee el archivo completo con read_file antes de reescribirlo.")
+        if hashlib.sha256(file.read_bytes()).hexdigest() != self.full_reads[key]:
+            raise AgentError("El archivo cambió desde la lectura; vuelve a leerlo antes de reescribir.")
+        if len(content.encode("utf-8")) > MAX_REPLACEMENT_BYTES:
+            raise AgentError("Contenido demasiado grande para rewrite_file (25 KB).")
+        if file.read_text(encoding="utf-8") == content:
+            raise AgentError("El contenido propuesto es idéntico; no hay cambios.")
+        tmp = file.with_name(file.name + ".autodev-tmp")
+        tmp.write_text(content, encoding="utf-8")
+        os.replace(tmp, file)
+        self.full_reads.pop(key)
+        self.write_count += 1
+        self.last_test_passed = False
+        return f"REESCRITO: {path}"
 
     def _run_process(self, command: list[str], timeout: float = 600) -> str:
         kwargs = {"cwd": str(self.root), "stdout": subprocess.PIPE, "stderr": subprocess.STDOUT,
@@ -504,6 +533,7 @@ class Session:
         repeats = 0
         final_retries = 0
         no_tool_replies = 0
+        failed_calls: dict[str, int] = {}
         self.state["status"] = "running"
         self.save()
         try:
@@ -589,6 +619,12 @@ class Session:
                     output = tools.call(name, args)
                     self.state["messages"].append({"role": "tool", "tool_name": name, "content": output})
                     self.record(output[:600], callback)
+                    if output.startswith("ERROR:"):
+                        failed_calls[fingerprint] = failed_calls.get(fingerprint, 0) + 1
+                        if failed_calls[fingerprint] >= 3:
+                            raise AgentError("La misma acción falló tres veces, incluso alternando otras herramientas.")
+                    elif name in {"create_file", "replace_text", "rewrite_file"}:
+                        failed_calls.clear()
                 self.save()
             else:
                 self.state["status"] = "paused"

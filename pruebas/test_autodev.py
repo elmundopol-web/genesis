@@ -185,6 +185,20 @@ class PathsTests(unittest.TestCase):
         self.assertIn("Lee primero", tools.call("replace_text", {"path": "genesis/a.py", "old": "hello", "new": "ciao"}))
         self.assertFalse((self.root / "new.py").exists())
 
+    def test_rewrite_requires_full_current_read_and_changes(self):
+        tools = WorkspaceTools(self.root)
+        self.assertIn("archivo completo", tools.call("rewrite_file", {"path": "genesis/a.py", "content": "new\n"}))
+        tools.tool_read_file("genesis/a.py", 1, 1)
+        self.assertIn("archivo completo", tools.call("rewrite_file", {"path": "genesis/a.py", "content": "new\n"}))
+        tools.tool_read_file("genesis/a.py")
+        (self.root / "genesis/a.py").write_text("external\n", encoding="utf-8")
+        self.assertIn("cambió", tools.call("rewrite_file", {"path": "genesis/a.py", "content": "new\n"}))
+        tools.tool_read_file("genesis/a.py")
+        self.assertIn("idéntico", tools.call("rewrite_file", {"path": "genesis/a.py", "content": "external\n"}))
+        self.assertIn("REESCRITO", tools.call("rewrite_file", {"path": "genesis/a.py", "content": "new\n"}))
+        self.assertEqual((self.root / "genesis/a.py").read_text(), "new\n")
+        self.assertIn("archivo completo", tools.call("rewrite_file", {"path": "genesis/a.py", "content": "again\n"}))
+
     def test_symlink_outside_denied(self):
         outside = self.root.parent / (self.root.name + "-outside.py")
         outside.write_text("secret", encoding="utf-8")
@@ -322,6 +336,27 @@ class SessionTests(unittest.TestCase):
         self.assertEqual(result, "done", logs)
         self.assertTrue(any("llamadas JSON" in line for line in logs))
         self.assertEqual((Path(session.state["worktree"]) / "genesis" / "motor" / "demo.py").read_text(), "VALUE = 2\n")
+
+    def test_alternating_failed_actions_stop_without_commit(self):
+        class Alternating:
+            count = 0
+
+            def chat(self, model, messages):
+                self.count += 1
+                if self.count % 2:
+                    name, args = "read_file", {"path": "genesis/motor/demo.py"}
+                else:
+                    name, args = "replace_text", {"path": "genesis/motor/demo.py", "old": "missing", "new": "new"}
+                return {"role": "assistant", "content": "", "tool_calls": [
+                    {"function": {"name": name, "arguments": args}}]}
+
+        session = Session.create(self.repo, "Reparar un archivo", "qwen2.5-coder:7b", minutes=5)
+        model = Alternating()
+        logs = []
+        self.assertEqual(session.run(logs.append, threading.Event(), client=model), "paused")
+        self.assertEqual(model.count, 6)
+        self.assertTrue(any("misma acción falló tres veces" in line for line in logs))
+        self.assertEqual(_git_status(Path(session.state["worktree"])), "")
 
 
 if __name__ == "__main__":
