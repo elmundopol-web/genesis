@@ -142,6 +142,20 @@ class StructuredOllamaTests(unittest.TestCase):
                 with self.assertRaises(AgentError):
                     Ollama().chat("qwen2.5-coder:7b", [{"role": "user", "content": "Tarea"}])
 
+    def test_code_generation_preserves_quotes_without_json_format(self):
+        content = '```python\n"""Documentación original."""\nVALUE = 2\n```'
+        with patch("urllib.request.urlopen", return_value=self.response(content)) as request:
+            result = Ollama().edit_file("qwen2.5-coder:7b", "demo.py", "Cambia VALUE", "VALUE = 1", "API real")
+        payload = json.loads(request.call_args.args[0].data)
+        self.assertNotIn("format", payload)
+        self.assertIn("API real", payload["messages"][-1]["content"])
+        self.assertEqual(result, '"""Documentación original."""\nVALUE = 2\n')
+
+    def test_code_mixed_with_prose_is_rejected(self):
+        with patch("urllib.request.urlopen", return_value=self.response("Aquí está:\n```python\nx=1\n```")):
+            with self.assertRaises(AgentError):
+                Ollama().edit_file("qwen2.5-coder:7b", "demo.py", "Modifica", "", "")
+
 
 class PathsTests(unittest.TestCase):
     def setUp(self):
@@ -210,6 +224,26 @@ class PathsTests(unittest.TestCase):
                 self.assertIn("Python no válido", self.tools.call(name, args))
                 self.assertEqual((self.root / "genesis/a.py").read_text(), original)
         self.assertFalse((self.root / "invalid.py").exists())
+
+    def test_local_editor_checks_read_version_and_reuses_write_guards(self):
+        calls = []
+        def editor(path, instruction, source, context):
+            calls.append((path, source, context))
+            return "VALUE = 2\n"
+        tools = WorkspaceTools(self.root, editor=editor)
+        self.assertIn("Lee este archivo", tools.call("edit_file", {"path": "genesis/a.py", "instruction": "Cambia"}))
+        tools.tool_read_file("genesis/a.py")
+        self.assertIn("REESCRITO", tools.call("edit_file", {"path": "genesis/a.py", "instruction": "Cambia"}))
+        self.assertEqual(calls[0][1], "hello\nworld\n")
+        self.assertIn("CREADO", tools.call("edit_file", {"path": "new.py", "instruction": "Crea"}))
+        self.assertIn("VALUE = 2", calls[1][2])
+        tools.tool_read_file("genesis/a.py")
+        def stale_editor(*args):
+            (self.root / "genesis/a.py").write_text("EXTERNAL = 3\n", encoding="utf-8")
+            return "VALUE = 4\n"
+        tools.editor = stale_editor
+        self.assertIn("cambió", tools.call("edit_file", {"path": "genesis/a.py", "instruction": "Cambia"}))
+        self.assertEqual((self.root / "genesis/a.py").read_text(), "EXTERNAL = 3\n")
 
     def test_symlink_outside_denied(self):
         outside = self.root.parent / (self.root.name + "-outside.py")
