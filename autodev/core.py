@@ -638,8 +638,6 @@ class Session:
                         failed_calls[fingerprint] = failed_calls.get(fingerprint, 0) + 1
                         if failed_calls[fingerprint] >= 3:
                             raise AgentError("La misma acción falló tres veces, incluso alternando otras herramientas.")
-                    elif name in {"create_file", "replace_text", "rewrite_file"}:
-                        failed_calls.clear()
                 self.save()
             else:
                 self.state["status"] = "paused"
