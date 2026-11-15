@@ -31,6 +31,10 @@ ignorar herramientas o no resolver una tarea.
   original de GENESIS.
 - Expone al modelo herramientas para listar, leer, buscar, sustituir fragmentos,
   crear archivos y ejecutar pruebas. **No ofrece una terminal arbitraria**.
+- Algunos modelos escriben las llamadas a herramientas como objetos JSON en
+  texto, sin usar el formato nativo de Ollama. AutoDev puede interpretar solo
+  **JSON puro** con nombres de herramientas permitidos; rechaza texto adicional,
+  herramientas desconocidas y operaciones fuera de los archivos autorizados.
 - Ejecuta las pruebas Python (y JavaScript si hay Node.js) antes de dar por
   válido el resultado y hacer commit en esa rama local.
 - Guarda `state.json` y el historial en
