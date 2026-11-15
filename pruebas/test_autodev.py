@@ -5,13 +5,15 @@ from __future__ import annotations
 import subprocess
 import shutil
 import sys
+import io
+import json
 import tempfile
 import threading
 import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from autodev.core import AgentError, Session, WorkspaceTools, _safe_path, parse_text_tool_calls
+from autodev.core import AgentError, Ollama, Session, WorkspaceTools, _safe_path, parse_text_tool_calls
 
 
 class FakeOllama:
@@ -99,6 +101,39 @@ class ParsedToolTests(unittest.TestCase):
         ]:
             with self.subTest(content=content[:60]):
                 self.assertEqual(parse_text_tool_calls(content), [])
+
+
+class StructuredOllamaTests(unittest.TestCase):
+    def response(self, content):
+        return io.BytesIO(json.dumps({"message": {"content": content}}).encode("utf-8"))
+
+    def test_structured_call_and_history_round_trip(self):
+        action = {"name": "read_file", "arguments": {"path": "genesis/motor/azar.py"}}
+        messages = [{"role": "system", "content": "Instrucciones"},
+                    {"role": "assistant", "content": "", "tool_calls": [{"function": action}]},
+                    {"role": "tool", "tool_name": "read_file", "content": "contenido real"}]
+        with patch("urllib.request.urlopen", return_value=self.response(json.dumps(action))) as request:
+            result = Ollama().chat("qwen2.5-coder:7b", messages)
+        payload = json.loads(request.call_args.args[0].data)
+        self.assertIn("oneOf", payload["format"])
+        self.assertNotIn("tools", payload)
+        self.assertEqual(payload["messages"][-1]["role"], "user")
+        self.assertIn("contenido real", payload["messages"][-1]["content"])
+        self.assertEqual(result["tool_calls"][0]["function"], action)
+        self.assertEqual(messages[0]["content"], "Instrucciones")
+
+    def test_finish_requests_host_validation(self):
+        content = json.dumps({"name": "finish", "arguments": {"summary": "Listo para comprobar"}})
+        with patch("urllib.request.urlopen", return_value=self.response(content)):
+            result = Ollama().chat("qwen2.5-coder:7b", [{"role": "user", "content": "Tarea"}])
+        self.assertEqual(result["content"], "Listo para comprobar")
+        self.assertEqual(result["tool_calls"], [])
+
+    def test_prose_and_unknown_tools_are_not_executed(self):
+        for content in ["Modifica el archivo así…", '{"name":"shell","arguments":{"cmd":"whoami"}}']:
+            with self.subTest(content=content), patch("urllib.request.urlopen", return_value=self.response(content)):
+                with self.assertRaises(AgentError):
+                    Ollama().chat("qwen2.5-coder:7b", [{"role": "user", "content": "Tarea"}])
 
 
 class PathsTests(unittest.TestCase):

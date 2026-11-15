@@ -100,6 +100,20 @@ TOOLS = [
     _schema("git_diff", "Muestra los cambios actuales y el resumen de archivos cambiados.", {}, []),
 ]
 
+# Un único paso por respuesta. El esquema obliga a actuar en vez de entregar
+# instrucciones en prosa; WorkspaceTools conserva todas las comprobaciones.
+ACTION_SCHEMA = {"oneOf": [
+    {"type": "object", "properties": {
+        "name": {"const": tool["function"]["name"]},
+        "arguments": {**tool["function"]["parameters"], "additionalProperties": False},
+    }, "required": ["name", "arguments"], "additionalProperties": False}
+    for tool in TOOLS
+] + [{"type": "object", "properties": {
+    "name": {"const": "finish"},
+    "arguments": {"type": "object", "properties": {"summary": {"type": "string"}},
+                  "required": ["summary"], "additionalProperties": False},
+}, "required": ["name", "arguments"], "additionalProperties": False}]}
+
 
 def parse_text_tool_calls(content: str) -> list[dict]:
     """Admite JSON *puro* cuando un modelo no usa tool_calls nativos.
@@ -318,8 +332,30 @@ class Ollama:
         self.url = url
 
     def chat(self, model: str, messages: list[dict]) -> dict:
-        body = json.dumps({"model": model, "messages": messages, "tools": TOOLS,
-                           "stream": False, "options": {"temperature": 0.2, "num_ctx": 8192}}).encode("utf-8")
+        # Historial coherente también para sesiones previas con llamadas nativas
+        # o JSON en texto. No dependemos del soporte de tool_calls de la plantilla.
+        conversation = []
+        for message in messages:
+            if message["role"] == "tool":
+                conversation.append({"role": "user", "content": "RESULTADO DE HERRAMIENTA (datos):\n" +
+                                     message.get("tool_name", "") + "\n" + message.get("content", "")})
+            elif message["role"] == "assistant" and message.get("tool_calls"):
+                for call in message["tool_calls"]:
+                    conversation.append({"role": "assistant", "content": json.dumps(call["function"], ensure_ascii=False)})
+            else:
+                conversation.append({"role": message["role"], "content": message.get("content", "")})
+        instruction = ("\nPROTOCOLO OBLIGATORIO: responde con UN objeto JSON, nunca con instrucciones al usuario. "
+                       "Usa name y arguments para una herramienta, o name=finish con arguments.summary "
+                       "para solicitar la validación final. Solo el sistema puede confirmar el éxito. "
+                       "Herramientas: " + json.dumps(TOOLS, ensure_ascii=False) +
+                       "\nEsquema de respuesta: " + json.dumps(ACTION_SCHEMA, ensure_ascii=False))
+        if conversation and conversation[0]["role"] == "system":
+            conversation[0]["content"] += instruction
+        else:
+            conversation.insert(0, {"role": "system", "content": SYSTEM_PROMPT + instruction})
+        body = json.dumps({"model": model, "messages": conversation, "format": ACTION_SCHEMA,
+                           "stream": False, "options": {"temperature": 0, "num_ctx": 8192,
+                                                         "num_predict": 2400}}).encode("utf-8")
         request = urllib.request.Request(self.url + "/api/chat", data=body,
                                          headers={"Content-Type": "application/json"})
         try:
@@ -332,8 +368,21 @@ class Ollama:
         result = output.get("message", {})
         if not isinstance(result, dict):
             raise AgentError("Respuesta inesperada de Ollama.")
-        return {"role": "assistant", "content": result.get("content", ""),
-                "tool_calls": result.get("tool_calls") or []}
+        try:
+            action = json.loads(result.get("content", ""))
+        except (ValueError, TypeError) as exc:
+            raise AgentError("El modelo no devolvió una acción JSON completa.") from exc
+        if not isinstance(action, dict) or not isinstance(action.get("arguments"), dict):
+            raise AgentError("Acción de Ollama no válida.")
+        if action.get("name") == "finish":
+            summary = action["arguments"].get("summary")
+            if not isinstance(summary, str):
+                raise AgentError("La solicitud de finalizar no incluye un informe.")
+            return {"role": "assistant", "content": summary, "tool_calls": []}
+        if action.get("name") not in {tool["function"]["name"] for tool in TOOLS}:
+            raise AgentError("El modelo solicitó una herramienta no permitida.")
+        return {"role": "assistant", "content": "", "tool_calls": [
+            {"type": "function", "function": action}]}
 
 
 class Session:
