@@ -9,7 +9,7 @@ import threading
 import unittest
 from pathlib import Path
 
-from autodev.core import AgentError, Session, WorkspaceTools, _safe_path
+from autodev.core import AgentError, Session, WorkspaceTools, _safe_path, parse_text_tool_calls
 
 
 class FakeOllama:
@@ -52,12 +52,51 @@ class FakeOllamaNudged(FakeOllama):
         assert "Llama AHORA" in messages[-1]["content"]
 
 
+class FakeOllamaJsonText:
+    def __init__(self):
+        self.count = 0
+
+    def chat(self, model, messages):
+        self.count += 1
+        if self.count == 1:
+            return {"role": "assistant", "content":
+                    '{"name":"read_file","arguments":{"path":"genesis/motor/demo.py"}}', "tool_calls": []}
+        if self.count == 2:
+            return {"role": "assistant", "content":
+                    '{"name":"replace_text","arguments":{"path":"genesis/motor/demo.py",'
+                    '"old":"VALUE = 1","new":"VALUE = 2"}}', "tool_calls": []}
+        return {"role": "assistant", "content": "Tarea terminada.", "tool_calls": []}
+
+
 def _command(path: Path, *args):
     subprocess.run(["git", "-C", str(path), *args], check=True, capture_output=True)
 
 
 def _git_status(repo: Path) -> str:
     return subprocess.check_output(["git", "-C", str(repo), "status", "--porcelain"], text=True)
+
+
+class ParsedToolTests(unittest.TestCase):
+    def test_parses_two_plain_json_objects(self):
+        actual_log = ('{"name": "list_files", "arguments": {"folder": "genesis/motor/calendario.py"}}\n'
+                      '{"name": "list_files", "arguments": {"folder": "pruebas/test_azar_calendario.py"}}')
+        calls = parse_text_tool_calls(actual_log)
+        self.assertEqual(len(calls), 2)
+        self.assertEqual(calls[1]["function"]["name"], "list_files")
+
+    def test_parses_fenced_json(self):
+        parsed = parse_text_tool_calls('```json\n{"name":"read_file","arguments":{"path":"x.py"}}\n```')
+        self.assertEqual(parsed[0]["function"]["arguments"]["path"], "x.py")
+
+    def test_rejects_non_pure_json_and_unknown_tools(self):
+        for content in [
+            'Aquí tienes: {"name":"read_file","arguments":{"path":"x.py"}}',
+            '{"name":"run_shell","arguments":{"cmd":"del *"}}',
+            '{"name":"read_file","arguments":"x.py"}',
+            ' '.join(['{"name":"git_diff","arguments":{}}'] * 5),
+        ]:
+            with self.subTest(content=content[:60]):
+                self.assertEqual(parse_text_tool_calls(content), [])
 
 
 class PathsTests(unittest.TestCase):
@@ -80,6 +119,11 @@ class PathsTests(unittest.TestCase):
         lines = self.tools.tool_read_file("genesis/a.py", start=2)
         self.assertIn("2: world", lines)
         self.assertNotIn("1: hello", lines)
+
+    def test_list_files_with_file_path_recovers_as_read_only(self):
+        result = self.tools.tool_list_files("genesis/a.py")
+        self.assertIn("list_files para un archivo", result)
+        self.assertIn("1: hello", result)
 
     def test_unique_replacements_only(self):
         self.tools.tool_replace_text("genesis/a.py", "hello", "ciao")
@@ -170,6 +214,14 @@ class SessionTests(unittest.TestCase):
         session = Session.create(self.repo, "Cambia VALUE a 2", "qwen2.5-coder:7b", minutes=5)
         result = session.run(lambda _: None, threading.Event(), client=FakeOllamaNudged())
         self.assertEqual(result, "done")
+
+    def test_plain_json_calls_execute_and_finish(self):
+        session = Session.create(self.repo, "Cambia VALUE a 2", "qwen2.5-coder:7b", minutes=5)
+        logs = []
+        result = session.run(logs.append, threading.Event(), client=FakeOllamaJsonText())
+        self.assertEqual(result, "done", logs)
+        self.assertTrue(any("llamadas JSON" in line for line in logs))
+        self.assertEqual((Path(session.state["worktree"]) / "genesis" / "motor" / "demo.py").read_text(), "VALUE = 2\n")
 
 
 if __name__ == "__main__":
