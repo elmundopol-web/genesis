@@ -1,0 +1,38 @@
+# Partidas locales y archivos temporales de SQLite
+/partidas/
+*.db
+*.db-*
+*.sqlite
+*.sqlite-*
+*.sqlite3
+*.sqlite3-*
+
+# Respaldos locales
+/docs/respaldo/
+*.tar.gz
+*.tgz
+*.zip
+*.bak
+
+# Python y herramientas de desarrollo
+__pycache__/
+*.py[cod]
+.ruff_cache/
+.pytest_cache/
+.venv/
+venv/
+.coverage
+htmlcov/
+
+# Configuración privada y credenciales
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Archivos del sistema y del editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

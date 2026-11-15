@@ -1,0 +1,158 @@
+{
+ "1.0-1": [
+  {
+   "tick": 1130,
+   "cede": "Goro",
+   "salud_cede": 1000,
+   "recibe": "Iria",
+   "salud_recibe": 1000
+  }
+ ],
+ "1.0-2": [
+  {
+   "tick": 818,
+   "cede": "Meru",
+   "salud_cede": 1000,
+   "recibe": "Olba",
+   "salud_recibe": 994
+  }
+ ],
+ "1.0-3": [
+  {
+   "tick": 1781,
+   "cede": "Unai",
+   "salud_cede": 799,
+   "recibe": "Etan",
+   "salud_recibe": 807
+  }
+ ],
+ "1.0-8": [
+  {
+   "tick": 1131,
+   "cede": "Mael",
+   "salud_cede": 1000,
+   "recibe": "Lida",
+   "salud_recibe": 1000
+  },
+  {
+   "tick": 1564,
+   "cede": "Lura",
+   "salud_cede": 1000,
+   "recibe": "Juna",
+   "salud_recibe": 1000
+  }
+ ],
+ "1.0-10": [
+  {
+   "tick": 1879,
+   "cede": "Lura",
+   "salud_cede": 1000,
+   "recibe": "Zuri",
+   "salud_recibe": 985
+  },
+  {
+   "tick": 1879,
+   "cede": "Nilo",
+   "salud_cede": 995,
+   "recibe": "Lura",
+   "salud_recibe": 998
+  },
+  {
+   "tick": 1880,
+   "cede": "Lura",
+   "salud_cede": 998,
+   "recibe": "Nilo",
+   "salud_recibe": 994
+  },
+  {
+   "tick": 1880,
+   "cede": "Nilo",
+   "salud_cede": 994,
+   "recibe": "Lura",
+   "salud_recibe": 997
+  },
+  {
+   "tick": 1920,
+   "cede": "Elai",
+   "salud_cede": 1000,
+   "recibe": "Lura",
+   "salud_recibe": 997
+  }
+ ],
+ "0.3-6": [
+  {
+   "tick": 1790,
+   "cede": "Gael",
+   "salud_cede": 989,
+   "recibe": "Kora",
+   "salud_recibe": 955
+  }
+ ],
+ "0.3-8": [
+  {
+   "tick": 961,
+   "cede": "Juna",
+   "salud_cede": 1000,
+   "recibe": "Hebe",
+   "salud_recibe": 999
+  },
+  {
+   "tick": 961,
+   "cede": "Hebe",
+   "salud_cede": 999,
+   "recibe": "Juna",
+   "salud_recibe": 999
+  },
+  {
+   "tick": 962,
+   "cede": "Juna",
+   "salud_cede": 1000,
+   "recibe": "Nura",
+   "salud_recibe": 999
+  },
+  {
+   "tick": 964,
+   "cede": "Juna",
+   "salud_cede": 998,
+   "recibe": "Beto",
+   "salud_recibe": 999
+  },
+  {
+   "tick": 964,
+   "cede": "Hebe",
+   "salud_cede": 1000,
+   "recibe": "Juna",
+   "salud_recibe": 996
+  },
+  {
+   "tick": 1904,
+   "cede": "Nura",
+   "salud_cede": 1000,
+   "recibe": "Lura",
+   "salud_recibe": 990
+  }
+ ],
+ "0.3-10": [
+  {
+   "tick": 941,
+   "cede": "Oren",
+   "salud_cede": 998,
+   "recibe": "Cira",
+   "salud_recibe": 999
+  },
+  {
+   "tick": 942,
+   "cede": "Kiro",
+   "salud_cede": 1000,
+   "recibe": "Oren",
+   "salud_recibe": 997
+  },
+  {
+   "tick": 943,
+   "cede": "Oren",
+   "salud_cede": 997,
+   "recibe": "Kiro",
+   "salud_recibe": 999
+  }
+ ]
+}

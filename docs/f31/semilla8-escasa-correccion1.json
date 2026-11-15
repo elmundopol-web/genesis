@@ -1,0 +1,278 @@
+[
+ {
+  "semilla": 8,
+  "abundancia": 0.3,
+  "anios": 2,
+  "vivos_por_anio": [
+   25,
+   21
+  ],
+  "segundos": 2.4,
+  "obras_iniciadas": 11,
+  "terminadas": 10,
+  "abandonadas": 0,
+  "suspendidas": 3,
+  "reanudadas": 2,
+  "por_tipo": {
+   "refugio:lista": 5,
+   "deposito:lista": 5,
+   "refugio:suspendida": 1
+  },
+  "utilizadas": 10,
+  "reparadas": 8,
+  "reparaciones": 51,
+  "ruinas": 0,
+  "estancias": 894,
+  "estancias_con_frio": 159,
+  "horas_a_cubierto": 3880,
+  "sin_sitio": 20,
+  "cede_sitio": 0,
+  "madera_aportada": 190,
+  "guardado": 380,
+  "retirado": 323,
+  "depositos_vacios": 4,
+  "compromisos": 161,
+  "compromisos_dejados": 65,
+  "informes": 218,
+  "comprobaciones": 97,
+  "contribuyen": 24,
+  "benefician": 25,
+  "reciben_deposito": 13,
+  "comunidades": [
+   {
+    "id": 1,
+    "nombre": "Comunidad de la Ribera",
+    "estado": "activa",
+    "miembros": 4,
+    "antiguos": 1,
+    "dias": 71,
+    "lugares": [
+     2,
+     6
+    ],
+    "acuerdos": 2,
+    "uniones": 3,
+    "salidas": 1,
+    "recurrentes": 7,
+    "funcional": true
+   },
+   {
+    "id": 2,
+    "nombre": "Comunidad de la Loma",
+    "estado": "activa",
+    "miembros": 4,
+    "antiguos": 1,
+    "dias": 70,
+    "lugares": [
+     3,
+     5
+    ],
+    "acuerdos": 0,
+    "uniones": 2,
+    "salidas": 1,
+    "recurrentes": 5,
+    "funcional": true
+   },
+   {
+    "id": 3,
+    "nombre": "Comunidad de los Juncos",
+    "estado": "activa",
+    "miembros": 7,
+    "antiguos": 2,
+    "dias": 64,
+    "lugares": [
+     1,
+     7
+    ],
+    "acuerdos": 2,
+    "uniones": 3,
+    "salidas": 2,
+    "recurrentes": 14,
+    "funcional": true
+   },
+   {
+    "id": 4,
+    "nombre": "Comunidad del Vado",
+    "estado": "activa",
+    "miembros": 7,
+    "antiguos": 1,
+    "dias": 62,
+    "lugares": [
+     4,
+     8
+    ],
+    "acuerdos": 2,
+    "uniones": 7,
+    "salidas": 3,
+    "recurrentes": 9,
+    "funcional": true
+   },
+   {
+    "id": 5,
+    "nombre": "Comunidad de la Loma II",
+    "estado": "debil",
+    "miembros": 2,
+    "antiguos": 2,
+    "dias": 39,
+    "lugares": [
+     9,
+     10
+    ],
+    "acuerdos": 0,
+    "uniones": 1,
+    "salidas": 2,
+    "recurrentes": 5,
+    "funcional": true
+   }
+  ],
+  "funcionales": 5,
+  "uniones": 16,
+  "salidas": 9,
+  "alejamientos": 16,
+  "disueltas": 0,
+  "acuerdos": [
+   {
+    "id": 1,
+    "tipo": "prioridad_apuro",
+    "comunidad": 3,
+    "aceptan": 7,
+    "rechazan": 0,
+    "cumplidos": 0,
+    "incumplidos": 0
+   },
+   {
+    "id": 2,
+    "tipo": "prioridad_apuro",
+    "comunidad": 4,
+    "aceptan": 3,
+    "rechazan": 2,
+    "cumplidos": 0,
+    "incumplidos": 0
+   },
+   {
+    "id": 3,
+    "tipo": "reserva_minima",
+    "comunidad": 4,
+    "aceptan": 2,
+    "rechazan": 0,
+    "cumplidos": 0,
+    "incumplidos": 9
+   },
+   {
+    "id": 4,
+    "tipo": "reserva_minima",
+    "comunidad": 1,
+    "aceptan": 2,
+    "rechazan": 1,
+    "cumplidos": 0,
+    "incumplidos": 1
+   },
+   {
+    "id": 5,
+    "tipo": "reserva_minima",
+    "comunidad": 3,
+    "aceptan": 2,
+    "rechazan": 0,
+    "cumplidos": 0,
+    "incumplidos": 1
+   },
+   {
+    "id": 6,
+    "tipo": "prioridad_apuro",
+    "comunidad": 1,
+    "aceptan": 1,
+    "rechazan": 1,
+    "cumplidos": 0,
+    "incumplidos": 0
+   }
+  ],
+  "acuerdos_propuestos": 6,
+  "acuerdos_aceptados": 24,
+  "acuerdos_rechazados": 7,
+  "cadenas": [
+   {
+    "tipo": "vivencia->obra",
+    "evento": 2037,
+    "causa": 724,
+    "tick": 246,
+    "quien": "Dana",
+    "lugar": "Depósito del Abedul",
+    "noches_al_raso": null
+   },
+   {
+    "tipo": "vivencia->obra",
+    "evento": 2113,
+    "causa": 1498,
+    "tick": 254,
+    "quien": "Mael",
+    "lugar": "Depósito del Prado",
+    "noches_al_raso": null
+   },
+   {
+    "tipo": "vivencia->obra",
+    "evento": 3698,
+    "causa": 3135,
+    "tick": 400,
+    "quien": "Cira",
+    "lugar": "Depósito de la Loma",
+    "noches_al_raso": null
+   },
+   {
+    "tipo": "informacion->uso",
+    "evento": 3799,
+    "causa": 3458,
+    "tick": 413,
+    "quien": "Enya",
+    "lugar": "Refugio de los Juncos",
+    "frio": false,
+    "fuera": 19.0
+   },
+   {
+    "tipo": "informacion->uso",
+    "evento": 4309,
+    "causa": 3902,
+    "tick": 458,
+    "quien": "Tobo",
+    "lugar": "Refugio de la Ribera",
+    "frio": false,
+    "fuera": 22.3
+   },
+   {
+    "tipo": "informacion->uso",
+    "evento": 4311,
+    "causa": 3458,
+    "tick": 459,
+    "quien": "Enya",
+    "lugar": "Refugio de los Juncos",
+    "frio": false,
+    "fuera": 21.2
+   },
+   {
+    "tipo": "acuerdo",
+    "evento": 4988,
+    "causa": 4987,
+    "tick": 543,
+    "quien": "Cira",
+    "acuerdo": "prioridad_apuro"
+   },
+   {
+    "tipo": "acuerdo",
+    "evento": 5506,
+    "causa": 4987,
+    "tick": 609,
+    "quien": "Lior",
+    "acuerdo": "prioridad_apuro"
+   }
+  ],
+  "cesiones": [],
+  "cesiones_resumen": {
+   "total": 0,
+   "por_enlace": {},
+   "por_motivo": {},
+   "circulares_misma_hora": 0,
+   "vueltas_en_24h": 0
+  },
+  "correccion": 1,
+  "origen": "espontáneo: mundo creado desde la semilla con su configuración normal, sin preparar nada"
+ }
+]

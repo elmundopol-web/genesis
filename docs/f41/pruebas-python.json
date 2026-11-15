@@ -1,0 +1,104 @@
+[
+ {
+  "modulo": "test_almacen",
+  "total": 21,
+  "correcto": true,
+  "segundos": 8.0
+ },
+ {
+  "modulo": "test_azar_calendario",
+  "total": 14,
+  "correcto": true,
+  "segundos": 0.31
+ },
+ {
+  "modulo": "test_cesiones",
+  "total": 19,
+  "correcto": true,
+  "segundos": 17.41
+ },
+ {
+  "modulo": "test_clima",
+  "total": 12,
+  "correcto": true,
+  "segundos": 2.21
+ },
+ {
+  "modulo": "test_comunidad",
+  "total": 20,
+  "correcto": true,
+  "segundos": 30.0
+ },
+ {
+  "modulo": "test_cuidados_f41",
+  "total": 10,
+  "correcto": true,
+  "segundos": 7.35
+ },
+ {
+  "modulo": "test_eventos_determinismo",
+  "total": 15,
+  "correcto": true,
+  "segundos": 5.55
+ },
+ {
+  "modulo": "test_f4_recorridos",
+  "total": 9,
+  "correcto": true,
+  "segundos": 11.16
+ },
+ {
+  "modulo": "test_habitantes",
+  "total": 48,
+  "correcto": true,
+  "segundos": 23.48
+ },
+ {
+  "modulo": "test_recursos",
+  "total": 28,
+  "correcto": true,
+  "segundos": 7.61
+ },
+ {
+  "modulo": "test_sesion_servidor",
+  "total": 18,
+  "correcto": true,
+  "segundos": 10.12
+ },
+ {
+  "modulo": "test_sociedad",
+  "total": 46,
+  "correcto": true,
+  "segundos": 20.39
+ },
+ {
+  "modulo": "test_sociedad_en_sesion",
+  "total": 18,
+  "correcto": true,
+  "segundos": 32.22
+ },
+ {
+  "modulo": "test_supervivencia",
+  "total": 9,
+  "correcto": true,
+  "segundos": 158.43
+ },
+ {
+  "modulo": "test_terreno",
+  "total": 12,
+  "correcto": true,
+  "segundos": 6.81
+ },
+ {
+  "modulo": "test_vida_en_sesion",
+  "total": 21,
+  "correcto": true,
+  "segundos": 45.76
+ },
+ {
+  "modulo": "test_vidas_f4",
+  "total": 1,
+  "correcto": true,
+  "segundos": 0.45
+ }
+]

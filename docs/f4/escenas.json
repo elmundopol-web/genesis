@@ -1,0 +1,568 @@
+{
+ "tipo": "Escenas preparadas de comportamiento",
+ "bosque": [
+  {
+   "id": 23,
+   "tick": 6,
+   "tipo": "presencia.orden",
+   "datos": {
+    "accion": "agujero",
+    "x": 1,
+    "y": 1,
+    "cantidad": 0,
+    "orden": 1,
+    "historia": 23
+   },
+   "causa_id": null
+  },
+  {
+   "id": 24,
+   "tick": 7,
+   "tipo": "vidas.observa",
+   "datos": {
+    "id": 1,
+    "nombre": "Sima",
+    "historia": 23,
+    "familiar": true,
+    "celda": 65,
+    "objeto": "agujero"
+   },
+   "causa_id": 23
+  },
+  {
+   "id": 25,
+   "tick": 7,
+   "tipo": "vidas.interpreta",
+   "datos": {
+    "id": 1,
+    "nombre": "Sima",
+    "historia": 23,
+    "contenido": "cambio sin explicar",
+    "presencia": "duda",
+    "anterior": null
+   },
+   "causa_id": 24
+  },
+  {
+   "id": 26,
+   "tick": 7,
+   "tipo": "vidas.inspecciona",
+   "datos": {
+    "id": 1,
+    "nombre": "Sima",
+    "historia": 23,
+    "contenido": "hendidura estable",
+    "cantidad": 0
+   },
+   "causa_id": 25
+  },
+  {
+   "id": 27,
+   "tick": 7,
+   "tipo": "vidas.observa",
+   "datos": {
+    "id": 2,
+    "nombre": "Rudo",
+    "historia": 23,
+    "familiar": true,
+    "celda": 65,
+    "objeto": "agujero"
+   },
+   "causa_id": 23
+  },
+  {
+   "id": 28,
+   "tick": 7,
+   "tipo": "vidas.interpreta",
+   "datos": {
+    "id": 2,
+    "nombre": "Rudo",
+    "historia": 23,
+    "contenido": "posible advertencia",
+    "presencia": "temor",
+    "anterior": null
+   },
+   "causa_id": 27
+  },
+  {
+   "id": 29,
+   "tick": 7,
+   "tipo": "vidas.rodear",
+   "datos": {
+    "id": 2,
+    "nombre": "Rudo",
+    "historia": 23,
+    "x": 3,
+    "y": 0,
+    "destino": 3
+   },
+   "causa_id": 28
+  },
+  {
+   "id": 30,
+   "tick": 7,
+   "tipo": "vidas.observa",
+   "datos": {
+    "id": 3,
+    "nombre": "Tobo",
+    "historia": 23,
+    "familiar": false,
+    "celda": 65,
+    "objeto": "agujero"
+   },
+   "causa_id": 23
+  },
+  {
+   "id": 31,
+   "tick": 7,
+   "tipo": "vidas.interpreta",
+   "datos": {
+    "id": 3,
+    "nombre": "Tobo",
+    "historia": 23,
+    "contenido": "terreno peligroso",
+    "presencia": "cautela",
+    "anterior": null
+   },
+   "causa_id": 30
+  },
+  {
+   "id": 32,
+   "tick": 7,
+   "tipo": "vidas.rodear",
+   "datos": {
+    "id": 3,
+    "nombre": "Tobo",
+    "historia": 23,
+    "x": 3,
+    "y": 0,
+    "destino": 3
+   },
+   "causa_id": 31
+  },
+  {
+   "id": 33,
+   "tick": 8,
+   "tipo": "vidas.relata",
+   "datos": {
+    "id": 1,
+    "nombre": "Sima",
+    "historia": 23,
+    "a": 4,
+    "origen": 24,
+    "contenido": "hendidura estable"
+   },
+   "causa_id": 26
+  },
+  {
+   "id": 35,
+   "tick": 8,
+   "tipo": "vidas.rodear",
+   "datos": {
+    "id": 4,
+    "nombre": "Fedra",
+    "historia": 23,
+    "x": 13,
+    "y": 3,
+    "destino": 205
+   },
+   "causa_id": 33
+  },
+  {
+   "id": 38,
+   "tick": 9,
+   "tipo": "vidas.observa",
+   "datos": {
+    "id": 4,
+    "nombre": "Fedra",
+    "historia": 23,
+    "familiar": false,
+    "celda": 65,
+    "objeto": "agujero"
+   },
+   "causa_id": 23
+  },
+  {
+   "id": 39,
+   "tick": 9,
+   "tipo": "vidas.interpreta",
+   "datos": {
+    "id": 4,
+    "nombre": "Fedra",
+    "historia": 23,
+    "contenido": "terreno peligroso",
+    "presencia": "cautela",
+    "anterior": 33
+   },
+   "causa_id": 38
+  },
+  {
+   "id": 40,
+   "tick": 9,
+   "tipo": "vidas.rodear",
+   "datos": {
+    "id": 4,
+    "nombre": "Fedra",
+    "historia": 23,
+    "x": 3,
+    "y": 0,
+    "destino": 3
+   },
+   "causa_id": 39
+  },
+  {
+   "id": 41,
+   "tick": 9,
+   "tipo": "presencia.orden",
+   "datos": {
+    "accion": "cerrar",
+    "x": 1,
+    "y": 1,
+    "cantidad": 0,
+    "orden": 2,
+    "historia": 23
+   },
+   "causa_id": 23
+  },
+  {
+   "id": 43,
+   "tick": 10,
+   "tipo": "vidas.revisa",
+   "datos": {
+    "id": 2,
+    "nombre": "Rudo",
+    "historia": 23,
+    "contenido": "ya no está a la vista"
+   },
+   "causa_id": 28
+  },
+  {
+   "id": 44,
+   "tick": 10,
+   "tipo": "vidas.revisa",
+   "datos": {
+    "id": 3,
+    "nombre": "Tobo",
+    "historia": 23,
+    "contenido": "ya no está a la vista"
+   },
+   "causa_id": 31
+  },
+  {
+   "id": 46,
+   "tick": 10,
+   "tipo": "vidas.revisa",
+   "datos": {
+    "id": 4,
+    "nombre": "Fedra",
+    "historia": 23,
+    "contenido": "ya no está a la vista"
+   },
+   "causa_id": 39
+  }
+ ],
+ "palabra": [
+  {
+   "id": 19,
+   "tick": 6,
+   "tipo": "vidas.promete",
+   "datos": {
+    "id": 1,
+    "nombre": "Sima",
+    "historia": 19,
+    "a": 2,
+    "cantidad": 2,
+    "plazo": 18,
+    "motivo": "compartir la próxima ración",
+    "expectativa": "recibir dos unidades",
+    "conocen": [
+     1,
+     2
+    ]
+   },
+   "causa_id": null
+  },
+  {
+   "id": 20,
+   "tick": 7,
+   "tipo": "vidas.entrega",
+   "datos": {
+    "id": 1,
+    "nombre": "Sima",
+    "historia": 19,
+    "a": 2,
+    "beneficiario": 2,
+    "cantidad": 2,
+    "motivo": "cumplir la palabra"
+   },
+   "causa_id": 19
+  }
+ ],
+ "prioridad_de_ayudar": [
+  {
+   "id": 19,
+   "tick": 6,
+   "tipo": "vidas.promete",
+   "datos": {
+    "id": 1,
+    "nombre": "Sima",
+    "historia": 19,
+    "a": 2,
+    "cantidad": 2,
+    "plazo": 18,
+    "motivo": "compartir la próxima ración",
+    "expectativa": "recibir dos unidades",
+    "conocen": [
+     1,
+     2
+    ]
+   },
+   "causa_id": null
+  },
+  {
+   "id": 20,
+   "tick": 7,
+   "tipo": "vidas.entrega",
+   "datos": {
+    "id": 1,
+    "nombre": "Sima",
+    "historia": 19,
+    "a": 3,
+    "beneficiario": 2,
+    "cantidad": 2,
+    "motivo": "socorrer a quien pasa hambre"
+   },
+   "causa_id": 19
+  },
+  {
+   "id": 21,
+   "tick": 19,
+   "tipo": "vidas.juzga",
+   "datos": {
+    "id": 2,
+    "nombre": "Rudo",
+    "historia": 19,
+    "a": 1,
+    "observacion": "vio la entrega a otra persona",
+    "contenido": "palabra rota"
+   },
+   "causa_id": 20
+  },
+  {
+   "id": 22,
+   "tick": 19,
+   "tipo": "vidas.tomar_distancia",
+   "datos": {
+    "id": 2,
+    "nombre": "Rudo",
+    "historia": 19,
+    "x": 20,
+    "y": 0,
+    "destino": 20
+   },
+   "causa_id": 21
+  },
+  {
+   "id": 24,
+   "tick": 23,
+   "tipo": "vidas.repara",
+   "datos": {
+    "id": 1,
+    "nombre": "Sima",
+    "historia": 19,
+    "a": 2,
+    "cantidad": 2,
+    "explicacion": "socorrer a quien pasa hambre",
+    "aceptada": true
+   },
+   "causa_id": 21
+  }
+ ],
+ "hambre_grave_visible": [
+  {
+   "id": 19,
+   "tick": 6,
+   "tipo": "vidas.promete",
+   "datos": {
+    "id": 1,
+    "nombre": "Sima",
+    "historia": 19,
+    "a": 2,
+    "cantidad": 2,
+    "plazo": 18,
+    "motivo": "compartir la próxima ración",
+    "expectativa": "recibir dos unidades",
+    "conocen": [
+     1,
+     2
+    ]
+   },
+   "causa_id": null
+  },
+  {
+   "id": 20,
+   "tick": 7,
+   "tipo": "vidas.entrega",
+   "datos": {
+    "id": 1,
+    "nombre": "Sima",
+    "historia": 19,
+    "a": 3,
+    "beneficiario": 2,
+    "cantidad": 2,
+    "motivo": "socorrer a quien pasa hambre"
+   },
+   "causa_id": 19
+  },
+  {
+   "id": 21,
+   "tick": 19,
+   "tipo": "vidas.juzga",
+   "datos": {
+    "id": 2,
+    "nombre": "Rudo",
+    "historia": 19,
+    "a": 1,
+    "observacion": "vio el hambre",
+    "contenido": "necesidad justificada"
+   },
+   "causa_id": 20
+  },
+  {
+   "id": 23,
+   "tick": 23,
+   "tipo": "vidas.repara",
+   "datos": {
+    "id": 1,
+    "nombre": "Sima",
+    "historia": 19,
+    "a": 2,
+    "cantidad": 2,
+    "explicacion": "socorrer a quien pasa hambre",
+    "aceptada": true
+   },
+   "causa_id": 21
+  }
+ ],
+ "aprendizaje": [
+  {
+   "id": 19,
+   "tick": 8,
+   "tipo": "vidas.nace",
+   "datos": {
+    "id": 4,
+    "nombre": "Fedra Sima",
+    "historia": 18,
+    "progenitores": [
+     1,
+     2
+    ],
+    "a": 1,
+    "x": 21,
+    "y": 0
+   },
+   "causa_id": 18
+  },
+  {
+   "id": 20,
+   "tick": 8,
+   "tipo": "vidas.enseña",
+   "datos": {
+    "id": 1,
+    "nombre": "Sima",
+    "historia": 18,
+    "a": 4,
+    "celda": 21,
+    "contenido": "orilla para beber",
+    "confianza": 60
+   },
+   "causa_id": 19
+  },
+  {
+   "id": 21,
+   "tick": 8,
+   "tipo": "habitante.muere",
+   "datos": {
+    "id": 1,
+    "nombre": "Sima",
+    "causa": "sed",
+    "edad": 25,
+    "x": 21,
+    "y": 0,
+    "danios": {}
+   },
+   "causa_id": 5
+  },
+  {
+   "id": 22,
+   "tick": 8,
+   "tipo": "habitante.muere",
+   "datos": {
+    "id": 2,
+    "nombre": "Rudo",
+    "causa": "sed",
+    "edad": 41,
+    "x": 21,
+    "y": 0,
+    "danios": {}
+   },
+   "causa_id": 6
+  },
+  {
+   "id": 23,
+   "tick": 8,
+   "tipo": "vidas.nuevo_cuidado",
+   "datos": {
+    "id": 4,
+    "nombre": "Fedra Sima",
+    "historia": 18,
+    "a": 3,
+    "anteriores": [
+     1,
+     2
+    ]
+   },
+   "causa_id": 21
+  },
+  {
+   "id": 24,
+   "tick": 8,
+   "tipo": "vidas.buscar_agua_aprendida",
+   "datos": {
+    "id": 4,
+    "nombre": "Fedra Sima",
+    "historia": 18,
+    "x": 19,
+    "y": 0,
+    "destino": 21
+   },
+   "causa_id": 20
+  },
+  {
+   "id": 25,
+   "tick": 3848,
+   "tipo": "vidas.crece",
+   "datos": {
+    "id": 4,
+    "nombre": "Fedra Sima",
+    "historia": 18,
+    "etapa": "aprendiz",
+    "edad": 4
+   },
+   "causa_id": 19
+  },
+  {
+   "id": 26,
+   "tick": 11528,
+   "tipo": "vidas.crece",
+   "datos": {
+    "id": 4,
+    "nombre": "Fedra Sima",
+    "historia": 18,
+    "etapa": "adulto",
+    "edad": 12
+   },
+   "causa_id": 19
+  }
+ ]
+}

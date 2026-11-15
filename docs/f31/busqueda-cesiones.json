@@ -1,0 +1,1667 @@
+{
+ "total": {
+  "mundos": 180,
+  "peticiones_con_peligro": 2118,
+  "en_apuros": 1,
+  "cesiones": 0
+ },
+ "mundos": [
+  {
+   "semilla": 1,
+   "abundancia": 0.3,
+   "anios": 3,
+   "vivos": 25,
+   "peticiones_con_peligro": 15,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 2,
+   "abundancia": 0.3,
+   "anios": 3,
+   "vivos": 15,
+   "peticiones_con_peligro": 3,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 3,
+   "abundancia": 0.3,
+   "anios": 3,
+   "vivos": 6,
+   "peticiones_con_peligro": 1,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 4,
+   "abundancia": 0.3,
+   "anios": 3,
+   "vivos": 15,
+   "peticiones_con_peligro": 0,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 5,
+   "abundancia": 0.3,
+   "anios": 3,
+   "vivos": 25,
+   "peticiones_con_peligro": 1,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 6,
+   "abundancia": 0.3,
+   "anios": 3,
+   "vivos": 25,
+   "peticiones_con_peligro": 6,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 7,
+   "abundancia": 0.3,
+   "anios": 3,
+   "vivos": 14,
+   "peticiones_con_peligro": 1,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 8,
+   "abundancia": 0.3,
+   "anios": 3,
+   "vivos": 14,
+   "peticiones_con_peligro": 8,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 9,
+   "abundancia": 0.3,
+   "anios": 3,
+   "vivos": 1,
+   "peticiones_con_peligro": 0,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 10,
+   "abundancia": 0.3,
+   "anios": 3,
+   "vivos": 25,
+   "peticiones_con_peligro": 7,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 11,
+   "abundancia": 0.3,
+   "anios": 3,
+   "vivos": 9,
+   "peticiones_con_peligro": 44,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 12,
+   "abundancia": 0.3,
+   "anios": 3,
+   "vivos": 13,
+   "peticiones_con_peligro": 27,
+   "en_apuros": [
+    {
+     "tick": 700,
+     "quien": 15,
+     "nombre": "Neva",
+     "salud": 393,
+     "fuera": -6.4,
+     "refugio": "Refugio del Prado",
+     "acuerdo": null,
+     "ocupantes": [
+      [
+       3,
+       990
+      ],
+      [
+       5,
+       1000
+      ],
+      [
+       7,
+       1000
+      ],
+      [
+       9,
+       1000
+      ],
+      [
+       11,
+       1000
+      ],
+      [
+       25,
+       1000
+      ]
+     ],
+     "cedio": null
+    }
+   ],
+   "cesiones": []
+  },
+  {
+   "semilla": 13,
+   "abundancia": 0.3,
+   "anios": 3,
+   "vivos": 9,
+   "peticiones_con_peligro": 36,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 14,
+   "abundancia": 0.3,
+   "anios": 3,
+   "vivos": 21,
+   "peticiones_con_peligro": 0,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 15,
+   "abundancia": 0.3,
+   "anios": 3,
+   "vivos": 8,
+   "peticiones_con_peligro": 0,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 16,
+   "abundancia": 0.3,
+   "anios": 3,
+   "vivos": 17,
+   "peticiones_con_peligro": 6,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 17,
+   "abundancia": 0.3,
+   "anios": 3,
+   "vivos": 19,
+   "peticiones_con_peligro": 24,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 18,
+   "abundancia": 0.3,
+   "anios": 3,
+   "vivos": 18,
+   "peticiones_con_peligro": 3,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 19,
+   "abundancia": 0.3,
+   "anios": 3,
+   "vivos": 21,
+   "peticiones_con_peligro": 8,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 20,
+   "abundancia": 0.3,
+   "anios": 3,
+   "vivos": 21,
+   "peticiones_con_peligro": 1,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 21,
+   "abundancia": 0.3,
+   "anios": 3,
+   "vivos": 25,
+   "peticiones_con_peligro": 9,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 22,
+   "abundancia": 0.3,
+   "anios": 3,
+   "vivos": 20,
+   "peticiones_con_peligro": 11,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 23,
+   "abundancia": 0.3,
+   "anios": 3,
+   "vivos": 25,
+   "peticiones_con_peligro": 0,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 24,
+   "abundancia": 0.3,
+   "anios": 3,
+   "vivos": 19,
+   "peticiones_con_peligro": 2,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 25,
+   "abundancia": 0.3,
+   "anios": 3,
+   "vivos": 13,
+   "peticiones_con_peligro": 10,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 26,
+   "abundancia": 0.3,
+   "anios": 3,
+   "vivos": 16,
+   "peticiones_con_peligro": 4,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 27,
+   "abundancia": 0.3,
+   "anios": 3,
+   "vivos": 15,
+   "peticiones_con_peligro": 5,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 28,
+   "abundancia": 0.3,
+   "anios": 3,
+   "vivos": 1,
+   "peticiones_con_peligro": 2,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 29,
+   "abundancia": 0.3,
+   "anios": 3,
+   "vivos": 19,
+   "peticiones_con_peligro": 11,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 30,
+   "abundancia": 0.3,
+   "anios": 3,
+   "vivos": 17,
+   "peticiones_con_peligro": 28,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 31,
+   "abundancia": 0.3,
+   "anios": 3,
+   "vivos": 4,
+   "peticiones_con_peligro": 1,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 32,
+   "abundancia": 0.3,
+   "anios": 3,
+   "vivos": 11,
+   "peticiones_con_peligro": 3,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 33,
+   "abundancia": 0.3,
+   "anios": 3,
+   "vivos": 20,
+   "peticiones_con_peligro": 23,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 34,
+   "abundancia": 0.3,
+   "anios": 3,
+   "vivos": 22,
+   "peticiones_con_peligro": 0,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 35,
+   "abundancia": 0.3,
+   "anios": 3,
+   "vivos": 10,
+   "peticiones_con_peligro": 1,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 36,
+   "abundancia": 0.3,
+   "anios": 3,
+   "vivos": 15,
+   "peticiones_con_peligro": 41,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 37,
+   "abundancia": 0.3,
+   "anios": 3,
+   "vivos": 9,
+   "peticiones_con_peligro": 12,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 38,
+   "abundancia": 0.3,
+   "anios": 3,
+   "vivos": 20,
+   "peticiones_con_peligro": 0,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 39,
+   "abundancia": 0.3,
+   "anios": 3,
+   "vivos": 22,
+   "peticiones_con_peligro": 5,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 40,
+   "abundancia": 0.3,
+   "anios": 3,
+   "vivos": 11,
+   "peticiones_con_peligro": 30,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 41,
+   "abundancia": 0.3,
+   "anios": 3,
+   "vivos": 21,
+   "peticiones_con_peligro": 4,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 42,
+   "abundancia": 0.3,
+   "anios": 3,
+   "vivos": 13,
+   "peticiones_con_peligro": 0,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 43,
+   "abundancia": 0.3,
+   "anios": 3,
+   "vivos": 19,
+   "peticiones_con_peligro": 34,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 44,
+   "abundancia": 0.3,
+   "anios": 3,
+   "vivos": 14,
+   "peticiones_con_peligro": 0,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 45,
+   "abundancia": 0.3,
+   "anios": 3,
+   "vivos": 22,
+   "peticiones_con_peligro": 9,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 46,
+   "abundancia": 0.3,
+   "anios": 3,
+   "vivos": 9,
+   "peticiones_con_peligro": 18,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 47,
+   "abundancia": 0.3,
+   "anios": 3,
+   "vivos": 14,
+   "peticiones_con_peligro": 8,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 48,
+   "abundancia": 0.3,
+   "anios": 3,
+   "vivos": 14,
+   "peticiones_con_peligro": 2,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 49,
+   "abundancia": 0.3,
+   "anios": 3,
+   "vivos": 18,
+   "peticiones_con_peligro": 2,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 50,
+   "abundancia": 0.3,
+   "anios": 3,
+   "vivos": 11,
+   "peticiones_con_peligro": 4,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 51,
+   "abundancia": 0.3,
+   "anios": 3,
+   "vivos": 15,
+   "peticiones_con_peligro": 13,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 52,
+   "abundancia": 0.3,
+   "anios": 3,
+   "vivos": 14,
+   "peticiones_con_peligro": 5,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 53,
+   "abundancia": 0.3,
+   "anios": 3,
+   "vivos": 21,
+   "peticiones_con_peligro": 7,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 54,
+   "abundancia": 0.3,
+   "anios": 3,
+   "vivos": 21,
+   "peticiones_con_peligro": 2,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 55,
+   "abundancia": 0.3,
+   "anios": 3,
+   "vivos": 25,
+   "peticiones_con_peligro": 47,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 56,
+   "abundancia": 0.3,
+   "anios": 3,
+   "vivos": 5,
+   "peticiones_con_peligro": 5,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 57,
+   "abundancia": 0.3,
+   "anios": 3,
+   "vivos": 22,
+   "peticiones_con_peligro": 2,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 58,
+   "abundancia": 0.3,
+   "anios": 3,
+   "vivos": 23,
+   "peticiones_con_peligro": 0,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 59,
+   "abundancia": 0.3,
+   "anios": 3,
+   "vivos": 25,
+   "peticiones_con_peligro": 0,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 60,
+   "abundancia": 0.3,
+   "anios": 3,
+   "vivos": 15,
+   "peticiones_con_peligro": 10,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 1,
+   "abundancia": 0.12,
+   "anios": 3,
+   "vivos": 6,
+   "peticiones_con_peligro": 0,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 2,
+   "abundancia": 0.12,
+   "anios": 3,
+   "vivos": 2,
+   "peticiones_con_peligro": 0,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 3,
+   "abundancia": 0.12,
+   "anios": 3,
+   "vivos": 2,
+   "peticiones_con_peligro": 0,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 4,
+   "abundancia": 0.12,
+   "anios": 3,
+   "vivos": 0,
+   "peticiones_con_peligro": 0,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 5,
+   "abundancia": 0.12,
+   "anios": 3,
+   "vivos": 7,
+   "peticiones_con_peligro": 0,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 6,
+   "abundancia": 0.12,
+   "anios": 3,
+   "vivos": 6,
+   "peticiones_con_peligro": 0,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 7,
+   "abundancia": 0.12,
+   "anios": 3,
+   "vivos": 0,
+   "peticiones_con_peligro": 0,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 8,
+   "abundancia": 0.12,
+   "anios": 3,
+   "vivos": 2,
+   "peticiones_con_peligro": 0,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 9,
+   "abundancia": 0.12,
+   "anios": 3,
+   "vivos": 0,
+   "peticiones_con_peligro": 0,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 10,
+   "abundancia": 0.12,
+   "anios": 3,
+   "vivos": 5,
+   "peticiones_con_peligro": 0,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 11,
+   "abundancia": 0.12,
+   "anios": 3,
+   "vivos": 3,
+   "peticiones_con_peligro": 0,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 12,
+   "abundancia": 0.12,
+   "anios": 3,
+   "vivos": 3,
+   "peticiones_con_peligro": 0,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 13,
+   "abundancia": 0.12,
+   "anios": 3,
+   "vivos": 0,
+   "peticiones_con_peligro": 0,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 14,
+   "abundancia": 0.12,
+   "anios": 3,
+   "vivos": 2,
+   "peticiones_con_peligro": 0,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 15,
+   "abundancia": 0.12,
+   "anios": 3,
+   "vivos": 0,
+   "peticiones_con_peligro": 0,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 16,
+   "abundancia": 0.12,
+   "anios": 3,
+   "vivos": 2,
+   "peticiones_con_peligro": 0,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 17,
+   "abundancia": 0.12,
+   "anios": 3,
+   "vivos": 7,
+   "peticiones_con_peligro": 0,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 18,
+   "abundancia": 0.12,
+   "anios": 3,
+   "vivos": 3,
+   "peticiones_con_peligro": 0,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 19,
+   "abundancia": 0.12,
+   "anios": 3,
+   "vivos": 3,
+   "peticiones_con_peligro": 0,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 20,
+   "abundancia": 0.12,
+   "anios": 3,
+   "vivos": 6,
+   "peticiones_con_peligro": 0,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 21,
+   "abundancia": 0.12,
+   "anios": 3,
+   "vivos": 7,
+   "peticiones_con_peligro": 1,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 22,
+   "abundancia": 0.12,
+   "anios": 3,
+   "vivos": 1,
+   "peticiones_con_peligro": 0,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 23,
+   "abundancia": 0.12,
+   "anios": 3,
+   "vivos": 6,
+   "peticiones_con_peligro": 0,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 24,
+   "abundancia": 0.12,
+   "anios": 3,
+   "vivos": 4,
+   "peticiones_con_peligro": 0,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 25,
+   "abundancia": 0.12,
+   "anios": 3,
+   "vivos": 1,
+   "peticiones_con_peligro": 0,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 26,
+   "abundancia": 0.12,
+   "anios": 3,
+   "vivos": 3,
+   "peticiones_con_peligro": 0,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 27,
+   "abundancia": 0.12,
+   "anios": 3,
+   "vivos": 0,
+   "peticiones_con_peligro": 0,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 28,
+   "abundancia": 0.12,
+   "anios": 3,
+   "vivos": 0,
+   "peticiones_con_peligro": 0,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 29,
+   "abundancia": 0.12,
+   "anios": 3,
+   "vivos": 3,
+   "peticiones_con_peligro": 0,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 30,
+   "abundancia": 0.12,
+   "anios": 3,
+   "vivos": 7,
+   "peticiones_con_peligro": 0,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 31,
+   "abundancia": 0.12,
+   "anios": 3,
+   "vivos": 0,
+   "peticiones_con_peligro": 0,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 32,
+   "abundancia": 0.12,
+   "anios": 3,
+   "vivos": 2,
+   "peticiones_con_peligro": 0,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 33,
+   "abundancia": 0.12,
+   "anios": 3,
+   "vivos": 1,
+   "peticiones_con_peligro": 0,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 34,
+   "abundancia": 0.12,
+   "anios": 3,
+   "vivos": 3,
+   "peticiones_con_peligro": 0,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 35,
+   "abundancia": 0.12,
+   "anios": 3,
+   "vivos": 1,
+   "peticiones_con_peligro": 0,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 36,
+   "abundancia": 0.12,
+   "anios": 3,
+   "vivos": 0,
+   "peticiones_con_peligro": 0,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 37,
+   "abundancia": 0.12,
+   "anios": 3,
+   "vivos": 0,
+   "peticiones_con_peligro": 0,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 38,
+   "abundancia": 0.12,
+   "anios": 3,
+   "vivos": 1,
+   "peticiones_con_peligro": 1,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 39,
+   "abundancia": 0.12,
+   "anios": 3,
+   "vivos": 2,
+   "peticiones_con_peligro": 0,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 40,
+   "abundancia": 0.12,
+   "anios": 3,
+   "vivos": 0,
+   "peticiones_con_peligro": 0,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 41,
+   "abundancia": 0.12,
+   "anios": 3,
+   "vivos": 2,
+   "peticiones_con_peligro": 0,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 42,
+   "abundancia": 0.12,
+   "anios": 3,
+   "vivos": 2,
+   "peticiones_con_peligro": 0,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 43,
+   "abundancia": 0.12,
+   "anios": 3,
+   "vivos": 2,
+   "peticiones_con_peligro": 0,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 44,
+   "abundancia": 0.12,
+   "anios": 3,
+   "vivos": 1,
+   "peticiones_con_peligro": 0,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 45,
+   "abundancia": 0.12,
+   "anios": 3,
+   "vivos": 4,
+   "peticiones_con_peligro": 0,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 46,
+   "abundancia": 0.12,
+   "anios": 3,
+   "vivos": 1,
+   "peticiones_con_peligro": 0,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 47,
+   "abundancia": 0.12,
+   "anios": 3,
+   "vivos": 3,
+   "peticiones_con_peligro": 0,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 48,
+   "abundancia": 0.12,
+   "anios": 3,
+   "vivos": 2,
+   "peticiones_con_peligro": 0,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 49,
+   "abundancia": 0.12,
+   "anios": 3,
+   "vivos": 0,
+   "peticiones_con_peligro": 0,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 50,
+   "abundancia": 0.12,
+   "anios": 3,
+   "vivos": 0,
+   "peticiones_con_peligro": 0,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 51,
+   "abundancia": 0.12,
+   "anios": 3,
+   "vivos": 3,
+   "peticiones_con_peligro": 0,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 52,
+   "abundancia": 0.12,
+   "anios": 3,
+   "vivos": 1,
+   "peticiones_con_peligro": 0,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 53,
+   "abundancia": 0.12,
+   "anios": 3,
+   "vivos": 3,
+   "peticiones_con_peligro": 0,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 54,
+   "abundancia": 0.12,
+   "anios": 3,
+   "vivos": 6,
+   "peticiones_con_peligro": 1,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 55,
+   "abundancia": 0.12,
+   "anios": 3,
+   "vivos": 2,
+   "peticiones_con_peligro": 5,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 56,
+   "abundancia": 0.12,
+   "anios": 3,
+   "vivos": 1,
+   "peticiones_con_peligro": 0,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 57,
+   "abundancia": 0.12,
+   "anios": 3,
+   "vivos": 2,
+   "peticiones_con_peligro": 0,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 58,
+   "abundancia": 0.12,
+   "anios": 3,
+   "vivos": 8,
+   "peticiones_con_peligro": 0,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 59,
+   "abundancia": 0.12,
+   "anios": 3,
+   "vivos": 3,
+   "peticiones_con_peligro": 0,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 60,
+   "abundancia": 0.12,
+   "anios": 3,
+   "vivos": 0,
+   "peticiones_con_peligro": 0,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 1,
+   "abundancia": 1.0,
+   "anios": 3,
+   "vivos": 25,
+   "peticiones_con_peligro": 5,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 2,
+   "abundancia": 1.0,
+   "anios": 3,
+   "vivos": 25,
+   "peticiones_con_peligro": 4,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 3,
+   "abundancia": 1.0,
+   "anios": 3,
+   "vivos": 24,
+   "peticiones_con_peligro": 15,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 4,
+   "abundancia": 1.0,
+   "anios": 3,
+   "vivos": 22,
+   "peticiones_con_peligro": 0,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 5,
+   "abundancia": 1.0,
+   "anios": 3,
+   "vivos": 25,
+   "peticiones_con_peligro": 7,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 6,
+   "abundancia": 1.0,
+   "anios": 3,
+   "vivos": 25,
+   "peticiones_con_peligro": 0,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 7,
+   "abundancia": 1.0,
+   "anios": 3,
+   "vivos": 25,
+   "peticiones_con_peligro": 2,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 8,
+   "abundancia": 1.0,
+   "anios": 3,
+   "vivos": 25,
+   "peticiones_con_peligro": 7,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 9,
+   "abundancia": 1.0,
+   "anios": 3,
+   "vivos": 14,
+   "peticiones_con_peligro": 1,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 10,
+   "abundancia": 1.0,
+   "anios": 3,
+   "vivos": 25,
+   "peticiones_con_peligro": 7,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 11,
+   "abundancia": 1.0,
+   "anios": 3,
+   "vivos": 25,
+   "peticiones_con_peligro": 188,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 12,
+   "abundancia": 1.0,
+   "anios": 3,
+   "vivos": 25,
+   "peticiones_con_peligro": 29,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 13,
+   "abundancia": 1.0,
+   "anios": 3,
+   "vivos": 25,
+   "peticiones_con_peligro": 110,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 14,
+   "abundancia": 1.0,
+   "anios": 3,
+   "vivos": 25,
+   "peticiones_con_peligro": 9,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 15,
+   "abundancia": 1.0,
+   "anios": 3,
+   "vivos": 23,
+   "peticiones_con_peligro": 6,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 16,
+   "abundancia": 1.0,
+   "anios": 3,
+   "vivos": 25,
+   "peticiones_con_peligro": 11,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 17,
+   "abundancia": 1.0,
+   "anios": 3,
+   "vivos": 25,
+   "peticiones_con_peligro": 26,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 18,
+   "abundancia": 1.0,
+   "anios": 3,
+   "vivos": 25,
+   "peticiones_con_peligro": 5,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 19,
+   "abundancia": 1.0,
+   "anios": 3,
+   "vivos": 25,
+   "peticiones_con_peligro": 35,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 20,
+   "abundancia": 1.0,
+   "anios": 3,
+   "vivos": 25,
+   "peticiones_con_peligro": 0,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 21,
+   "abundancia": 1.0,
+   "anios": 3,
+   "vivos": 25,
+   "peticiones_con_peligro": 39,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 22,
+   "abundancia": 1.0,
+   "anios": 3,
+   "vivos": 25,
+   "peticiones_con_peligro": 58,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 23,
+   "abundancia": 1.0,
+   "anios": 3,
+   "vivos": 25,
+   "peticiones_con_peligro": 8,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 24,
+   "abundancia": 1.0,
+   "anios": 3,
+   "vivos": 25,
+   "peticiones_con_peligro": 22,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 25,
+   "abundancia": 1.0,
+   "anios": 3,
+   "vivos": 25,
+   "peticiones_con_peligro": 58,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 26,
+   "abundancia": 1.0,
+   "anios": 3,
+   "vivos": 20,
+   "peticiones_con_peligro": 8,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 27,
+   "abundancia": 1.0,
+   "anios": 3,
+   "vivos": 25,
+   "peticiones_con_peligro": 15,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 28,
+   "abundancia": 1.0,
+   "anios": 3,
+   "vivos": 19,
+   "peticiones_con_peligro": 3,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 29,
+   "abundancia": 1.0,
+   "anios": 3,
+   "vivos": 24,
+   "peticiones_con_peligro": 47,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 30,
+   "abundancia": 1.0,
+   "anios": 3,
+   "vivos": 25,
+   "peticiones_con_peligro": 3,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 31,
+   "abundancia": 1.0,
+   "anios": 3,
+   "vivos": 25,
+   "peticiones_con_peligro": 44,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 32,
+   "abundancia": 1.0,
+   "anios": 3,
+   "vivos": 25,
+   "peticiones_con_peligro": 30,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 33,
+   "abundancia": 1.0,
+   "anios": 3,
+   "vivos": 25,
+   "peticiones_con_peligro": 28,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 34,
+   "abundancia": 1.0,
+   "anios": 3,
+   "vivos": 25,
+   "peticiones_con_peligro": 7,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 35,
+   "abundancia": 1.0,
+   "anios": 3,
+   "vivos": 25,
+   "peticiones_con_peligro": 3,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 36,
+   "abundancia": 1.0,
+   "anios": 3,
+   "vivos": 25,
+   "peticiones_con_peligro": 60,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 37,
+   "abundancia": 1.0,
+   "anios": 3,
+   "vivos": 25,
+   "peticiones_con_peligro": 45,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 38,
+   "abundancia": 1.0,
+   "anios": 3,
+   "vivos": 25,
+   "peticiones_con_peligro": 5,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 39,
+   "abundancia": 1.0,
+   "anios": 3,
+   "vivos": 25,
+   "peticiones_con_peligro": 55,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 40,
+   "abundancia": 1.0,
+   "anios": 3,
+   "vivos": 25,
+   "peticiones_con_peligro": 66,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 41,
+   "abundancia": 1.0,
+   "anios": 3,
+   "vivos": 25,
+   "peticiones_con_peligro": 9,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 42,
+   "abundancia": 1.0,
+   "anios": 3,
+   "vivos": 25,
+   "peticiones_con_peligro": 2,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 43,
+   "abundancia": 1.0,
+   "anios": 3,
+   "vivos": 25,
+   "peticiones_con_peligro": 45,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 44,
+   "abundancia": 1.0,
+   "anios": 3,
+   "vivos": 25,
+   "peticiones_con_peligro": 18,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 45,
+   "abundancia": 1.0,
+   "anios": 3,
+   "vivos": 25,
+   "peticiones_con_peligro": 18,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 46,
+   "abundancia": 1.0,
+   "anios": 3,
+   "vivos": 25,
+   "peticiones_con_peligro": 115,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 47,
+   "abundancia": 1.0,
+   "anios": 3,
+   "vivos": 25,
+   "peticiones_con_peligro": 2,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 48,
+   "abundancia": 1.0,
+   "anios": 3,
+   "vivos": 25,
+   "peticiones_con_peligro": 5,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 49,
+   "abundancia": 1.0,
+   "anios": 3,
+   "vivos": 25,
+   "peticiones_con_peligro": 1,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 50,
+   "abundancia": 1.0,
+   "anios": 3,
+   "vivos": 25,
+   "peticiones_con_peligro": 15,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 51,
+   "abundancia": 1.0,
+   "anios": 3,
+   "vivos": 25,
+   "peticiones_con_peligro": 47,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 52,
+   "abundancia": 1.0,
+   "anios": 3,
+   "vivos": 25,
+   "peticiones_con_peligro": 44,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 53,
+   "abundancia": 1.0,
+   "anios": 3,
+   "vivos": 25,
+   "peticiones_con_peligro": 16,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 54,
+   "abundancia": 1.0,
+   "anios": 3,
+   "vivos": 25,
+   "peticiones_con_peligro": 9,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 55,
+   "abundancia": 1.0,
+   "anios": 3,
+   "vivos": 25,
+   "peticiones_con_peligro": 10,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 56,
+   "abundancia": 1.0,
+   "anios": 3,
+   "vivos": 21,
+   "peticiones_con_peligro": 38,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 57,
+   "abundancia": 1.0,
+   "anios": 3,
+   "vivos": 25,
+   "peticiones_con_peligro": 5,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 58,
+   "abundancia": 1.0,
+   "anios": 3,
+   "vivos": 25,
+   "peticiones_con_peligro": 13,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 59,
+   "abundancia": 1.0,
+   "anios": 3,
+   "vivos": 25,
+   "peticiones_con_peligro": 9,
+   "en_apuros": [],
+   "cesiones": []
+  },
+  {
+   "semilla": 60,
+   "abundancia": 1.0,
+   "anios": 3,
+   "vivos": 25,
+   "peticiones_con_peligro": 57,
+   "en_apuros": [],
+   "cesiones": []
+  }
+ ]
+}

@@ -1,0 +1,51 @@
+{
+ "1.0": {
+  "totales": {
+   "obras": 133,
+   "estancia_vista": 5416,
+   "estancia_informada": 3516,
+   "estancia_informada_con_frio": 1237,
+   "estancia_vista_con_frio": 1743,
+   "cede": 10,
+   "cede_causa:estructura.reparada": 9,
+   "cede_causa:obra.terminada": 1,
+   "cede_tras_recibir_misma_hora": 3,
+   "cede_reciproca": 2
+  },
+  "causa_de_estancia_informada": {
+   "lugar.informa": 3516
+  },
+  "causa_de_obra_iniciada": {
+   "sin causa": 116,
+   "habitante.fuente_agotada": 6,
+   "refugio.sin_sitio": 1,
+   "habitante.intemperie": 6,
+   "habitante.hambre_grave": 1,
+   "habitante.viaje_fallido": 3
+  }
+ },
+ "0.3": {
+  "totales": {
+   "obras": 124,
+   "estancia_vista": 4150,
+   "estancia_informada": 2322,
+   "estancia_vista_con_frio": 1294,
+   "estancia_informada_con_frio": 943,
+   "cede": 10,
+   "cede_causa:estructura.reparada": 2,
+   "cede_causa:obra.terminada": 8,
+   "cede_reciproca": 2,
+   "cede_tras_recibir_misma_hora": 3
+  },
+  "causa_de_estancia_informada": {
+   "lugar.informa": 2322
+  },
+  "causa_de_obra_iniciada": {
+   "sin causa": 80,
+   "habitante.fuente_agotada": 18,
+   "habitante.viaje_fallido": 16,
+   "habitante.intemperie": 7,
+   "habitante.hambre_grave": 3
+  }
+ }
+}

@@ -1,0 +1,364 @@
+[
+ {
+  "iniciales": 8,
+  "ordenes": [],
+  "muestras": [
+   {
+    "hora": 120,
+    "horas_por_segundo": 1771.1,
+    "eventos": 229,
+    "vivos": 8,
+    "vinculos": 0,
+    "guardar_ms": 4.3,
+    "leer_lista_y_detalle_ms": 0.03
+   },
+   {
+    "hora": 960,
+    "horas_por_segundo": 1754.9,
+    "eventos": 1675,
+    "vivos": 10,
+    "vinculos": 20,
+    "guardar_ms": 16.0,
+    "leer_lista_y_detalle_ms": 0.36
+   },
+   {
+    "hora": 1080,
+    "horas_por_segundo": 1337.9,
+    "eventos": 1931,
+    "vivos": 11,
+    "vinculos": 22,
+    "guardar_ms": 9.6,
+    "leer_lista_y_detalle_ms": 0.12
+   }
+  ],
+  "bytes": 495616
+ },
+ {
+  "iniciales": 25,
+  "ordenes": [],
+  "muestras": [
+   {
+    "hora": 120,
+    "horas_por_segundo": 619.6,
+    "eventos": 760,
+    "vivos": 25,
+    "vinculos": 28,
+    "guardar_ms": 12.0,
+    "leer_lista_y_detalle_ms": 0.09
+   },
+   {
+    "hora": 960,
+    "horas_por_segundo": 357.7,
+    "eventos": 6338,
+    "vivos": 33,
+    "vinculos": 188,
+    "guardar_ms": 116.5,
+    "leer_lista_y_detalle_ms": 0.64
+   },
+   {
+    "hora": 1080,
+    "horas_por_segundo": 295.9,
+    "eventos": 7369,
+    "vivos": 34,
+    "vinculos": 200,
+    "guardar_ms": 43.7,
+    "leer_lista_y_detalle_ms": 1.21
+   }
+  ],
+  "bytes": 1675264
+ },
+ {
+  "iniciales": 25,
+  "ordenes": [
+   {
+    "id": 51,
+    "tick": 0,
+    "tipo": "presencia.orden",
+    "datos": {
+     "accion": "agujero",
+     "x": 41,
+     "y": 43,
+     "cantidad": 0,
+     "orden": 1,
+     "historia": 51
+    },
+    "causa_id": null
+   },
+   {
+    "id": 52,
+    "tick": 0,
+    "tipo": "presencia.orden",
+    "datos": {
+     "accion": "agujero",
+     "x": 29,
+     "y": 5,
+     "cantidad": 0,
+     "orden": 2,
+     "historia": 52
+    },
+    "causa_id": null
+   },
+   {
+    "id": 53,
+    "tick": 0,
+    "tipo": "presencia.orden",
+    "datos": {
+     "accion": "agujero",
+     "x": 39,
+     "y": 14,
+     "cantidad": 0,
+     "orden": 3,
+     "historia": 53
+    },
+    "causa_id": null
+   },
+   {
+    "id": 54,
+    "tick": 0,
+    "tipo": "presencia.orden",
+    "datos": {
+     "accion": "agujero",
+     "x": 37,
+     "y": 59,
+     "cantidad": 0,
+     "orden": 4,
+     "historia": 54
+    },
+    "causa_id": null
+   },
+   {
+    "id": 55,
+    "tick": 0,
+    "tipo": "presencia.orden",
+    "datos": {
+     "accion": "agujero",
+     "x": 42,
+     "y": 43,
+     "cantidad": 0,
+     "orden": 5,
+     "historia": 55
+    },
+    "causa_id": null
+   },
+   {
+    "id": 56,
+    "tick": 0,
+    "tipo": "presencia.orden",
+    "datos": {
+     "accion": "agujero",
+     "x": 31,
+     "y": 2,
+     "cantidad": 0,
+     "orden": 6,
+     "historia": 56
+    },
+    "causa_id": null
+   },
+   {
+    "id": 57,
+    "tick": 0,
+    "tipo": "presencia.orden",
+    "datos": {
+     "accion": "agujero",
+     "x": 39,
+     "y": 16,
+     "cantidad": 0,
+     "orden": 7,
+     "historia": 57
+    },
+    "causa_id": null
+   },
+   {
+    "id": 58,
+    "tick": 0,
+    "tipo": "presencia.orden",
+    "datos": {
+     "accion": "agujero",
+     "x": 37,
+     "y": 54,
+     "cantidad": 0,
+     "orden": 8,
+     "historia": 58
+    },
+    "causa_id": null
+   }
+  ],
+  "muestras": [
+   {
+    "hora": 120,
+    "horas_por_segundo": 364.7,
+    "eventos": 1114,
+    "vivos": 25,
+    "vinculos": 38,
+    "guardar_ms": 25.3,
+    "leer_lista_y_detalle_ms": 1.25
+   },
+   {
+    "hora": 960,
+    "horas_por_segundo": 282.6,
+    "eventos": 6731,
+    "vivos": 32,
+    "vinculos": 230,
+    "guardar_ms": 99.9,
+    "leer_lista_y_detalle_ms": 1.49
+   },
+   {
+    "hora": 1080,
+    "horas_por_segundo": 266.3,
+    "eventos": 7711,
+    "vivos": 33,
+    "vinculos": 247,
+    "guardar_ms": 47.6,
+    "leer_lista_y_detalle_ms": 2.03
+   }
+  ],
+  "bytes": 1716224
+ },
+ {
+  "iniciales": 40,
+  "ordenes": [
+   {
+    "id": 82,
+    "tick": 0,
+    "tipo": "presencia.orden",
+    "datos": {
+     "accion": "agujero",
+     "x": 41,
+     "y": 43,
+     "cantidad": 0,
+     "orden": 1,
+     "historia": 82
+    },
+    "causa_id": null
+   },
+   {
+    "id": 83,
+    "tick": 0,
+    "tipo": "presencia.orden",
+    "datos": {
+     "accion": "agujero",
+     "x": 29,
+     "y": 5,
+     "cantidad": 0,
+     "orden": 2,
+     "historia": 83
+    },
+    "causa_id": null
+   },
+   {
+    "id": 84,
+    "tick": 0,
+    "tipo": "presencia.orden",
+    "datos": {
+     "accion": "agujero",
+     "x": 39,
+     "y": 14,
+     "cantidad": 0,
+     "orden": 3,
+     "historia": 84
+    },
+    "causa_id": null
+   },
+   {
+    "id": 85,
+    "tick": 0,
+    "tipo": "presencia.orden",
+    "datos": {
+     "accion": "agujero",
+     "x": 37,
+     "y": 59,
+     "cantidad": 0,
+     "orden": 4,
+     "historia": 85
+    },
+    "causa_id": null
+   },
+   {
+    "id": 86,
+    "tick": 0,
+    "tipo": "presencia.orden",
+    "datos": {
+     "accion": "agujero",
+     "x": 42,
+     "y": 43,
+     "cantidad": 0,
+     "orden": 5,
+     "historia": 86
+    },
+    "causa_id": null
+   },
+   {
+    "id": 87,
+    "tick": 0,
+    "tipo": "presencia.orden",
+    "datos": {
+     "accion": "agujero",
+     "x": 31,
+     "y": 2,
+     "cantidad": 0,
+     "orden": 6,
+     "historia": 87
+    },
+    "causa_id": null
+   },
+   {
+    "id": 88,
+    "tick": 0,
+    "tipo": "presencia.orden",
+    "datos": {
+     "accion": "agujero",
+     "x": 40,
+     "y": 16,
+     "cantidad": 0,
+     "orden": 7,
+     "historia": 88
+    },
+    "causa_id": null
+   },
+   {
+    "id": 89,
+    "tick": 0,
+    "tipo": "presencia.orden",
+    "datos": {
+     "accion": "agujero",
+     "x": 37,
+     "y": 54,
+     "cantidad": 0,
+     "orden": 8,
+     "historia": 89
+    },
+    "causa_id": null
+   }
+  ],
+  "muestras": [
+   {
+    "hora": 120,
+    "horas_por_segundo": 221.7,
+    "eventos": 1877,
+    "vivos": 40,
+    "vinculos": 90,
+    "guardar_ms": 42.1,
+    "leer_lista_y_detalle_ms": 1.55
+   },
+   {
+    "hora": 960,
+    "horas_por_segundo": 162.8,
+    "eventos": 10989,
+    "vivos": 48,
+    "vinculos": 450,
+    "guardar_ms": 167.9,
+    "leer_lista_y_detalle_ms": 2.05
+   },
+   {
+    "hora": 1080,
+    "horas_por_segundo": 181.7,
+    "eventos": 12419,
+    "vivos": 48,
+    "vinculos": 478,
+    "guardar_ms": 65.4,
+    "leer_lista_y_detalle_ms": 1.44
+   }
+  ],
+  "bytes": 2764800
+ }
+]

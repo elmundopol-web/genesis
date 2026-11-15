@@ -1,0 +1,915 @@
+[
+ {
+  "semilla": 1,
+  "abundancia": 1,
+  "iniciales": 25,
+  "ordenes": [],
+  "anuales": [
+   {
+    "anio": 1,
+    "fundadores": 25,
+    "nacimientos": 8,
+    "descendientes_vivos": 8,
+    "infancia_vivos": 8,
+    "descendientes_adultos_vivos": 0,
+    "muertes_infantiles": 0,
+    "nietos_vivos": 0,
+    "nietos": 0,
+    "poblacion": 33,
+    "eventos": 4515,
+    "segundos": 3.686,
+    "vinculos": 166
+   }
+  ],
+  "acciones": {
+   "vidas.activacion": 1,
+   "vidas.convive": 98,
+   "vidas.esperan": 8,
+   "vidas.nace": 8,
+   "vidas.enseña": 8,
+   "vidas.da_agua": 63,
+   "vidas.alimenta": 107,
+   "vidas.buscar_agua_aprendida": 76,
+   "vidas.acompañar": 109,
+   "vidas.enseña_a_recoger": 6,
+   "vidas.nuevo_cuidado": 9
+  },
+  "interpretaciones": {},
+  "duracion_maxima_horas": {
+   "vidas.convive": 0,
+   "vidas.esperan": 799
+  },
+  "hash": "60a2a4110a6d7fa44bfa0fe09ac47b6e1f79390cd32436dc393296af0efce91f"
+ },
+ {
+  "semilla": 2,
+  "abundancia": 1,
+  "iniciales": 25,
+  "ordenes": [],
+  "anuales": [
+   {
+    "anio": 1,
+    "fundadores": 25,
+    "nacimientos": 7,
+    "descendientes_vivos": 7,
+    "infancia_vivos": 7,
+    "descendientes_adultos_vivos": 0,
+    "muertes_infantiles": 0,
+    "nietos_vivos": 0,
+    "nietos": 0,
+    "poblacion": 32,
+    "eventos": 5198,
+    "segundos": 3.634,
+    "vinculos": 188
+   }
+  ],
+  "acciones": {
+   "vidas.activacion": 1,
+   "vidas.convive": 124,
+   "vidas.esperan": 7,
+   "vidas.nace": 7,
+   "vidas.enseña": 7,
+   "vidas.buscar_agua_aprendida": 123,
+   "vidas.da_agua": 84,
+   "vidas.alimenta": 150,
+   "vidas.acompañar": 166,
+   "vidas.nuevo_cuidado": 22,
+   "vidas.enseña_a_recoger": 6,
+   "vidas.protege": 4,
+   "vidas.promete": 2,
+   "vidas.entrega": 2
+  },
+  "interpretaciones": {},
+  "duracion_maxima_horas": {
+   "vidas.convive": 0,
+   "vidas.esperan": 875,
+   "vidas.promete": 1
+  },
+  "hash": "3ee2c54e8422fe9f926c3fc41fb6a5d22d4160350f805ea6d2df980010eefe9a"
+ },
+ {
+  "semilla": 3,
+  "abundancia": 1,
+  "iniciales": 25,
+  "ordenes": [],
+  "anuales": [
+   {
+    "anio": 1,
+    "fundadores": 25,
+    "nacimientos": 7,
+    "descendientes_vivos": 7,
+    "infancia_vivos": 7,
+    "descendientes_adultos_vivos": 0,
+    "muertes_infantiles": 0,
+    "nietos_vivos": 0,
+    "nietos": 0,
+    "poblacion": 32,
+    "eventos": 4723,
+    "segundos": 3.767,
+    "vinculos": 131
+   }
+  ],
+  "acciones": {
+   "vidas.activacion": 1,
+   "vidas.convive": 81,
+   "vidas.esperan": 8,
+   "vidas.nace": 7,
+   "vidas.enseña": 7,
+   "vidas.buscar_agua_aprendida": 138,
+   "vidas.acompañar": 180,
+   "vidas.alimenta": 137,
+   "vidas.da_agua": 103,
+   "vidas.enseña_a_recoger": 7,
+   "vidas.nuevo_cuidado": 4,
+   "vidas.protege": 2
+  },
+  "interpretaciones": {},
+  "duracion_maxima_horas": {
+   "vidas.convive": 0,
+   "vidas.esperan": 772
+  },
+  "hash": "0e8882162d4db1d6882f21a92747d06887411245bd78344782a84fcf1746c66e"
+ },
+ {
+  "semilla": 4,
+  "abundancia": 1,
+  "iniciales": 25,
+  "ordenes": [],
+  "anuales": [
+   {
+    "anio": 1,
+    "fundadores": 19,
+    "nacimientos": 6,
+    "descendientes_vivos": 3,
+    "infancia_vivos": 3,
+    "descendientes_adultos_vivos": 0,
+    "muertes_infantiles": 3,
+    "nietos_vivos": 0,
+    "nietos": 0,
+    "poblacion": 22,
+    "eventos": 4452,
+    "segundos": 2.98,
+    "vinculos": 150
+   }
+  ],
+  "acciones": {
+   "vidas.activacion": 1,
+   "vidas.convive": 109,
+   "vidas.esperan": 6,
+   "vidas.nace": 6,
+   "vidas.enseña": 6,
+   "vidas.buscar_agua_aprendida": 84,
+   "vidas.acompañar": 111,
+   "vidas.da_agua": 40,
+   "vidas.alimenta": 63,
+   "vidas.enseña_a_recoger": 4,
+   "vidas.nuevo_cuidado": 5,
+   "vidas.protege": 11,
+   "vidas.promete": 1,
+   "vidas.vence": 1,
+   "vidas.juzga": 1
+  },
+  "interpretaciones": {},
+  "duracion_maxima_horas": {
+   "vidas.convive": 0,
+   "vidas.esperan": 844,
+   "vidas.promete": 13
+  },
+  "hash": "124f003e6a5e8c72fec6be0827fef13a90e8db8ceebb46e8bba55bbba21d1d95"
+ },
+ {
+  "semilla": 5,
+  "abundancia": 1,
+  "iniciales": 25,
+  "ordenes": [],
+  "anuales": [
+   {
+    "anio": 1,
+    "fundadores": 25,
+    "nacimientos": 8,
+    "descendientes_vivos": 8,
+    "infancia_vivos": 8,
+    "descendientes_adultos_vivos": 0,
+    "muertes_infantiles": 0,
+    "nietos_vivos": 0,
+    "nietos": 0,
+    "poblacion": 33,
+    "eventos": 6338,
+    "segundos": 4.682,
+    "vinculos": 188
+   }
+  ],
+  "acciones": {
+   "vidas.activacion": 1,
+   "vidas.convive": 156,
+   "vidas.promete": 2,
+   "vidas.entrega": 2,
+   "vidas.esperan": 9,
+   "vidas.nace": 8,
+   "vidas.enseña": 8,
+   "vidas.da_agua": 111,
+   "vidas.alimenta": 166,
+   "vidas.buscar_agua_aprendida": 125,
+   "vidas.acompañar": 202,
+   "vidas.nuevo_cuidado": 21,
+   "vidas.enseña_a_recoger": 7,
+   "vidas.protege": 2
+  },
+  "interpretaciones": {},
+  "duracion_maxima_horas": {
+   "vidas.convive": 0,
+   "vidas.promete": 1,
+   "vidas.esperan": 868
+  },
+  "hash": "15614ca735ffcdcfebc2bbe58c17cbf3ee9b6bccf94b193a014b84ce20d2f6f9"
+ },
+ {
+  "semilla": 6,
+  "abundancia": 1,
+  "iniciales": 25,
+  "ordenes": [],
+  "anuales": [
+   {
+    "anio": 1,
+    "fundadores": 25,
+    "nacimientos": 6,
+    "descendientes_vivos": 6,
+    "infancia_vivos": 6,
+    "descendientes_adultos_vivos": 0,
+    "muertes_infantiles": 0,
+    "nietos_vivos": 0,
+    "nietos": 0,
+    "poblacion": 31,
+    "eventos": 4345,
+    "segundos": 24.15,
+    "vinculos": 144
+   }
+  ],
+  "acciones": {
+   "vidas.activacion": 1,
+   "vidas.convive": 95,
+   "vidas.esperan": 7,
+   "vidas.nace": 6,
+   "vidas.enseña": 6,
+   "vidas.acompañar": 99,
+   "vidas.alimenta": 65,
+   "vidas.buscar_agua_aprendida": 53,
+   "vidas.da_agua": 47,
+   "vidas.enseña_a_recoger": 4,
+   "vidas.nuevo_cuidado": 4
+  },
+  "interpretaciones": {},
+  "duracion_maxima_horas": {
+   "vidas.convive": 0,
+   "vidas.esperan": 659
+  },
+  "hash": "c9c49431fc1efdfb69738837a9b6c1e126d884a8fb480d3332b49b1f63d2905a"
+ },
+ {
+  "semilla": 7,
+  "abundancia": 1,
+  "iniciales": 25,
+  "ordenes": [],
+  "anuales": [
+   {
+    "anio": 1,
+    "fundadores": 25,
+    "nacimientos": 7,
+    "descendientes_vivos": 7,
+    "infancia_vivos": 7,
+    "descendientes_adultos_vivos": 0,
+    "muertes_infantiles": 0,
+    "nietos_vivos": 0,
+    "nietos": 0,
+    "poblacion": 32,
+    "eventos": 4979,
+    "segundos": 24.085,
+    "vinculos": 154
+   }
+  ],
+  "acciones": {
+   "vidas.activacion": 1,
+   "vidas.promete": 3,
+   "vidas.entrega": 3,
+   "vidas.convive": 102,
+   "vidas.esperan": 7,
+   "vidas.nace": 7,
+   "vidas.acompañar": 129,
+   "vidas.da_agua": 57,
+   "vidas.alimenta": 118,
+   "vidas.enseña": 6,
+   "vidas.buscar_agua_aprendida": 124,
+   "vidas.enseña_a_recoger": 5,
+   "vidas.nuevo_cuidado": 4,
+   "vidas.protege": 4
+  },
+  "interpretaciones": {},
+  "duracion_maxima_horas": {
+   "vidas.promete": 3,
+   "vidas.convive": 0,
+   "vidas.esperan": 743
+  },
+  "hash": "93343bc9907800a9faeef0e56ff02c0cd655f620072f36d039db32ca5fd82079"
+ },
+ {
+  "semilla": 8,
+  "abundancia": 1,
+  "iniciales": 25,
+  "ordenes": [],
+  "anuales": [
+   {
+    "anio": 1,
+    "fundadores": 25,
+    "nacimientos": 7,
+    "descendientes_vivos": 7,
+    "infancia_vivos": 7,
+    "descendientes_adultos_vivos": 0,
+    "muertes_infantiles": 0,
+    "nietos_vivos": 0,
+    "nietos": 0,
+    "poblacion": 32,
+    "eventos": 6316,
+    "segundos": 26.276,
+    "vinculos": 231
+   }
+  ],
+  "acciones": {
+   "vidas.activacion": 1,
+   "vidas.convive": 186,
+   "vidas.esperan": 8,
+   "vidas.nace": 7,
+   "vidas.enseña": 7,
+   "vidas.buscar_agua_aprendida": 132,
+   "vidas.alimenta": 177,
+   "vidas.acompañar": 236,
+   "vidas.da_agua": 83,
+   "vidas.nuevo_cuidado": 20,
+   "vidas.enseña_a_recoger": 7,
+   "vidas.promete": 1,
+   "vidas.entrega": 1
+  },
+  "interpretaciones": {},
+  "duracion_maxima_horas": {
+   "vidas.convive": 0,
+   "vidas.esperan": 871,
+   "vidas.promete": 1
+  },
+  "hash": "464c4dd32d64934b92d2a2ea8b29b7e2dda692649bfa9f765cec2236a6dfb355"
+ },
+ {
+  "semilla": 9,
+  "abundancia": 1,
+  "iniciales": 25,
+  "ordenes": [],
+  "anuales": [
+   {
+    "anio": 1,
+    "fundadores": 25,
+    "nacimientos": 5,
+    "descendientes_vivos": 4,
+    "infancia_vivos": 4,
+    "descendientes_adultos_vivos": 0,
+    "muertes_infantiles": 1,
+    "nietos_vivos": 0,
+    "nietos": 0,
+    "poblacion": 29,
+    "eventos": 3661,
+    "segundos": 23.151,
+    "vinculos": 109
+   }
+  ],
+  "acciones": {
+   "vidas.activacion": 1,
+   "vidas.convive": 66,
+   "vidas.esperan": 5,
+   "vidas.nace": 5,
+   "vidas.nuevo_cuidado": 2,
+   "vidas.alimenta": 38,
+   "vidas.enseña": 5,
+   "vidas.buscar_agua_aprendida": 25,
+   "vidas.da_agua": 15,
+   "vidas.acompañar": 49,
+   "vidas.enseña_a_recoger": 1,
+   "vidas.protege": 3,
+   "vidas.promete": 1,
+   "vidas.entrega": 1
+  },
+  "interpretaciones": {},
+  "duracion_maxima_horas": {
+   "vidas.convive": 0,
+   "vidas.esperan": 777,
+   "vidas.promete": 1
+  },
+  "hash": "89adc5bd4be246fdf7f77777d595df06dbbcb2e4a33dc0dc5ff8385a7bbc4c1f"
+ },
+ {
+  "semilla": 10,
+  "abundancia": 1,
+  "iniciales": 25,
+  "ordenes": [],
+  "anuales": [
+   {
+    "anio": 1,
+    "fundadores": 25,
+    "nacimientos": 4,
+    "descendientes_vivos": 4,
+    "infancia_vivos": 4,
+    "descendientes_adultos_vivos": 0,
+    "muertes_infantiles": 0,
+    "nietos_vivos": 0,
+    "nietos": 0,
+    "poblacion": 29,
+    "eventos": 4452,
+    "segundos": 24.41,
+    "vinculos": 144
+   }
+  ],
+  "acciones": {
+   "vidas.activacion": 1,
+   "vidas.convive": 95,
+   "vidas.esperan": 4,
+   "vidas.nace": 4,
+   "vidas.acompañar": 80,
+   "vidas.da_agua": 52,
+   "vidas.alimenta": 77,
+   "vidas.enseña": 4,
+   "vidas.buscar_agua_aprendida": 71,
+   "vidas.enseña_a_recoger": 4,
+   "vidas.nuevo_cuidado": 5,
+   "vidas.protege": 7
+  },
+  "interpretaciones": {},
+  "duracion_maxima_horas": {
+   "vidas.convive": 0,
+   "vidas.esperan": 827
+  },
+  "hash": "014e20c6de23c32ccec8bc55baaa35a74855c7bc828da590adae06822555ff27"
+ },
+ {
+  "semilla": 11,
+  "abundancia": 1,
+  "iniciales": 25,
+  "ordenes": [],
+  "anuales": [
+   {
+    "anio": 1,
+    "fundadores": 25,
+    "nacimientos": 6,
+    "descendientes_vivos": 6,
+    "infancia_vivos": 6,
+    "descendientes_adultos_vivos": 0,
+    "muertes_infantiles": 0,
+    "nietos_vivos": 0,
+    "nietos": 0,
+    "poblacion": 31,
+    "eventos": 5073,
+    "segundos": 14.924,
+    "vinculos": 252
+   }
+  ],
+  "acciones": {
+   "vidas.activacion": 1,
+   "vidas.convive": 152,
+   "vidas.esperan": 6,
+   "vidas.nace": 6,
+   "vidas.enseña": 6,
+   "vidas.da_agua": 90,
+   "vidas.alimenta": 119,
+   "vidas.buscar_agua_aprendida": 100,
+   "vidas.acompañar": 124,
+   "vidas.nuevo_cuidado": 16,
+   "vidas.enseña_a_recoger": 6,
+   "vidas.protege": 7,
+   "vidas.promete": 8,
+   "vidas.entrega": 3,
+   "vidas.vence": 5,
+   "vidas.juzga": 5,
+   "vidas.repara": 5
+  },
+  "interpretaciones": {},
+  "duracion_maxima_horas": {
+   "vidas.convive": 0,
+   "vidas.esperan": 776,
+   "vidas.promete": 30
+  },
+  "hash": "649e825ddd1231fbce9f73de61e99c5d6288f5cbc1091c63bdf54422cb06e2d0"
+ },
+ {
+  "semilla": 12,
+  "abundancia": 1,
+  "iniciales": 25,
+  "ordenes": [],
+  "anuales": [
+   {
+    "anio": 1,
+    "fundadores": 25,
+    "nacimientos": 7,
+    "descendientes_vivos": 7,
+    "infancia_vivos": 7,
+    "descendientes_adultos_vivos": 0,
+    "muertes_infantiles": 0,
+    "nietos_vivos": 0,
+    "nietos": 0,
+    "poblacion": 32,
+    "eventos": 5098,
+    "segundos": 14.625,
+    "vinculos": 131
+   }
+  ],
+  "acciones": {
+   "vidas.activacion": 1,
+   "vidas.convive": 74,
+   "vidas.esperan": 7,
+   "vidas.nace": 7,
+   "vidas.enseña": 7,
+   "vidas.buscar_agua_aprendida": 108,
+   "vidas.da_agua": 78,
+   "vidas.alimenta": 112,
+   "vidas.acompañar": 120,
+   "vidas.nuevo_cuidado": 6,
+   "vidas.enseña_a_recoger": 6,
+   "vidas.protege": 5,
+   "vidas.promete": 1,
+   "vidas.entrega": 1
+  },
+  "interpretaciones": {},
+  "duracion_maxima_horas": {
+   "vidas.convive": 0,
+   "vidas.esperan": 708,
+   "vidas.promete": 2
+  },
+  "hash": "329499851196c07229d8b7757d94b68a3eb543f408d2fcd91c32a76e054efadf"
+ },
+ {
+  "semilla": 13,
+  "abundancia": 1,
+  "iniciales": 25,
+  "ordenes": [],
+  "anuales": [
+   {
+    "anio": 1,
+    "fundadores": 25,
+    "nacimientos": 7,
+    "descendientes_vivos": 6,
+    "infancia_vivos": 6,
+    "descendientes_adultos_vivos": 0,
+    "muertes_infantiles": 1,
+    "nietos_vivos": 0,
+    "nietos": 0,
+    "poblacion": 31,
+    "eventos": 4584,
+    "segundos": 14.173,
+    "vinculos": 195
+   }
+  ],
+  "acciones": {
+   "vidas.activacion": 1,
+   "vidas.convive": 106,
+   "vidas.esperan": 9,
+   "vidas.nace": 7,
+   "vidas.acompañar": 134,
+   "vidas.da_agua": 63,
+   "vidas.alimenta": 96,
+   "vidas.enseña": 7,
+   "vidas.buscar_agua_aprendida": 85,
+   "vidas.nuevo_cuidado": 12,
+   "vidas.enseña_a_recoger": 4,
+   "vidas.protege": 4,
+   "vidas.promete": 1,
+   "vidas.entrega": 1
+  },
+  "interpretaciones": {},
+  "duracion_maxima_horas": {
+   "vidas.convive": 0,
+   "vidas.esperan": 776,
+   "vidas.promete": 1
+  },
+  "hash": "8be6220851844b9dd51645a5610e8c4c957b4bcff53d00f6a1d1d6855cf9b22a"
+ },
+ {
+  "semilla": 14,
+  "abundancia": 1,
+  "iniciales": 25,
+  "ordenes": [],
+  "anuales": [
+   {
+    "anio": 1,
+    "fundadores": 25,
+    "nacimientos": 6,
+    "descendientes_vivos": 6,
+    "infancia_vivos": 6,
+    "descendientes_adultos_vivos": 0,
+    "muertes_infantiles": 0,
+    "nietos_vivos": 0,
+    "nietos": 0,
+    "poblacion": 31,
+    "eventos": 4605,
+    "segundos": 13.817,
+    "vinculos": 134
+   }
+  ],
+  "acciones": {
+   "vidas.activacion": 1,
+   "vidas.promete": 3,
+   "vidas.entrega": 3,
+   "vidas.convive": 85,
+   "vidas.esperan": 6,
+   "vidas.nace": 6,
+   "vidas.enseña": 5,
+   "vidas.da_agua": 55,
+   "vidas.alimenta": 90,
+   "vidas.buscar_agua_aprendida": 77,
+   "vidas.acompañar": 86,
+   "vidas.nuevo_cuidado": 6,
+   "vidas.enseña_a_recoger": 5,
+   "vidas.protege": 4
+  },
+  "interpretaciones": {},
+  "duracion_maxima_horas": {
+   "vidas.promete": 2,
+   "vidas.convive": 0,
+   "vidas.esperan": 749
+  },
+  "hash": "4c43867e91671aab6b8399de0b96254e192353bc990fe24fae37fd4751ed5da2"
+ },
+ {
+  "semilla": 15,
+  "abundancia": 1,
+  "iniciales": 25,
+  "ordenes": [],
+  "anuales": [
+   {
+    "anio": 1,
+    "fundadores": 22,
+    "nacimientos": 6,
+    "descendientes_vivos": 5,
+    "infancia_vivos": 5,
+    "descendientes_adultos_vivos": 0,
+    "muertes_infantiles": 1,
+    "nietos_vivos": 0,
+    "nietos": 0,
+    "poblacion": 27,
+    "eventos": 4576,
+    "segundos": 14.918,
+    "vinculos": 174
+   }
+  ],
+  "acciones": {
+   "vidas.activacion": 1,
+   "vidas.convive": 118,
+   "vidas.esperan": 6,
+   "vidas.nace": 6,
+   "vidas.enseña": 6,
+   "vidas.buscar_agua_aprendida": 92,
+   "vidas.acompañar": 76,
+   "vidas.alimenta": 85,
+   "vidas.da_agua": 65,
+   "vidas.enseña_a_recoger": 5,
+   "vidas.nuevo_cuidado": 5,
+   "vidas.promete": 1,
+   "vidas.entrega": 1,
+   "vidas.protege": 4
+  },
+  "interpretaciones": {},
+  "duracion_maxima_horas": {
+   "vidas.convive": 0,
+   "vidas.esperan": 773,
+   "vidas.promete": 1
+  },
+  "hash": "bdccf81ec597f7e2cf4e4414175d9b617b4cb20de54cdac367ec9b39010f3927"
+ },
+ {
+  "semilla": 16,
+  "abundancia": 1,
+  "iniciales": 25,
+  "ordenes": [],
+  "anuales": [
+   {
+    "anio": 1,
+    "fundadores": 25,
+    "nacimientos": 8,
+    "descendientes_vivos": 8,
+    "infancia_vivos": 8,
+    "descendientes_adultos_vivos": 0,
+    "muertes_infantiles": 0,
+    "nietos_vivos": 0,
+    "nietos": 0,
+    "poblacion": 33,
+    "eventos": 5617,
+    "segundos": 7.918,
+    "vinculos": 296
+   }
+  ],
+  "acciones": {
+   "vidas.activacion": 1,
+   "vidas.convive": 175,
+   "vidas.esperan": 8,
+   "vidas.nace": 8,
+   "vidas.enseña": 8,
+   "vidas.buscar_agua_aprendida": 123,
+   "vidas.alimenta": 175,
+   "vidas.acompañar": 156,
+   "vidas.da_agua": 121,
+   "vidas.nuevo_cuidado": 13,
+   "vidas.enseña_a_recoger": 6,
+   "vidas.promete": 7,
+   "vidas.entrega": 5,
+   "vidas.protege": 4,
+   "vidas.vence": 2,
+   "vidas.juzga": 2,
+   "vidas.repara": 1
+  },
+  "interpretaciones": {},
+  "duracion_maxima_horas": {
+   "vidas.convive": 0,
+   "vidas.esperan": 875,
+   "vidas.promete": 20
+  },
+  "hash": "4c115526c92ab41e0c0ef2bcbc7bcbf87be6cd15d0530166d1bc8101672274c6"
+ },
+ {
+  "semilla": 17,
+  "abundancia": 1,
+  "iniciales": 25,
+  "ordenes": [],
+  "anuales": [
+   {
+    "anio": 1,
+    "fundadores": 25,
+    "nacimientos": 7,
+    "descendientes_vivos": 7,
+    "infancia_vivos": 7,
+    "descendientes_adultos_vivos": 0,
+    "muertes_infantiles": 0,
+    "nietos_vivos": 0,
+    "nietos": 0,
+    "poblacion": 32,
+    "eventos": 5613,
+    "segundos": 7.875,
+    "vinculos": 256
+   }
+  ],
+  "acciones": {
+   "vidas.activacion": 1,
+   "vidas.convive": 192,
+   "vidas.esperan": 9,
+   "vidas.nace": 7,
+   "vidas.enseña": 7,
+   "vidas.buscar_agua_aprendida": 127,
+   "vidas.da_agua": 81,
+   "vidas.alimenta": 166,
+   "vidas.acompañar": 122,
+   "vidas.nuevo_cuidado": 19,
+   "vidas.enseña_a_recoger": 6,
+   "vidas.protege": 1
+  },
+  "interpretaciones": {},
+  "duracion_maxima_horas": {
+   "vidas.convive": 0,
+   "vidas.esperan": 872
+  },
+  "hash": "549b056792a8345503713febf8e99d570593f89022bebe1adc87c79bdb58e534"
+ },
+ {
+  "semilla": 18,
+  "abundancia": 1,
+  "iniciales": 25,
+  "ordenes": [],
+  "anuales": [
+   {
+    "anio": 1,
+    "fundadores": 25,
+    "nacimientos": 7,
+    "descendientes_vivos": 7,
+    "infancia_vivos": 7,
+    "descendientes_adultos_vivos": 0,
+    "muertes_infantiles": 0,
+    "nietos_vivos": 0,
+    "nietos": 0,
+    "poblacion": 32,
+    "eventos": 5136,
+    "segundos": 7.29,
+    "vinculos": 214
+   }
+  ],
+  "acciones": {
+   "vidas.activacion": 1,
+   "vidas.convive": 145,
+   "vidas.esperan": 10,
+   "vidas.nace": 7,
+   "vidas.alimenta": 128,
+   "vidas.enseña": 7,
+   "vidas.da_agua": 81,
+   "vidas.acompañar": 134,
+   "vidas.buscar_agua_aprendida": 116,
+   "vidas.enseña_a_recoger": 7,
+   "vidas.nuevo_cuidado": 10,
+   "vidas.protege": 10,
+   "vidas.promete": 3,
+   "vidas.entrega": 2,
+   "vidas.vence": 1,
+   "vidas.juzga": 1,
+   "vidas.corresponde": 1
+  },
+  "interpretaciones": {},
+  "duracion_maxima_horas": {
+   "vidas.convive": 0,
+   "vidas.esperan": 831,
+   "vidas.promete": 13,
+   "vidas.corresponde": 0
+  },
+  "hash": "015a3b4db40de40f52eff3da4a6c10909f401daebbcbabb8976d13d5ba70475e"
+ },
+ {
+  "semilla": 19,
+  "abundancia": 1,
+  "iniciales": 25,
+  "ordenes": [],
+  "anuales": [
+   {
+    "anio": 1,
+    "fundadores": 25,
+    "nacimientos": 8,
+    "descendientes_vivos": 8,
+    "infancia_vivos": 8,
+    "descendientes_adultos_vivos": 0,
+    "muertes_infantiles": 0,
+    "nietos_vivos": 0,
+    "nietos": 0,
+    "poblacion": 33,
+    "eventos": 5935,
+    "segundos": 7.47,
+    "vinculos": 194
+   }
+  ],
+  "acciones": {
+   "vidas.activacion": 1,
+   "vidas.convive": 153,
+   "vidas.esperan": 9,
+   "vidas.nace": 8,
+   "vidas.enseña": 8,
+   "vidas.buscar_agua_aprendida": 111,
+   "vidas.acompañar": 119,
+   "vidas.alimenta": 103,
+   "vidas.nuevo_cuidado": 16,
+   "vidas.da_agua": 61,
+   "vidas.enseña_a_recoger": 5,
+   "vidas.promete": 2,
+   "vidas.entrega": 2,
+   "vidas.protege": 8
+  },
+  "interpretaciones": {},
+  "duracion_maxima_horas": {
+   "vidas.convive": 0,
+   "vidas.esperan": 828,
+   "vidas.promete": 1
+  },
+  "hash": "d25cda48c0ba9a964436d36f53a03ad28c5b0ffe6ee66f3da0cde4b1d0483a8b"
+ },
+ {
+  "semilla": 20,
+  "abundancia": 1,
+  "iniciales": 25,
+  "ordenes": [],
+  "anuales": [
+   {
+    "anio": 1,
+    "fundadores": 25,
+    "nacimientos": 7,
+    "descendientes_vivos": 7,
+    "infancia_vivos": 7,
+    "descendientes_adultos_vivos": 0,
+    "muertes_infantiles": 0,
+    "nietos_vivos": 0,
+    "nietos": 0,
+    "poblacion": 32,
+    "eventos": 4606,
+    "segundos": 6.871,
+    "vinculos": 141
+   }
+  ],
+  "acciones": {
+   "vidas.activacion": 1,
+   "vidas.convive": 102,
+   "vidas.esperan": 8,
+   "vidas.nace": 7,
+   "vidas.enseña": 7,
+   "vidas.buscar_agua_aprendida": 91,
+   "vidas.da_agua": 72,
+   "vidas.alimenta": 111,
+   "vidas.acompañar": 115,
+   "vidas.nuevo_cuidado": 9,
+   "vidas.enseña_a_recoger": 4,
+   "vidas.promete": 2,
+   "vidas.entrega": 2,
+   "vidas.protege": 1
+  },
+  "interpretaciones": {},
+  "duracion_maxima_horas": {
+   "vidas.convive": 0,
+   "vidas.esperan": 852,
+   "vidas.promete": 10
+  },
+  "hash": "61c6800eb7fcbc00d078d274acb92976a29e811eaf91ba278bd477f4f7d8b4eb"
+ }
+]

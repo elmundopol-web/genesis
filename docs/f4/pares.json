@@ -1,0 +1,316 @@
+[
+ {
+  "semilla": 3,
+  "abundancia": 1,
+  "iniciales": 25,
+  "ordenes": [],
+  "anuales": [
+   {
+    "anio": 1,
+    "fundadores": 25,
+    "nacimientos": 7,
+    "descendientes_vivos": 7,
+    "infancia_vivos": 7,
+    "descendientes_adultos_vivos": 0,
+    "muertes_infantiles": 0,
+    "nietos_vivos": 0,
+    "nietos": 0,
+    "poblacion": 32,
+    "eventos": 4723,
+    "segundos": 3.197,
+    "vinculos": 131
+   },
+   {
+    "anio": 2,
+    "fundadores": 24,
+    "nacimientos": 9,
+    "descendientes_vivos": 5,
+    "infancia_vivos": 5,
+    "descendientes_adultos_vivos": 0,
+    "muertes_infantiles": 4,
+    "nietos_vivos": 0,
+    "nietos": 0,
+    "poblacion": 29,
+    "eventos": 12668,
+    "segundos": 29.745,
+    "vinculos": 240
+   }
+  ],
+  "acciones": {
+   "vidas.activacion": 1,
+   "vidas.convive": 168,
+   "vidas.esperan": 9,
+   "vidas.nace": 9,
+   "vidas.enseña": 9,
+   "vidas.buscar_agua_aprendida": 408,
+   "vidas.acompañar": 623,
+   "vidas.alimenta": 485,
+   "vidas.da_agua": 330,
+   "vidas.enseña_a_recoger": 9,
+   "vidas.nuevo_cuidado": 29,
+   "vidas.protege": 19,
+   "vidas.promete": 5,
+   "vidas.entrega": 5
+  },
+  "interpretaciones": {},
+  "duracion_maxima_horas": {
+   "vidas.convive": 0,
+   "vidas.esperan": 1733,
+   "vidas.promete": 1
+  },
+  "hash": "47f6197350b32926c830fd92394266e1d63c628821042b4e6c0502c6ead33e78"
+ },
+ {
+  "semilla": 3,
+  "abundancia": 1,
+  "iniciales": 25,
+  "ordenes": [
+   {
+    "id": 360,
+    "tick": 24,
+    "tipo": "presencia.orden",
+    "datos": {
+     "accion": "agujero",
+     "x": 36,
+     "y": 29,
+     "cantidad": 0,
+     "orden": 1,
+     "historia": 360
+    },
+    "causa_id": null
+   }
+  ],
+  "anuales": [
+   {
+    "anio": 1,
+    "fundadores": 25,
+    "nacimientos": 5,
+    "descendientes_vivos": 5,
+    "infancia_vivos": 5,
+    "descendientes_adultos_vivos": 0,
+    "muertes_infantiles": 0,
+    "nietos_vivos": 0,
+    "nietos": 0,
+    "poblacion": 30,
+    "eventos": 4266,
+    "segundos": 3.49,
+    "vinculos": 122
+   },
+   {
+    "anio": 2,
+    "fundadores": 21,
+    "nacimientos": 10,
+    "descendientes_vivos": 5,
+    "infancia_vivos": 5,
+    "descendientes_adultos_vivos": 0,
+    "muertes_infantiles": 5,
+    "nietos_vivos": 0,
+    "nietos": 0,
+    "poblacion": 26,
+    "eventos": 11806,
+    "segundos": 31.117,
+    "vinculos": 236
+   }
+  ],
+  "acciones": {
+   "vidas.activacion": 1,
+   "vidas.convive": 157,
+   "presencia.orden": 1,
+   "vidas.observa": 12,
+   "vidas.interpreta": 12,
+   "vidas.investigar": 18,
+   "vidas.inspecciona": 8,
+   "vidas.relata": 13,
+   "vidas.rodear": 13,
+   "vidas.pide_compania": 2,
+   "vidas.acude": 1,
+   "vidas.esperan": 10,
+   "vidas.nace": 10,
+   "vidas.da_agua": 184,
+   "vidas.enseña": 9,
+   "vidas.alimenta": 291,
+   "vidas.buscar_agua_aprendida": 341,
+   "vidas.acompañar": 387,
+   "vidas.enseña_a_recoger": 8,
+   "vidas.nuevo_cuidado": 47,
+   "vidas.protege": 16,
+   "vidas.promete": 9,
+   "vidas.entrega": 7,
+   "vidas.vence": 2,
+   "vidas.juzga": 2,
+   "vidas.repara": 2
+  },
+  "interpretaciones": {
+   "vidas.interpreta · cambio sin explicar": 2,
+   "vidas.relata · hendidura estable": 12,
+   "vidas.interpreta · posible advertencia": 2,
+   "vidas.interpreta · posible hueco natural": 6,
+   "vidas.interpreta · terreno peligroso": 2,
+   "vidas.relata · posible advertencia": 1
+  },
+  "duracion_maxima_horas": {
+   "vidas.convive": 0,
+   "presencia.orden": 1400,
+   "vidas.esperan": 1605,
+   "vidas.promete": 34
+  },
+  "hash": "03ed7acd4a5aa4df09e5a5311a30887aaae6eb1d0588e27d8a217d6fba823f9a"
+ },
+ {
+  "semilla": 3,
+  "abundancia": 0.3,
+  "iniciales": 25,
+  "ordenes": [],
+  "anuales": [
+   {
+    "anio": 1,
+    "fundadores": 25,
+    "nacimientos": 2,
+    "descendientes_vivos": 2,
+    "infancia_vivos": 2,
+    "descendientes_adultos_vivos": 0,
+    "muertes_infantiles": 0,
+    "nietos_vivos": 0,
+    "nietos": 0,
+    "poblacion": 27,
+    "eventos": 6110,
+    "segundos": 2.183,
+    "vinculos": 114
+   },
+   {
+    "anio": 2,
+    "fundadores": 14,
+    "nacimientos": 5,
+    "descendientes_vivos": 1,
+    "infancia_vivos": 1,
+    "descendientes_adultos_vivos": 0,
+    "muertes_infantiles": 4,
+    "nietos_vivos": 0,
+    "nietos": 0,
+    "poblacion": 15,
+    "eventos": 11252,
+    "segundos": 15.241,
+    "vinculos": 165
+   }
+  ],
+  "acciones": {
+   "vidas.activacion": 1,
+   "vidas.promete": 10,
+   "vidas.entrega": 10,
+   "vidas.convive": 107,
+   "vidas.esperan": 5,
+   "vidas.nace": 5,
+   "vidas.enseña": 5,
+   "vidas.buscar_agua_aprendida": 81,
+   "vidas.alimenta": 45,
+   "vidas.acompañar": 99,
+   "vidas.nuevo_cuidado": 11,
+   "vidas.da_agua": 20,
+   "vidas.enseña_a_recoger": 2,
+   "vidas.corresponde": 2
+  },
+  "interpretaciones": {},
+  "duracion_maxima_horas": {
+   "vidas.promete": 8,
+   "vidas.convive": 0,
+   "vidas.esperan": 944,
+   "vidas.corresponde": 0
+  },
+  "hash": "356b6aebc7b984735deced26e8342f2e27a87d902898611adab7043ccb4bf9cc"
+ },
+ {
+  "semilla": 3,
+  "abundancia": 0.3,
+  "iniciales": 25,
+  "ordenes": [
+   {
+    "id": 352,
+    "tick": 24,
+    "tipo": "presencia.orden",
+    "datos": {
+     "accion": "agujero",
+     "x": 27,
+     "y": 24,
+     "cantidad": 0,
+     "orden": 1,
+     "historia": 352
+    },
+    "causa_id": null
+   }
+  ],
+  "anuales": [
+   {
+    "anio": 1,
+    "fundadores": 25,
+    "nacimientos": 5,
+    "descendientes_vivos": 5,
+    "infancia_vivos": 5,
+    "descendientes_adultos_vivos": 0,
+    "muertes_infantiles": 0,
+    "nietos_vivos": 0,
+    "nietos": 0,
+    "poblacion": 30,
+    "eventos": 6501,
+    "segundos": 2.656,
+    "vinculos": 114
+   },
+   {
+    "anio": 2,
+    "fundadores": 15,
+    "nacimientos": 6,
+    "descendientes_vivos": 0,
+    "infancia_vivos": 0,
+    "descendientes_adultos_vivos": 0,
+    "muertes_infantiles": 6,
+    "nietos_vivos": 0,
+    "nietos": 0,
+    "poblacion": 15,
+    "eventos": 11974,
+    "segundos": 16.05,
+    "vinculos": 166
+   }
+  ],
+  "acciones": {
+   "vidas.activacion": 1,
+   "presencia.orden": 1,
+   "vidas.observa": 13,
+   "vidas.interpreta": 13,
+   "vidas.rodear": 11,
+   "vidas.inspecciona": 8,
+   "vidas.convive": 100,
+   "vidas.investigar": 6,
+   "vidas.promete": 9,
+   "vidas.relata": 11,
+   "vidas.entrega": 9,
+   "vidas.pide_compania": 2,
+   "vidas.acompaña": 1,
+   "vidas.esperan": 6,
+   "vidas.nace": 6,
+   "vidas.enseña": 6,
+   "vidas.acompañar": 181,
+   "vidas.alimenta": 91,
+   "vidas.da_agua": 54,
+   "vidas.buscar_agua_aprendida": 124,
+   "vidas.enseña_a_recoger": 3,
+   "vidas.nuevo_cuidado": 8,
+   "vidas.corresponde": 2
+  },
+  "interpretaciones": {
+   "vidas.interpreta · cambio sin explicar": 3,
+   "vidas.interpreta · posible advertencia": 3,
+   "vidas.relata · hendidura estable": 1,
+   "vidas.relata · posible advertencia": 9,
+   "vidas.interpreta · terreno peligroso": 2,
+   "vidas.relata · terreno peligroso": 1,
+   "vidas.interpreta · posible hueco natural": 5
+  },
+  "duracion_maxima_horas": {
+   "presencia.orden": 1613,
+   "vidas.convive": 0,
+   "vidas.promete": 3,
+   "vidas.esperan": 978,
+   "vidas.corresponde": 0
+  },
+  "hash": "43d02e450acabe188fe623a7bb2a4b40e7f97dc31667a6548eb6aa086dd486d0"
+ }
+]

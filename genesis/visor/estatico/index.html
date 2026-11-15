@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>GENESIS</title>
+  <link rel="stylesheet" href="/estilo.css">
+</head>
+<body>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5.2v13.6a.8.8 0 0 0 1.2.7l11-6.8a.8.8 0 0 0 0-1.4l-11-6.8a.8.8 0 0 0-1.2.7z" fill="currentColor" stroke="none"/></symbol>
+      <symbol id="i-pausa" viewBox="0 0 24 24"><rect x="6.5" y="5" width="4" height="14" rx="1.2" fill="currentColor" stroke="none"/><rect x="13.5" y="5" width="4" height="14" rx="1.2" fill="currentColor" stroke="none"/></symbol>
+      <symbol id="i-mas" viewBox="0 0 24 24"><path d="M12 5.5v13M5.5 12h13"/></symbol>
+      <symbol id="i-menos" viewBox="0 0 24 24"><path d="M5.5 12h13"/></symbol>
+      <symbol id="i-encajar" viewBox="0 0 24 24"><path d="M4.5 9.5v-5h5M14.5 4.5h5v5M19.5 14.5v5h-5M9.5 19.5h-5v-5"/></symbol>
+      <symbol id="i-cerrar" viewBox="0 0 24 24"><path d="M6.5 6.5l11 11M17.5 6.5l-11 11"/></symbol>
+      <symbol id="i-plegar" viewBox="0 0 24 24"><path d="M14.5 6l-6 6 6 6"/></symbol>
+      <symbol id="i-volver" viewBox="0 0 24 24"><path d="M10.5 6.5L5 12l5.5 5.5M5.5 12H19"/></symbol>
+      <symbol id="i-cronica" viewBox="0 0 24 24"><path d="M6 4.5h9.5a2.5 2.5 0 0 1 2.5 2.5v12.5H8.5A2.5 2.5 0 0 1 6 17z"/><path d="M6 17a2.5 2.5 0 0 1 2.5-2.5H18M9.5 8.5h5M9.5 11.5h3"/></symbol>
+      <symbol id="i-mundo" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M4.3 9.8c3 1.4 5-1.2 7.6-.4 2.4.8 3.4 3.4 7.8 2.2M9.6 4.4c1.6 2.6-.8 4.2.6 6.6 1.4 2.4 3.6 2.8 3.2 5.8-.2 1.4-.8 2.2-1.4 3.2"/></symbol>
+      <symbol id="i-terreno" viewBox="0 0 24 24"><path d="M3 18.5l5.6-8.2 3.6 5 2.6-3.6 6.2 6.8z"/><circle cx="16.8" cy="6.6" r="1.9"/></symbol>
+      <symbol id="i-bayas" viewBox="0 0 24 24"><circle cx="8.4" cy="15.6" r="3.3"/><circle cx="15.6" cy="15.6" r="3.3"/><circle cx="12" cy="9.8" r="3.3"/><path d="M12 6.5c.2-1.6 1.2-2.6 2.8-3"/></symbol>
+      <symbol id="i-madera" viewBox="0 0 24 24"><path d="M12 3.2l5.4 6.6h-2.8l4.4 5.6H5l4.4-5.6H6.6zM12 15.4v5.4"/></symbol>
+      <symbol id="i-semillas" viewBox="0 0 24 24"><path d="M12 21V8.5M12 8.5c-2.4-.6-3.4-2.4-3.2-4.6 2.2.2 3.2 1.8 3.2 4.6zM12 8.5c2.4-.6 3.4-2.4 3.2-4.6-2.2.2-3.2 1.8-3.2 4.6zM12 14c-2.4-.6-3.4-2.4-3.2-4.6 2.2.2 3.2 1.8 3.2 4.6zM12 14c2.4-.6 3.4-2.4 3.2-4.6-2.2.2-3.2 1.8-3.2 4.6zM12 19.4c-2.4-.6-3.4-2.4-3.2-4.6 2.2.2 3.2 1.8 3.2 4.6zM12 19.4c2.4-.6 3.4-2.4 3.2-4.6-2.2.2-3.2 1.8-3.2 4.6z"/></symbol>
+      <symbol id="i-peces" viewBox="0 0 24 24"><path d="M3.2 12c2.8-4.4 8.6-5.6 12.6-2.2l4.4-3v10.4l-4.4-3c-4 3.4-9.8 2.2-12.6-2.2z"/><circle cx="8" cy="11.2" r=".6" fill="currentColor"/></symbol>
+      <symbol id="i-habitantes" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M3.5 19c.6-3.4 2.8-5 5.5-5s4.9 1.6 5.5 5"/><circle cx="16.6" cy="9.2" r="2.4"/><path d="M15.6 14.2c2.6-.2 4.4 1.4 5 4.3"/></symbol>
+      <symbol id="i-ojo" viewBox="0 0 24 24"><path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6z"/><circle cx="12" cy="12" r="2.6"/></symbol>
+      <symbol id="i-seguir" viewBox="0 0 24 24"><circle cx="12" cy="12" r="6"/><path d="M12 2.5v4M12 17.5v4M2.5 12h4M17.5 12h4"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/></symbol>
+      <symbol id="i-salud" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.4A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></symbol>
+      <symbol id="i-energia" viewBox="0 0 24 24"><path d="M13 3L6 13.5h5L10 21l8-11h-5z"/></symbol>
+      <symbol id="i-gota" viewBox="0 0 24 24"><path d="M12 3.5c3.4 4.2 5.5 7 5.5 10a5.5 5.5 0 0 1-11 0c0-3 2.1-5.8 5.5-10z"/></symbol>
+      <symbol id="i-hambre" viewBox="0 0 24 24"><path d="M4 11.5h16a8 8 0 0 1-16 0zM9 7c0-1 1-1.4 1-2.6M13.5 7c0-1 1-1.4 1-2.6"/></symbol>
+      <symbol id="i-despejado" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.2"/><path d="M12 3v2.2M12 18.8V21M3 12h2.2M18.8 12H21M5.6 5.6l1.6 1.6M16.8 16.8l1.6 1.6M18.4 5.6l-1.6 1.6M7.2 16.8l-1.6 1.6"/></symbol>
+      <symbol id="i-noche" viewBox="0 0 24 24"><path d="M19.2 14.2A7.6 7.6 0 1 1 9.8 4.8a6.1 6.1 0 0 0 9.4 9.4z"/></symbol>
+      <symbol id="i-nublado" viewBox="0 0 24 24"><path d="M7.2 18h9.8a3.8 3.8 0 0 0 .6-7.56A5.8 5.8 0 0 0 6.4 11.9 3.1 3.1 0 0 0 7.2 18z"/></symbol>
+      <symbol id="i-lluvia" viewBox="0 0 24 24"><path d="M7.2 14.5h9.8a3.8 3.8 0 0 0 .6-7.56A5.8 5.8 0 0 0 6.4 8.4a3.1 3.1 0 0 0 .8 6.1z"/><path d="M8.6 17.4l-1 2.8M12.4 17.4l-1 2.8M16.2 17.4l-1 2.8"/></symbol>
+      <symbol id="i-tormenta" viewBox="0 0 24 24"><path d="M7.2 14.5h9.8a3.8 3.8 0 0 0 .6-7.56A5.8 5.8 0 0 0 6.4 8.4a3.1 3.1 0 0 0 .8 6.1z"/><path d="M12.8 15.2l-2.4 3.4h3l-2 3"/></symbol>
+      <symbol id="i-nieve" viewBox="0 0 24 24"><path d="M7.2 14.5h9.8a3.8 3.8 0 0 0 .6-7.56A5.8 5.8 0 0 0 6.4 8.4a3.1 3.1 0 0 0 .8 6.1z"/><path d="M8.4 18.2h.01M12 18.2h.01M15.6 18.2h.01M10.2 20.8h.01M13.8 20.8h.01" stroke-width="2.2"/></symbol>
+    </defs>
+  </svg>
+
+  <canvas id="mundo" tabindex="0" role="img"
+          aria-label="Mapa del mundo. Arrastra para moverte y usa la rueda para acercarte. Con el foco en el mapa: flechas para mover la celda elegida, más y menos para el zoom, cero para ver el mundo entero."></canvas>
+
+  <div class="velo" id="velo">
+    <div class="velo-marca">GENESIS</div>
+    <div class="velo-texto" id="velo-texto">Despertando el mundo</div>
+  </div>
+
+  <header class="marca hud">
+    <svg class="marca-signo" viewBox="0 0 32 32" width="30" height="30" aria-hidden="true">
+      <circle cx="16" cy="16" r="15" fill="#1b2a22"/>
+      <path d="M2.4 10.6C7.6 8 12.2 12.8 17.2 11c4.4-1.6 6.8-5 11.2-3.6a15 15 0 0 1 2.4 6.4c-4.2-1.6-6.8 2.2-11.8 3.6-5.6 1.6-10.2-2.8-16-.2a15 15 0 0 1-.6-6.6z" fill="#7fae5c"/>
+      <path d="M12.6 1.6c3.6 4.6-2.2 7.6.6 12.6 2.4 4.4 7.2 5 6.4 10.4-.4 2.6-2 4.4-3.4 6.2" fill="none" stroke="#6dbbd8" stroke-width="2.6" stroke-linecap="round"/>
+      <circle cx="16" cy="16" r="15" fill="none" stroke="rgba(240,237,227,.28)"/>
+    </svg>
+    <div class="marca-texto">
+      <span class="marca-nombre">GENESIS<span class="marca-fase">F3</span></span>
+      <span class="marca-partida" id="partida">Partida</span>
+    </div>
+  </header>
+
+  <section class="fecha hud" aria-label="Fecha y tiempo">
+    <div class="reloj" id="reloj" aria-hidden="true">
+      <svg viewBox="0 0 48 48" width="48" height="48">
+        <circle class="reloj-aro" cx="24" cy="24" r="21"/>
+        <path class="reloj-dia" d="M24 3a21 21 0 0 1 0 42" transform="rotate(-90 24 24)"/>
+        <g id="reloj-aguja"><circle class="reloj-astro" cx="24" cy="3" r="3.4"/></g>
+      </svg>
+      <svg class="icono reloj-cielo"><use id="icono-cielo" href="#i-despejado"/></svg>
+    </div>
+    <div class="fecha-texto">
+      <h1 id="fecha-titulo">GENESIS</h1>
+      <p id="fecha-sub">Conectando con el motor</p>
+    </div>
+    <div class="fecha-tiempo">
+      <span class="fecha-grados" id="grados"></span>
+      <span class="fecha-cielo" id="cielo"></span>
+    </div>
+  </section>
+
+  <p class="anuncio" id="anuncio" aria-live="polite"></p>
+  <p class="aviso" id="aviso" role="alert" hidden></p>
+
+  <div class="arriba-der">
+    <nav class="capas hud" id="capas" aria-label="Capa del mapa"></nav>
+    <button type="button" class="boton-hud" id="abrir-vidas" hidden>Historias</button>
+    <button type="button" class="boton-hud" id="intervenir" hidden>Intervenir</button>
+    <button type="button" class="boton-hud" id="abrir-cronica" aria-expanded="false" aria-controls="cronica">
+      <svg class="icono"><use href="#i-cronica"/></svg><span>Crónica</span><span class="insignia" id="insignia" hidden></span>
+    </button>
+  </div>
+
+  <button type="button" class="boton-hud pestana-mundo" id="abrir-mundo" aria-expanded="true" aria-controls="panel-mundo">
+    <svg class="icono"><use href="#i-mundo"/></svg><span>El mundo</span>
+  </button>
+
+  <aside class="panel mundo" id="panel-mundo" aria-labelledby="t-mundo">
+    <div class="panel-cabecera">
+      <h2 class="oculto" id="t-mundo">El mundo y sus habitantes</h2>
+      <div class="pestanas" role="tablist">
+        <button type="button" role="tab" id="tab-mundo" aria-selected="true" aria-controls="vista-mundo">El mundo</button>
+        <button type="button" role="tab" id="tab-gente" aria-selected="false" aria-controls="vista-gente">Habitantes <span id="cuenta-gente"></span></button>
+      </div>
+      <button type="button" class="icono-boton" id="cerrar-mundo" aria-label="Plegar el panel"><svg class="icono"><use href="#i-plegar"/></svg></button>
+    </div>
+    <div class="panel-cuerpo" id="vista-gente" role="tabpanel" hidden>
+      <p class="gente-resumen" id="gente-resumen"></p>
+      <div class="gente" id="gente"></div>
+    </div>
+    <div class="panel-cuerpo" id="vista-mundo" role="tabpanel">
+      <section class="bloque" aria-labelledby="t-hoy">
+        <h3 id="t-hoy">Hoy</h3>
+        <div class="hoy">
+          <div class="hoy-grados"><span id="hoy-grados">–</span><small>°C</small></div>
+          <div class="hoy-texto">
+            <span id="hoy-cielo"></span>
+            <span id="hoy-rango"></span>
+          </div>
+        </div>
+        <div class="estados" id="estados"></div>
+        <dl class="medidas">
+          <div><dt>Precipitación</dt><dd id="hoy-lluvia">–</dd></div>
+          <div><dt>Río</dt><dd id="hoy-rio">–</dd></div>
+        </dl>
+        <div class="medidor">
+          <div class="medidor-texto"><span>Humedad del suelo</span><span id="hoy-humedad">–</span></div>
+          <div class="medidor-barra" id="medidor-humedad"><i id="barra-humedad"></i></div>
+        </div>
+      </section>
+
+      <section class="bloque" aria-labelledby="t-recursos">
+        <h3 id="t-recursos">Recursos del mundo</h3>
+        <div class="recursos" id="recursos" role="group" aria-label="Recurso mostrado"></div>
+        <div class="grafica" id="grafica"></div>
+        <p class="grafica-pie" id="grafica-pie"></p>
+      </section>
+    </div>
+  </aside>
+
+  <div class="siguiendo hud" id="siguiendo" hidden>
+    <svg class="icono"><use href="#i-seguir"/></svg>
+    <span id="siguiendo-texto"></span>
+    <button type="button" id="dejar-de-seguir">Dejar de seguir</button>
+  </div>
+
+  <div class="lateral-der">
+    <section class="panel f4-panel" id="panel-intervenir" hidden>
+      <div class="panel-cabecera"><h2>Intervenir en el mundo</h2></div>
+      <div class="f4-interior">
+        <label>Acción <select id="tipo-intervencion"><option value="agujero">Abrir un agujero</option><option value="cerrar">Cerrar un agujero</option><option value="ofrenda">Dejar una ofrenda</option></select></label>
+        <label id="campo-bayas" hidden>Bayas <input id="cantidad-bayas" type="number" min="1" max="12" value="6"></label>
+        <p id="previa" aria-live="polite">Elige una celda del mapa.</p>
+        <button class="boton-ficha" id="confirmar" disabled>Confirmar</button>
+        <button class="boton-ficha" id="cancelar-intervencion">Cancelar</button>
+      </div>
+    </section>
+    <section class="panel f4-panel" id="historias" hidden>
+      <div class="panel-cabecera"><h2>Historias</h2><button class="boton-ficha" id="cerrar-historias">Cerrar</button></div>
+      <div class="f4-interior" id="relatos"></div>
+    </section>
+    <section class="panel ficha" id="ficha" aria-labelledby="ficha-nombre" hidden>
+      <div class="panel-cabecera">
+        <div class="ficha-quien">
+          <canvas class="retrato" id="ficha-retrato" width="184" height="184"></canvas>
+          <div>
+            <h2 id="ficha-nombre"></h2>
+            <p class="panel-sub" id="ficha-sub"></p>
+          </div>
+        </div>
+        <button type="button" class="icono-boton" id="cerrar-ficha" aria-label="Cerrar la ficha"><svg class="icono"><use href="#i-cerrar"/></svg></button>
+      </div>
+      <div class="ficha-cuerpo" id="ficha-cuerpo" aria-live="off"></div>
+    </section>
+
+    <section class="panel inspector" id="inspector" aria-labelledby="inspector-titulo" hidden>
+      <div class="panel-cabecera">
+        <div>
+          <h2 id="inspector-titulo">Celda</h2>
+          <p class="panel-sub" id="inspector-sub"></p>
+        </div>
+        <button type="button" class="icono-boton" id="cerrar-inspector" aria-label="Cerrar la inspección"><svg class="icono"><use href="#i-cerrar"/></svg></button>
+      </div>
+      <div class="inspector-cuerpo" id="inspector-cuerpo" aria-live="polite"></div>
+    </section>
+
+    <section class="panel cronica" id="cronica" aria-labelledby="t-cronica" hidden>
+      <div class="panel-cabecera">
+        <h2 id="t-cronica">Crónica</h2>
+        <button type="button" class="icono-boton" id="cerrar-cronica" aria-label="Cerrar la crónica"><svg class="icono"><use href="#i-cerrar"/></svg></button>
+      </div>
+      <div class="filtros" id="filtros" role="group" aria-label="Filtro de la crónica"></div>
+      <div class="eventos" id="eventos"></div>
+    </section>
+  </div>
+
+  <footer class="muelle hud" aria-label="Control del tiempo">
+    <div class="muelle-fila">
+      <button type="button" class="marcha" id="marcha" aria-label="Reanudar">
+        <svg class="icono"><use id="marcha-icono" href="#i-play"/></svg>
+      </button>
+      <div class="velocidades" id="velocidades" role="group" aria-label="Velocidad, en tiempo simulado por segundo"></div>
+      <span class="muelle-nota" id="ritmo">por segundo</span>
+      <div class="pasos" role="group" aria-label="Avanzar una cantidad exacta">
+        <button type="button" data-avance="hora">+1 hora</button>
+        <button type="button" data-avance="dia">+1 día</button>
+        <button type="button" data-avance="estacion">+1 estación</button>
+        <button type="button" data-avance="anio">+1 año</button>
+      </div>
+    </div>
+    <div class="salto" id="salto" hidden>
+      <div class="salto-texto"><span id="salto-titulo">Avanzando</span><span id="salto-detalle"></span></div>
+      <div class="salto-barra"><i id="salto-barra"></i></div>
+      <button type="button" id="cancelar-salto">Cancelar</button>
+    </div>
+    <div class="anio" id="anio" role="img" aria-label="Posición en el año"></div>
+  </footer>
+
+  <section class="panel resumen" id="resumen" aria-labelledby="resumen-titulo" hidden>
+    <div class="panel-cabecera">
+      <div>
+        <h2 id="resumen-titulo"></h2>
+        <p class="panel-sub" id="resumen-sub"></p>
+      </div>
+      <button type="button" class="icono-boton" id="cerrar-resumen" aria-label="Cerrar el resumen"><svg class="icono"><use href="#i-cerrar"/></svg></button>
+    </div>
+    <div class="resumen-cuerpo" id="resumen-cuerpo"></div>
+  </section>
+
+  <button type="button" class="boton-hud restaurar" id="restaurar" hidden>
+    <svg class="icono"><use href="#i-ojo"/></svg><span>Mostrar los paneles</span>
+  </button>
+
+  <div class="vista hud">
+    <div class="escala" id="escala" aria-hidden="true"><i></i><span></span></div>
+    <div class="zoom" role="group" aria-label="Zoom">
+      <button type="button" class="icono-boton" id="zoom-mas" aria-label="Acercar"><svg class="icono"><use href="#i-mas"/></svg></button>
+      <button type="button" class="icono-boton" id="zoom-menos" aria-label="Alejar"><svg class="icono"><use href="#i-menos"/></svg></button>
+      <button type="button" class="icono-boton" id="zoom-encajar" aria-label="Ver el mundo entero" title="Ver el mundo entero (0)"><svg class="icono"><use href="#i-encajar"/></svg></button>
+      <button type="button" class="icono-boton" id="vista-limpia" aria-label="Ocultar los paneles" title="Ocultar los paneles (H)"><svg class="icono"><use href="#i-ojo"/></svg></button>
+    </div>
+  </div>
+
+  <div class="etiqueta" id="etiqueta" hidden></div>
+
+  <noscript><p class="aviso">GENESIS necesita JavaScript.</p></noscript>
+  <script type="module" src="/app.js"></script>
+</body>
+</html>

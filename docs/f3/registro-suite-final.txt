@@ -1,0 +1,62 @@
+.........................................................C:\Users\elmun\Desktop\Juego\genesis\genesis\motor\sociedad.py:192: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x000002D0D622E3E0>
+  if avisos and j in avisos:
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+.....................................................................................................Partida 'f2-comunidad' creada a partir de 'f2', que no se ha modificado.
+Conserva sus 1817 eventos y sus etapas anteriores. Construcciones, reservas y comunidades empiezan el día 28, sin pasado inventado.
+Para abrirla: iniciar.bat f2-comunidad
+Error: no existe la partida C:\Users\elmun\AppData\Local\Temp\tmp_zadq_1d\no-existe.db
+Error: no existe la partida 'no-existe'; para crearla indica --semilla
+Error: nombre de partida no válido: '../fuera' (solo letras sin acento, números, guion y guion bajo)
+--dias debe ser al menos 1
+.Partida 'semilla-9' creada con la semilla 9 y 25 habitantes: C:\Users\elmun\AppData\Local\Temp\tmpfa08u1m7\semilla-9.db
+Error: ya existe una partida en C:\Users\elmun\AppData\Local\Temp\tmpfa08u1m7\semilla-9.db
+Partida 'semilla-9' (existente), desde año 1, primavera, día 1, 00:00
+Simulados 12 días (288 horas) en 0.52 s, hasta año 1, verano, día 3, 00:00
+  bayas: 50100 unidades
+  madera: 161359 unidades
+  semillas: 28783 unidades
+  peces: 2600 unidades
+  eventos registrados: 1056
+  habitantes vivos: 25 de 25
+  [bien] el mapa guardado es el que genera la semilla
+  [bien] los eventos guardados no han sido alterados
+  [bien] la repetición produce los mismos eventos
+  [bien] la repetición llega al mismo estado
+288 horas y 1056 eventos repetidos en 0.70 s (0 órdenes externas)
+Reproducción exacta.
+................................................................semilla-9: semilla 9, 25 habitantes al inicio, con comunidades (F3), 12 días simulados, 1056 eventos
+......................................Partida 'vieja-comunidad' creada a partir de 'vieja', que no se ha modificado.
+Conserva sus 1765 eventos. Memoria, vida social y comunidades empiezan el día 26, sin pasado inventado.
+Para abrirla: iniciar.bat vieja-comunidad
+Partida 'semilla-6' creada con la semilla 6 y 25 habitantes: C:\Users\elmun\AppData\Local\Temp\tmpit4wke38\semilla-6.db
+Partida 'semilla-6' (existente), desde año 1, primavera, día 1, 00:00
+Simulados 20 días (480 horas) en 0.76 s, hasta año 1, otoño, día 1, 00:00
+  bayas: 72611 unidades
+  madera: 189545 unidades
+  semillas: 63035 unidades
+  peces: 3647 unidades
+  eventos registrados: 1559
+  habitantes vivos: 25 de 25
+  [bien] el mapa guardado es el que genera la semilla
+  [bien] los eventos guardados no han sido alterados
+  [bien] la repetición produce los mismos eventos
+  [bien] la repetición llega al mismo estado
+480 horas y 1559 eventos repetidos en 0.93 s (0 órdenes externas)
+Reproducción exacta.
+Partida 'vacio' creada con la semilla 6 y 0 habitantes: C:\Users\elmun\AppData\Local\Temp\tmpit4wke38\vacio.db
+Partida 'pobre' creada con la semilla 6 y 25 habitantes: C:\Users\elmun\AppData\Local\Temp\tmpit4wke38\pobre.db
+Error: la abundancia debe ser mayor que cero
+Error: la cantidad de habitantes debe estar entre 0 y 200
+.Partida 'semilla-8' creada con la semilla 8 y 0 habitantes: C:\Users\elmun\AppData\Local\Temp\tmpcy75x8m8\semilla-8.db
+....................
+----------------------------------------------------------------------
+Ran 282 tests in 309.704s
+
+OK
+Partida 'semilla-8' (existente), desde año 1, primavera, día 1, 00:00
+Simulados 5 días (120 horas) en 0.01 s, hasta año 1, primavera, día 6, 00:00
+  bayas: 19060 unidades
+  madera: 131163 unidades
+  semillas: 13029 unidades
+  peces: 2512 unidades
+  eventos registrados: 14

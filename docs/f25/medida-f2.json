@@ -1,0 +1,125 @@
+{
+ "url": "http://127.0.0.1:8790/#sinvelo&habitante=17",
+ "ventana": "1440x900",
+ "gpu": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 (0x00002F04) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+ "parado": {
+  "horas": 0,
+  "fps": 178.4,
+  "intervalo": {
+   "p50": 5.6,
+   "p95": 5.7,
+   "p99": 6.1,
+   "max": 16.7
+  },
+  "mas20ms": 0,
+  "mas34ms": 0,
+  "mas50ms": 0,
+  "dibujo": {
+   "p50": 0.3,
+   "p95": 0.7,
+   "max": 1.8
+  },
+  "tareasLargas": 0,
+  "tareaMax": 0
+ },
+ "cerca": {
+  "horas": 243,
+  "fps": 98.8,
+  "intervalo": {
+   "p50": 5.6,
+   "p95": 38.9,
+   "p99": 44.5,
+   "max": 105.2
+  },
+  "mas20ms": 105,
+  "mas34ms": 66,
+  "mas50ms": 4,
+  "dibujo": {
+   "p50": 0.5,
+   "p95": 9.5,
+   "max": 18.4
+  },
+  "tareasLargas": 0,
+  "tareaMax": 0
+ },
+ "medio": {
+  "horas": 239,
+  "fps": 108.9,
+  "intervalo": {
+   "p50": 5.6,
+   "p95": 27.9,
+   "p99": 33.4,
+   "max": 94.4
+  },
+  "mas20ms": 164,
+  "mas34ms": 5,
+  "mas50ms": 1,
+  "dibujo": {
+   "p50": 0.4,
+   "p95": 12.9,
+   "max": 21
+  },
+  "tareasLargas": 0,
+  "tareaMax": 0
+ },
+ "mundo": {
+  "horas": 239,
+  "fps": 166.5,
+  "intervalo": {
+   "p50": 5.6,
+   "p95": 5.7,
+   "p99": 22.4,
+   "max": 55.4
+  },
+  "mas20ms": 21,
+  "mas34ms": 8,
+  "mas50ms": 2,
+  "dibujo": {
+   "p50": 0.4,
+   "p95": 0.7,
+   "max": 49.3
+  },
+  "tareasLargas": 1,
+  "tareaMax": 52
+ },
+ "mundo-rapido": {
+  "horas": 3606,
+  "fps": 28.8,
+  "intervalo": {
+   "p50": 5.7,
+   "p95": 116.6,
+   "p99": 122.3,
+   "max": 139
+  },
+  "mas20ms": 104,
+  "mas34ms": 104,
+  "mas50ms": 103,
+  "dibujo": {
+   "p50": 0.6,
+   "p95": 90.5,
+   "max": 104.4
+  },
+  "tareasLargas": 58,
+  "tareaMax": 106
+ },
+ "cerca-rapido": {
+  "horas": 4532,
+  "fps": 23.8,
+  "intervalo": {
+   "p50": 44.2,
+   "p95": 55.6,
+   "p99": 61.2,
+   "max": 66.9
+  },
+  "mas20ms": 237,
+  "mas34ms": 163,
+  "mas50ms": 44,
+  "dibujo": {
+   "p50": 10.8,
+   "p95": 14.9,
+   "max": 16.5
+  },
+  "tareasLargas": 0,
+  "tareaMax": 0
+ }
+}

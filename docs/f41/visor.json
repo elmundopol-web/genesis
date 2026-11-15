@@ -1,0 +1,17 @@
+{
+ "adulto": 13,
+ "menor": 27,
+ "errores": [],
+ "reproduccion": {
+  "correcto": true,
+  "comprobaciones": {
+   "mapa": true,
+   "registro_integro": true,
+   "eventos": true,
+   "estado": true
+  },
+  "tick": 952,
+  "eventos": 4967,
+  "ordenes_repetidas": 0
+ }
+}

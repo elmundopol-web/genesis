@@ -1,0 +1,302 @@
+{
+  "version": "0.2.0-f2",
+  "python": "3.14.4",
+  "sistema": "Windows-11-10.0.26200-SP0",
+  "repeticiones": 5,
+  "comparacion": [
+    {
+      "semilla": 4,
+      "abundancia": 1.0,
+      "reglas": {
+        "1": {
+          "mediana_s": 0.4947,
+          "muestras_s": [
+            0.5296,
+            0.4947,
+            0.5032,
+            0.4917,
+            0.493
+          ],
+          "vivos": 21,
+          "hash_estado": "cf1eb8b7a9d94d2108995a70f4d09c47c574ef1b25a91b2cf8f23fbe1ee610d9",
+          "hash_eventos": "b64c03c4bcc7649b0554cdde2726146d6a682fe675b6b5a98d891836536127e1"
+        },
+        "2": {
+          "mediana_s": 0.947,
+          "muestras_s": [
+            0.9685,
+            0.9283,
+            0.9559,
+            0.947,
+            0.9382
+          ],
+          "vivos": 24,
+          "hash_estado": "4e51a7c1c1dfc4c46b0738b856fc924fe17ba5733c7a0263e80a6af62af8b85e",
+          "hash_eventos": "efeadd30a6d892a99ee5f2b54f983cd1a0ab54931765ea3fbe145691e3c1a31d"
+        }
+      },
+      "factor_f2_f1": 1.91
+    },
+    {
+      "semilla": 1,
+      "abundancia": 1.0,
+      "reglas": {
+        "1": {
+          "mediana_s": 0.6183,
+          "muestras_s": [
+            0.6042,
+            0.5817,
+            0.657,
+            0.6289,
+            0.6183
+          ],
+          "vivos": 25,
+          "hash_estado": "5889a5dfeb487b19809b50520c5935447dc80d085046f316ea1d94fecb04017d",
+          "hash_eventos": "cbbc984481ebf7670330dba068282ce30436e6ed289f9548c181bb461576791d"
+        },
+        "2": {
+          "mediana_s": 0.9727,
+          "muestras_s": [
+            0.9755,
+            0.9598,
+            0.984,
+            0.9694,
+            0.9727
+          ],
+          "vivos": 25,
+          "hash_estado": "d4be5261fdf966e74de92ccdf743cce79ca7ed4479b1f9f66dde42f16e4701cb",
+          "hash_eventos": "61ff2b28fde01e2889a6a2f4280d6367b663bf53d355d2239030040f6411eb99"
+        }
+      },
+      "factor_f2_f1": 1.57
+    },
+    {
+      "semilla": 9,
+      "abundancia": 0.3,
+      "reglas": {
+        "1": {
+          "mediana_s": 0.548,
+          "muestras_s": [
+            0.5122,
+            0.5356,
+            0.6164,
+            0.548,
+            0.5566
+          ],
+          "vivos": 25,
+          "hash_estado": "ab38358390f2b077c86c2df1bc83eead82be0b9759633c38ebffb78e3b5e843d",
+          "hash_eventos": "b21184f585ec1a21a345c10ae3e5fbaf5dcaeb12130716e9cd58f85f0930f1da"
+        },
+        "2": {
+          "mediana_s": 0.9796,
+          "muestras_s": [
+            0.9361,
+            0.9796,
+            0.9817,
+            0.9863,
+            0.9537
+          ],
+          "vivos": 21,
+          "hash_estado": "55fad20a3b71547976d5a84b6fcacf4a78c28f64dfe69845cbd3ea16b737efe4",
+          "hash_eventos": "fc268a4cf96b1589260038a7464743a3cbf0b7055ed36be0d1655b52dda90f1c"
+        }
+      },
+      "factor_f2_f1": 1.79
+    }
+  ],
+  "historia": [
+    {
+      "anio": 1,
+      "segundos": 1.0024,
+      "eventos": 2563,
+      "vivos": 25
+    },
+    {
+      "anio": 2,
+      "segundos": 0.9657,
+      "eventos": 4908,
+      "vivos": 25
+    },
+    {
+      "anio": 3,
+      "segundos": 0.9268,
+      "eventos": 7431,
+      "vivos": 25
+    },
+    {
+      "anio": 4,
+      "segundos": 0.9354,
+      "eventos": 9779,
+      "vivos": 25
+    },
+    {
+      "anio": 5,
+      "segundos": 0.9353,
+      "eventos": 12270,
+      "vivos": 25
+    },
+    {
+      "anio": 6,
+      "segundos": 0.9222,
+      "eventos": 14943,
+      "vivos": 25
+    }
+  ],
+  "memoria": [
+    {
+      "reglas": 1,
+      "python_actual_bytes": 10679166,
+      "python_pico_bytes": 10699198,
+      "estado_json_bytes": 100832
+    },
+    {
+      "reglas": 2,
+      "python_actual_bytes": 12700914,
+      "python_pico_bytes": 12727866,
+      "estado_json_bytes": 226472,
+      "mente_media_bytes": 5019,
+      "recuerdos_activos": [
+        3,
+        6,
+        5,
+        5,
+        7,
+        8,
+        4,
+        7,
+        3,
+        3,
+        7,
+        9,
+        13,
+        8,
+        9,
+        6,
+        6,
+        7,
+        10,
+        6,
+        8,
+        10,
+        3,
+        6,
+        6
+      ]
+    }
+  ],
+  "sesion": [
+    {
+      "reglas": 1,
+      "hasta_anio": 1,
+      "salto_s": 1.1475,
+      "archivo_bytes": 569344,
+      "eventos": 2480,
+      "consulta_durante_salto_max_ms": 1.013,
+      "ficha": {
+        "mediana_ms": 0.344,
+        "maximo_ms": 0.622
+      },
+      "lista": {
+        "mediana_ms": 0.016,
+        "maximo_ms": 0.026
+      },
+      "estado": {
+        "mediana_ms": 0.06,
+        "maximo_ms": 0.101
+      },
+      "cronica": {
+        "mediana_ms": 0.248,
+        "maximo_ms": 0.365
+      },
+      "resumen": {
+        "mediana_ms": 0.362,
+        "maximo_ms": 0.444
+      }
+    },
+    {
+      "reglas": 1,
+      "hasta_anio": 5,
+      "salto_s": 3.9619,
+      "archivo_bytes": 2318336,
+      "eventos": 11470,
+      "consulta_durante_salto_max_ms": 23.383,
+      "ficha": {
+        "mediana_ms": 1.329,
+        "maximo_ms": 1.667
+      },
+      "lista": {
+        "mediana_ms": 0.017,
+        "maximo_ms": 0.029
+      },
+      "estado": {
+        "mediana_ms": 0.06,
+        "maximo_ms": 0.102
+      },
+      "cronica": {
+        "mediana_ms": 0.498,
+        "maximo_ms": 0.63
+      },
+      "resumen": {
+        "mediana_ms": 0.535,
+        "maximo_ms": 0.642
+      }
+    },
+    {
+      "reglas": 2,
+      "hasta_anio": 1,
+      "salto_s": 1.5321,
+      "archivo_bytes": 643072,
+      "eventos": 2563,
+      "consulta_durante_salto_max_ms": 1.028,
+      "ficha": {
+        "mediana_ms": 0.522,
+        "maximo_ms": 0.738
+      },
+      "lista": {
+        "mediana_ms": 0.019,
+        "maximo_ms": 0.03
+      },
+      "estado": {
+        "mediana_ms": 0.06,
+        "maximo_ms": 0.109
+      },
+      "cronica": {
+        "mediana_ms": 0.276,
+        "maximo_ms": 0.414
+      },
+      "resumen": {
+        "mediana_ms": 0.391,
+        "maximo_ms": 0.524
+      }
+    },
+    {
+      "reglas": 2,
+      "hasta_anio": 5,
+      "salto_s": 5.9134,
+      "archivo_bytes": 2740224,
+      "eventos": 12270,
+      "consulta_durante_salto_max_ms": 38.441,
+      "ficha": {
+        "mediana_ms": 1.955,
+        "maximo_ms": 2.765
+      },
+      "lista": {
+        "mediana_ms": 0.019,
+        "maximo_ms": 0.033
+      },
+      "estado": {
+        "mediana_ms": 0.062,
+        "maximo_ms": 0.107
+      },
+      "cronica": {
+        "mediana_ms": 0.239,
+        "maximo_ms": 0.354
+      },
+      "resumen": {
+        "mediana_ms": 0.433,
+        "maximo_ms": 0.514
+      }
+    }
+  ],
+  "carpeta_partidas": "C:\\Users\\elmun\\Documents\\Codex\\2026-11-11\\referenced-chatgpt-conversation-this-is-an\\work\\medidas-cierre-f2\\medicion-54bf68c0f252"
+}

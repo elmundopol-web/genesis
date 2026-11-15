@@ -1,0 +1,473 @@
+{
+ "libres": {
+  "costumbre": [
+   {
+    "id": 18,
+    "tick": 0,
+    "tipo": "habitante.aparece",
+    "datos": {
+     "id": 14,
+     "nombre": "Alba",
+     "edad": 42,
+     "x": 15,
+     "y": 18
+    },
+    "causa_id": null
+   },
+   {
+    "id": 84,
+    "tick": 1,
+    "tipo": "vidas.recuerda_descanso",
+    "datos": {
+     "id": 14,
+     "nombre": "Alba",
+     "historia": 84,
+     "celda": 1167
+    },
+    "causa_id": 18
+   },
+   {
+    "id": 347,
+    "tick": 18,
+    "tipo": "vidas.inicia_costumbre",
+    "datos": {
+     "id": 14,
+     "nombre": "Alba",
+     "historia": 347,
+     "a": null,
+     "modo": "volver a descansar",
+     "celda": 1167
+    },
+    "causa_id": 84
+   },
+   {
+    "id": 364,
+    "tick": 20,
+    "tipo": "vidas.fin_costumbre",
+    "datos": {
+     "id": 14,
+     "nombre": "Alba",
+     "historia": 347,
+     "a": null,
+     "motivo": "descanso en el lugar recordado"
+    },
+    "causa_id": 347
+   }
+  ],
+  "provisiones": [
+   {
+    "id": 921,
+    "tick": 160,
+    "tipo": "vidas.convive",
+    "datos": {
+     "id": 7,
+     "nombre": "Suni",
+     "historia": 921,
+     "a": 13,
+     "motivo": "descansar juntos"
+    },
+    "causa_id": null
+   },
+   {
+    "id": 1097,
+    "tick": 206,
+    "tipo": "vidas.inicia_costumbre",
+    "datos": {
+     "id": 13,
+     "nombre": "Elai",
+     "historia": 1097,
+     "a": 7,
+     "modo": "visitar a alguien apreciado",
+     "celda": 530
+    },
+    "causa_id": 921
+   },
+   {
+    "id": 1098,
+    "tick": 206,
+    "tipo": "vidas.descanso_compartido",
+    "datos": {
+     "id": 13,
+     "nombre": "Elai",
+     "historia": 1097,
+     "a": 7,
+     "celda": 530
+    },
+    "causa_id": 1097
+   },
+   {
+    "id": 1341,
+    "tick": 252,
+    "tipo": "vidas.esperan",
+    "datos": {
+     "id": 13,
+     "nombre": "Elai",
+     "historia": 1341,
+     "a": 7,
+     "plazo": 492,
+     "motivo": "encuentros repetidos y afecto"
+    },
+    "causa_id": 1098
+   },
+   {
+    "id": 2278,
+    "tick": 503,
+    "tipo": "vidas.nace",
+    "datos": {
+     "id": 27,
+     "nombre": "Dumo Elai",
+     "historia": 1341,
+     "progenitores": [
+      13,
+      7
+     ],
+     "a": 13,
+     "x": 30,
+     "y": 26
+    },
+    "causa_id": 1341
+   },
+   {
+    "id": 4864,
+    "tick": 942,
+    "tipo": "vidas.plan_cuidado",
+    "datos": {
+     "id": 13,
+     "nombre": "Elai",
+     "historia": 1341,
+     "a": 27,
+     "necesidad": "alimento",
+     "encuentro": 1692
+    },
+    "causa_id": 2278
+   },
+   {
+    "id": 4873,
+    "tick": 943,
+    "tipo": "vidas.provision_obtenida",
+    "datos": {
+     "id": 13,
+     "nombre": "Elai",
+     "historia": 1341,
+     "a": 27,
+     "necesidad": "alimento",
+     "celda": 1760,
+     "cantidad": 3
+    },
+    "causa_id": 4864
+   },
+   {
+    "id": 4905,
+    "tick": 946,
+    "tipo": "vidas.alimenta",
+    "datos": {
+     "id": 13,
+     "nombre": "Elai",
+     "historia": 1341,
+     "a": 27,
+     "recurso": "semillas",
+     "cantidad": 3
+    },
+    "causa_id": 4873
+   },
+   {
+    "id": 4906,
+    "tick": 946,
+    "tipo": "vidas.cuidado_cumplido",
+    "datos": {
+     "id": 13,
+     "nombre": "Elai",
+     "historia": 1341,
+     "a": 27,
+     "motivo": "entrega en contacto",
+     "antes": 310,
+     "despues": 184,
+     "necesidad": "alimento"
+    },
+    "causa_id": 4905
+   }
+  ],
+  "relevo": [
+   {
+    "id": 1458,
+    "tick": 280,
+    "tipo": "vidas.convive",
+    "datos": {
+     "id": 4,
+     "nombre": "Fedra",
+     "historia": 1458,
+     "a": 16,
+     "motivo": "descansar juntos"
+    },
+    "causa_id": null
+   },
+   {
+    "id": 1544,
+    "tick": 300,
+    "tipo": "vidas.esperan",
+    "datos": {
+     "id": 4,
+     "nombre": "Fedra",
+     "historia": 1544,
+     "a": 16,
+     "plazo": 540,
+     "motivo": "encuentros repetidos y afecto"
+    },
+    "causa_id": 1458
+   },
+   {
+    "id": 2537,
+    "tick": 551,
+    "tipo": "vidas.nace",
+    "datos": {
+     "id": 28,
+     "nombre": "Hebe Fedra",
+     "historia": 1544,
+     "progenitores": [
+      4,
+      16
+     ],
+     "a": 4,
+     "x": 36,
+     "y": 40
+    },
+    "causa_id": 1544
+   },
+   {
+    "id": 11701,
+    "tick": 1841,
+    "tipo": "vidas.solicita_relevo",
+    "datos": {
+     "id": 28,
+     "nombre": "Hebe Fedra",
+     "historia": 1544,
+     "motivo": "cuatro días sin contacto"
+    },
+    "causa_id": 2537
+   },
+   {
+    "id": 11705,
+    "tick": 1842,
+    "tipo": "vidas.relevo_aceptado",
+    "datos": {
+     "id": 8,
+     "nombre": "Maku",
+     "historia": 1544,
+     "a": 28,
+     "motivo": "cuatro días sin contacto"
+    },
+    "causa_id": 11701
+   },
+   {
+    "id": 11706,
+    "tick": 1842,
+    "tipo": "vidas.relevo_efectivo",
+    "datos": {
+     "id": 8,
+     "nombre": "Maku",
+     "historia": 1544,
+     "a": 28,
+     "menor": 28,
+     "anterior": 4,
+     "duracion": 1291,
+     "motivo": "cuatro días sin contacto"
+    },
+    "causa_id": 11705
+   }
+  ]
+ },
+ "urgencia_preparada": [
+  {
+   "id": 24,
+   "tick": 7,
+   "tipo": "vidas.nace",
+   "datos": {
+    "id": 4,
+    "nombre": "Fedra Sima",
+    "historia": 23,
+    "progenitores": [
+     1,
+     2
+    ],
+    "a": 1,
+    "x": 21,
+    "y": 0
+   },
+   "causa_id": 23
+  },
+  {
+   "id": 25,
+   "tick": 8,
+   "tipo": "vidas.plan_cuidado",
+   "datos": {
+    "id": 1,
+    "nombre": "Sima",
+    "historia": 23,
+    "a": 4,
+    "necesidad": "agua",
+    "encuentro": 13
+   },
+   "causa_id": 24
+  },
+  {
+   "id": 28,
+   "tick": 9,
+   "tipo": "vidas.plan_interrumpido",
+   "datos": {
+    "id": 1,
+    "nombre": "Sima",
+    "historia": 23,
+    "a": 4,
+    "motivo": "necesidad propia",
+    "sed": 730,
+    "hambre": 148,
+    "energia": 952
+   },
+   "causa_id": 25
+  },
+  {
+   "id": 29,
+   "tick": 9,
+   "tipo": "vidas.pide_ayuda",
+   "datos": {
+    "id": 1,
+    "nombre": "Sima",
+    "historia": 23,
+    "a": 4,
+    "oyeron": [
+     2,
+     3
+    ]
+   },
+   "causa_id": 28
+  },
+  {
+   "id": 30,
+   "tick": 9,
+   "tipo": "vidas.ayuda_aceptada",
+   "datos": {
+    "id": 2,
+    "nombre": "Rudo",
+    "historia": 23,
+    "a": 4,
+    "principal": 1,
+    "hasta": 21
+   },
+   "causa_id": 29
+  },
+  {
+   "id": 32,
+   "tick": 10,
+   "tipo": "vidas.plan_cuidado",
+   "datos": {
+    "id": 2,
+    "nombre": "Rudo",
+    "historia": 23,
+    "a": 4,
+    "necesidad": "agua",
+    "encuentro": 13
+   },
+   "causa_id": 30
+  },
+  {
+   "id": 35,
+   "tick": 12,
+   "tipo": "vidas.provision_obtenida",
+   "datos": {
+    "id": 2,
+    "nombre": "Rudo",
+    "historia": 23,
+    "a": 4,
+    "necesidad": "agua",
+    "celda": 273,
+    "cantidad": 1
+   },
+   "causa_id": 32
+  },
+  {
+   "id": 43,
+   "tick": 15,
+   "tipo": "vidas.da_agua",
+   "datos": {
+    "id": 2,
+    "nombre": "Rudo",
+    "historia": 23,
+    "a": 4,
+    "cantidad": 1
+   },
+   "causa_id": 35
+  },
+  {
+   "id": 44,
+   "tick": 15,
+   "tipo": "vidas.cuidado_cumplido",
+   "datos": {
+    "id": 2,
+    "nombre": "Rudo",
+    "historia": 23,
+    "a": 4,
+    "motivo": "entrega en contacto",
+    "antes": 560,
+    "despues": 140,
+    "necesidad": "agua"
+   },
+   "causa_id": 43
+  },
+  {
+   "id": 65,
+   "tick": 26,
+   "tipo": "vidas.plan_reanudado",
+   "datos": {
+    "id": 1,
+    "nombre": "Sima",
+    "historia": 23,
+    "a": 4
+   },
+   "causa_id": 28
+  },
+  {
+   "id": 67,
+   "tick": 27,
+   "tipo": "vidas.provision_obtenida",
+   "datos": {
+    "id": 1,
+    "nombre": "Sima",
+    "historia": 23,
+    "a": 4,
+    "necesidad": "agua",
+    "celda": 273,
+    "cantidad": 1
+   },
+   "causa_id": 65
+  },
+  {
+   "id": 70,
+   "tick": 29,
+   "tipo": "vidas.da_agua",
+   "datos": {
+    "id": 1,
+    "nombre": "Sima",
+    "historia": 23,
+    "a": 4,
+    "cantidad": 1
+   },
+   "causa_id": 67
+  },
+  {
+   "id": 71,
+   "tick": 29,
+   "tipo": "vidas.cuidado_cumplido",
+   "datos": {
+    "id": 1,
+    "nombre": "Sima",
+    "historia": 23,
+    "a": 4,
+    "motivo": "entrega en contacto",
+    "antes": 476,
+    "despues": 56,
+    "necesidad": "agua"
+   },
+   "causa_id": 70
+  }
+ ]
+}

@@ -1,0 +1,2246 @@
+[
+ {
+  "semilla": 1,
+  "abundancia": 0.3,
+  "anios": 2,
+  "vivos_por_anio": [
+   25,
+   25
+  ],
+  "segundos": 3.1,
+  "obras_iniciadas": 10,
+  "terminadas": 10,
+  "abandonadas": 0,
+  "suspendidas": 1,
+  "reanudadas": 1,
+  "por_tipo": {
+   "refugio:lista": 6,
+   "deposito:lista": 4
+  },
+  "utilizadas": 9,
+  "reparadas": 7,
+  "reparaciones": 42,
+  "ruinas": 0,
+  "estancias": 669,
+  "estancias_con_frio": 183,
+  "horas_a_cubierto": 3151,
+  "sin_sitio": 7,
+  "cede_sitio": 0,
+  "madera_aportada": 200,
+  "guardado": 94,
+  "retirado": 14,
+  "depositos_vacios": 0,
+  "compromisos": 151,
+  "compromisos_dejados": 55,
+  "informes": 225,
+  "comprobaciones": 94,
+  "contribuyen": 20,
+  "benefician": 25,
+  "reciben_deposito": 1,
+  "comunidades": [
+   {
+    "id": 1,
+    "nombre": "Comunidad del Abedul",
+    "estado": "activa",
+    "miembros": 11,
+    "antiguos": 0,
+    "dias": 67,
+    "lugares": [
+     1,
+     4
+    ],
+    "acuerdos": 1,
+    "uniones": 7,
+    "salidas": 0,
+    "recurrentes": 13,
+    "funcional": true
+   },
+   {
+    "id": 2,
+    "nombre": "Comunidad del Arroyo",
+    "estado": "activa",
+    "miembros": 8,
+    "antiguos": 1,
+    "dias": 48,
+    "lugares": [
+     2,
+     8
+    ],
+    "acuerdos": 0,
+    "uniones": 7,
+    "salidas": 1,
+    "recurrentes": 10,
+    "funcional": true
+   },
+   {
+    "id": 3,
+    "nombre": "Comunidad del Abedul II",
+    "estado": "activa",
+    "miembros": 2,
+    "antiguos": 0,
+    "dias": 28,
+    "lugares": [
+     7,
+     9
+    ],
+    "acuerdos": 0,
+    "uniones": 0,
+    "salidas": 0,
+    "recurrentes": 2,
+    "funcional": false
+   },
+   {
+    "id": 4,
+    "nombre": "Comunidad del Robledal II",
+    "estado": "activa",
+    "miembros": 3,
+    "antiguos": 0,
+    "dias": 13,
+    "lugares": [
+     6,
+     10
+    ],
+    "acuerdos": 0,
+    "uniones": 1,
+    "salidas": 0,
+    "recurrentes": 4,
+    "funcional": false
+   }
+  ],
+  "funcionales": 2,
+  "uniones": 15,
+  "salidas": 1,
+  "alejamientos": 13,
+  "disueltas": 0,
+  "acuerdos": [
+   {
+    "id": 1,
+    "tipo": "prioridad_apuro",
+    "comunidad": 1,
+    "aceptan": 3,
+    "rechazan": 1,
+    "cumplidos": 0,
+    "incumplidos": 0
+   }
+  ],
+  "acuerdos_propuestos": 1,
+  "acuerdos_aceptados": 11,
+  "acuerdos_rechazados": 3,
+  "cadenas": [
+   {
+    "tipo": "vivencia->obra",
+    "evento": 1845,
+    "causa": 1508,
+    "tick": 303,
+    "quien": "Bido",
+    "lugar": "Depósito de la Ribera",
+    "noches_al_raso": null
+   },
+   {
+    "tipo": "informacion->uso",
+    "evento": 2866,
+    "causa": 2640,
+    "tick": 554,
+    "quien": "Dana",
+    "lugar": "Refugio del Arroyo",
+    "frio": false,
+    "fuera": 8.5
+   },
+   {
+    "tipo": "informacion->uso",
+    "evento": 3102,
+    "causa": 2760,
+    "tick": 603,
+    "quien": "Vila",
+    "lugar": "Refugio del Arroyo",
+    "frio": false,
+    "fuera": 5.5
+   },
+   {
+    "tipo": "informacion->uso",
+    "evento": 3114,
+    "causa": 3061,
+    "tick": 605,
+    "quien": "Arek",
+    "lugar": "Refugio del Abedul",
+    "frio": false,
+    "fuera": 5.5
+   },
+   {
+    "tipo": "acuerdo",
+    "evento": 4165,
+    "causa": 4164,
+    "tick": 870,
+    "quien": "Cael",
+    "acuerdo": "prioridad_apuro"
+   },
+   {
+    "tipo": "acuerdo",
+    "evento": 4409,
+    "causa": 4164,
+    "tick": 908,
+    "quien": "Meru",
+    "acuerdo": "prioridad_apuro"
+   },
+   {
+    "tipo": "vivencia->obra",
+    "evento": 6396,
+    "causa": 5170,
+    "tick": 1254,
+    "quien": "Arek",
+    "lugar": "Depósito del Prado",
+    "noches_al_raso": null
+   },
+   {
+    "tipo": "vivencia->obra",
+    "evento": 8155,
+    "causa": 5871,
+    "tick": 1618,
+    "quien": "Gael",
+    "lugar": "Depósito de la Ribera II",
+    "noches_al_raso": null
+   }
+  ],
+  "origen": "espontáneo: mundo creado desde la semilla con su configuración normal, sin preparar nada"
+ },
+ {
+  "semilla": 2,
+  "abundancia": 0.3,
+  "anios": 2,
+  "vivos_por_anio": [
+   25,
+   15
+  ],
+  "segundos": 2.4,
+  "obras_iniciadas": 9,
+  "terminadas": 9,
+  "abandonadas": 1,
+  "suspendidas": 5,
+  "reanudadas": 5,
+  "por_tipo": {
+   "refugio:lista": 5,
+   "deposito:lista": 4
+  },
+  "utilizadas": 8,
+  "reparadas": 7,
+  "reparaciones": 36,
+  "ruinas": 0,
+  "estancias": 452,
+  "estancias_con_frio": 147,
+  "horas_a_cubierto": 2174,
+  "sin_sitio": 3,
+  "cede_sitio": 0,
+  "madera_aportada": 176,
+  "guardado": 105,
+  "retirado": 29,
+  "depositos_vacios": 1,
+  "compromisos": 147,
+  "compromisos_dejados": 66,
+  "informes": 116,
+  "comprobaciones": 48,
+  "contribuyen": 16,
+  "benefician": 22,
+  "reciben_deposito": 3,
+  "comunidades": [
+   {
+    "id": 1,
+    "nombre": "Comunidad del Vado",
+    "estado": "activa",
+    "miembros": 6,
+    "antiguos": 1,
+    "dias": 73,
+    "lugares": [
+     1,
+     4
+    ],
+    "acuerdos": 0,
+    "uniones": 4,
+    "salidas": 1,
+    "recurrentes": 11,
+    "funcional": true
+   },
+   {
+    "id": 2,
+    "nombre": "Comunidad del Prado",
+    "estado": "disuelta",
+    "miembros": 0,
+    "antiguos": 7,
+    "dias": 24,
+    "lugares": [
+     3,
+     6
+    ],
+    "acuerdos": 0,
+    "uniones": 3,
+    "salidas": 7,
+    "recurrentes": 14,
+    "funcional": true
+   },
+   {
+    "id": 3,
+    "nombre": "Comunidad de la Ribera",
+    "estado": "activa",
+    "miembros": 5,
+    "antiguos": 0,
+    "dias": 48,
+    "lugares": [
+     2,
+     8
+    ],
+    "acuerdos": 0,
+    "uniones": 3,
+    "salidas": 0,
+    "recurrentes": 6,
+    "funcional": true
+   },
+   {
+    "id": 4,
+    "nombre": "Comunidad del Prado II",
+    "estado": "activa",
+    "miembros": 3,
+    "antiguos": 0,
+    "dias": 46,
+    "lugares": [
+     5,
+     9
+    ],
+    "acuerdos": 0,
+    "uniones": 1,
+    "salidas": 0,
+    "recurrentes": 3,
+    "funcional": true
+   }
+  ],
+  "funcionales": 4,
+  "uniones": 11,
+  "salidas": 8,
+  "alejamientos": 11,
+  "disueltas": 1,
+  "acuerdos": [],
+  "acuerdos_propuestos": 0,
+  "acuerdos_aceptados": 0,
+  "acuerdos_rechazados": 0,
+  "cadenas": [
+   {
+    "tipo": "vivencia->obra",
+    "evento": 2666,
+    "causa": 1239,
+    "tick": 396,
+    "quien": "Enya",
+    "lugar": "Depósito del Robledal",
+    "noches_al_raso": null
+   },
+   {
+    "tipo": "vivencia->obra",
+    "evento": 3741,
+    "causa": 1177,
+    "tick": 564,
+    "quien": "Nadi",
+    "lugar": "Depósito del Linde",
+    "noches_al_raso": null
+   },
+   {
+    "tipo": "informacion->uso",
+    "evento": 3925,
+    "causa": 3037,
+    "tick": 602,
+    "quien": "Uma",
+    "lugar": "Refugio del Prado",
+    "frio": false,
+    "fuera": 12.0
+   },
+   {
+    "tipo": "informacion->uso",
+    "evento": 3929,
+    "causa": 2980,
+    "tick": 603,
+    "quien": "Naia",
+    "lugar": "Refugio del Prado",
+    "frio": false,
+    "fuera": 10.9
+   },
+   {
+    "tipo": "informacion->uso",
+    "evento": 4336,
+    "causa": 3678,
+    "tick": 680,
+    "quien": "Dorin",
+    "lugar": "Refugio del Prado",
+    "frio": false,
+    "fuera": -0.4
+   },
+   {
+    "tipo": "vivencia->obra",
+    "evento": 4828,
+    "causa": 2352,
+    "tick": 779,
+    "quien": "Dorin",
+    "lugar": "Depósito del Robledal II",
+    "noches_al_raso": null
+   }
+  ],
+  "origen": "espontáneo: mundo creado desde la semilla con su configuración normal, sin preparar nada"
+ },
+ {
+  "semilla": 3,
+  "abundancia": 0.3,
+  "anios": 2,
+  "vivos_por_anio": [
+   25,
+   15
+  ],
+  "segundos": 2.7,
+  "obras_iniciadas": 13,
+  "terminadas": 11,
+  "abandonadas": 3,
+  "suspendidas": 9,
+  "reanudadas": 7,
+  "por_tipo": {
+   "refugio:lista": 7,
+   "deposito:lista": 4,
+   "refugio:suspendida": 1,
+   "refugio:abandonada": 1
+  },
+  "utilizadas": 11,
+  "reparadas": 3,
+  "reparaciones": 19,
+  "ruinas": 0,
+  "estancias": 471,
+  "estancias_con_frio": 168,
+  "horas_a_cubierto": 2492,
+  "sin_sitio": 1,
+  "cede_sitio": 0,
+  "madera_aportada": 248,
+  "guardado": 138,
+  "retirado": 127,
+  "depositos_vacios": 5,
+  "compromisos": 175,
+  "compromisos_dejados": 81,
+  "informes": 149,
+  "comprobaciones": 78,
+  "contribuyen": 18,
+  "benefician": 22,
+  "reciben_deposito": 8,
+  "comunidades": [
+   {
+    "id": 1,
+    "nombre": "Comunidad del Abedul",
+    "estado": "disuelta",
+    "miembros": 0,
+    "antiguos": 5,
+    "dias": 46,
+    "lugares": [
+     1
+    ],
+    "acuerdos": 0,
+    "uniones": 2,
+    "salidas": 5,
+    "recurrentes": 9,
+    "funcional": true
+   },
+   {
+    "id": 2,
+    "nombre": "Comunidad de la Ribera",
+    "estado": "activa",
+    "miembros": 5,
+    "antiguos": 1,
+    "dias": 66,
+    "lugares": [
+     2,
+     3
+    ],
+    "acuerdos": 0,
+    "uniones": 3,
+    "salidas": 1,
+    "recurrentes": 10,
+    "funcional": true
+   },
+   {
+    "id": 3,
+    "nombre": "Comunidad del Abedul II",
+    "estado": "debil",
+    "miembros": 2,
+    "antiguos": 0,
+    "dias": 39,
+    "lugares": [
+     4,
+     10
+    ],
+    "acuerdos": 0,
+    "uniones": 0,
+    "salidas": 0,
+    "recurrentes": 2,
+    "funcional": false
+   },
+   {
+    "id": 4,
+    "nombre": "Comunidad del Robledal",
+    "estado": "activa",
+    "miembros": 3,
+    "antiguos": 4,
+    "dias": 37,
+    "lugares": [
+     6,
+     13
+    ],
+    "acuerdos": 1,
+    "uniones": 5,
+    "salidas": 4,
+    "recurrentes": 8,
+    "funcional": true
+   },
+   {
+    "id": 5,
+    "nombre": "Comunidad del Abedul IV",
+    "estado": "activa",
+    "miembros": 3,
+    "antiguos": 0,
+    "dias": 34,
+    "lugares": [
+     8,
+     12
+    ],
+    "acuerdos": 0,
+    "uniones": 1,
+    "salidas": 0,
+    "recurrentes": 5,
+    "funcional": true
+   }
+  ],
+  "funcionales": 4,
+  "uniones": 11,
+  "salidas": 10,
+  "alejamientos": 6,
+  "disueltas": 1,
+  "acuerdos": [
+   {
+    "id": 1,
+    "tipo": "prioridad_apuro",
+    "comunidad": 4,
+    "aceptan": 1,
+    "rechazan": 1,
+    "cumplidos": 0,
+    "incumplidos": 0
+   }
+  ],
+  "acuerdos_propuestos": 1,
+  "acuerdos_aceptados": 0,
+  "acuerdos_rechazados": 1,
+  "cadenas": [
+   {
+    "tipo": "vivencia->obra",
+    "evento": 2558,
+    "causa": 1458,
+    "tick": 327,
+    "quien": "Suni",
+    "lugar": "Depósito del Claro",
+    "noches_al_raso": null
+   },
+   {
+    "tipo": "informacion->uso",
+    "evento": 3678,
+    "causa": 3566,
+    "tick": 512,
+    "quien": "Suni",
+    "lugar": "Refugio del Abedul",
+    "frio": false,
+    "fuera": 9.8
+   },
+   {
+    "tipo": "informacion->uso",
+    "evento": 4343,
+    "causa": 4139,
+    "tick": 627,
+    "quien": "Sima",
+    "lugar": "Refugio del Abedul",
+    "frio": false,
+    "fuera": 5.9
+   },
+   {
+    "tipo": "informacion->uso",
+    "evento": 4484,
+    "causa": 4375,
+    "tick": 652,
+    "quien": "Nilo",
+    "lugar": "Refugio del Abedul",
+    "frio": false,
+    "fuera": 2.5
+   },
+   {
+    "tipo": "vivencia->obra",
+    "evento": 6035,
+    "causa": 5650,
+    "tick": 978,
+    "quien": "Olba",
+    "lugar": "Depósito del Abedul",
+    "noches_al_raso": null
+   },
+   {
+    "tipo": "vivencia->obra",
+    "evento": 6698,
+    "causa": 5713,
+    "tick": 1088,
+    "quien": "Maku",
+    "lugar": "Refugio del Prado",
+    "noches_al_raso": 14
+   }
+  ],
+  "origen": "espontáneo: mundo creado desde la semilla con su configuración normal, sin preparar nada"
+ },
+ {
+  "semilla": 4,
+  "abundancia": 0.3,
+  "anios": 2,
+  "vivos_por_anio": [
+   20,
+   15
+  ],
+  "segundos": 2.5,
+  "obras_iniciadas": 17,
+  "terminadas": 15,
+  "abandonadas": 2,
+  "suspendidas": 12,
+  "reanudadas": 10,
+  "por_tipo": {
+   "refugio:lista": 10,
+   "deposito:lista": 5,
+   "deposito:suspendida": 2
+  },
+  "utilizadas": 15,
+  "reparadas": 1,
+  "reparaciones": 2,
+  "ruinas": 0,
+  "estancias": 361,
+  "estancias_con_frio": 161,
+  "horas_a_cubierto": 2034,
+  "sin_sitio": 0,
+  "cede_sitio": 0,
+  "madera_aportada": 333,
+  "guardado": 143,
+  "retirado": 80,
+  "depositos_vacios": 0,
+  "compromisos": 228,
+  "compromisos_dejados": 100,
+  "informes": 82,
+  "comprobaciones": 35,
+  "contribuyen": 19,
+  "benefician": 15,
+  "reciben_deposito": 7,
+  "comunidades": [
+   {
+    "id": 1,
+    "nombre": "Comunidad de la Ribera",
+    "estado": "activa",
+    "miembros": 4,
+    "antiguos": 0,
+    "dias": 33,
+    "lugares": [
+     1,
+     11
+    ],
+    "acuerdos": 0,
+    "uniones": 1,
+    "salidas": 0,
+    "recurrentes": 5,
+    "funcional": true
+   },
+   {
+    "id": 2,
+    "nombre": "Comunidad del Arroyo",
+    "estado": "disuelta",
+    "miembros": 0,
+    "antiguos": 3,
+    "dias": 26,
+    "lugares": [
+     9,
+     10
+    ],
+    "acuerdos": 0,
+    "uniones": 0,
+    "salidas": 3,
+    "recurrentes": 3,
+    "funcional": true
+   },
+   {
+    "id": 3,
+    "nombre": "Comunidad de la Loma",
+    "estado": "debil",
+    "miembros": 3,
+    "antiguos": 0,
+    "dias": 28,
+    "lugares": [
+     5,
+     13
+    ],
+    "acuerdos": 0,
+    "uniones": 1,
+    "salidas": 0,
+    "recurrentes": 5,
+    "funcional": true
+   },
+   {
+    "id": 4,
+    "nombre": "Comunidad del Prado",
+    "estado": "activa",
+    "miembros": 3,
+    "antiguos": 0,
+    "dias": 27,
+    "lugares": [
+     6,
+     12
+    ],
+    "acuerdos": 0,
+    "uniones": 0,
+    "salidas": 0,
+    "recurrentes": 3,
+    "funcional": true
+   },
+   {
+    "id": 5,
+    "nombre": "Comunidad del Claro",
+    "estado": "activa",
+    "miembros": 3,
+    "antiguos": 0,
+    "dias": 22,
+    "lugares": [
+     7,
+     15
+    ],
+    "acuerdos": 0,
+    "uniones": 0,
+    "salidas": 0,
+    "recurrentes": 5,
+    "funcional": true
+   },
+   {
+    "id": 6,
+    "nombre": "Comunidad del Linde",
+    "estado": "debil",
+    "miembros": 2,
+    "antiguos": 0,
+    "dias": 20,
+    "lugares": [
+     4,
+     16
+    ],
+    "acuerdos": 0,
+    "uniones": 0,
+    "salidas": 0,
+    "recurrentes": 5,
+    "funcional": true
+   },
+   {
+    "id": 7,
+    "nombre": "Comunidad de la Loma II",
+    "estado": "activa",
+    "miembros": 2,
+    "antiguos": 0,
+    "dias": 13,
+    "lugares": [
+     14,
+     17
+    ],
+    "acuerdos": 0,
+    "uniones": 0,
+    "salidas": 0,
+    "recurrentes": 2,
+    "funcional": false
+   }
+  ],
+  "funcionales": 6,
+  "uniones": 2,
+  "salidas": 3,
+  "alejamientos": 9,
+  "disueltas": 1,
+  "acuerdos": [],
+  "acuerdos_propuestos": 0,
+  "acuerdos_aceptados": 0,
+  "acuerdos_rechazados": 0,
+  "cadenas": [
+   {
+    "tipo": "vivencia->obra",
+    "evento": 5730,
+    "causa": 4836,
+    "tick": 1072,
+    "quien": "Lida",
+    "lugar": "Refugio del Arroyo",
+    "noches_al_raso": 22
+   },
+   {
+    "tipo": "vivencia->obra",
+    "evento": 6175,
+    "causa": 5192,
+    "tick": 1144,
+    "quien": "Pau",
+    "lugar": "Depósito del Abedul",
+    "noches_al_raso": null
+   },
+   {
+    "tipo": "vivencia->obra",
+    "evento": 6852,
+    "causa": 4903,
+    "tick": 1233,
+    "quien": "Lior",
+    "lugar": "Depósito del Linde",
+    "noches_al_raso": null
+   },
+   {
+    "tipo": "informacion->uso",
+    "evento": 7625,
+    "causa": 6280,
+    "tick": 1371,
+    "quien": "Lior",
+    "lugar": "Refugio del Claro II",
+    "frio": false,
+    "fuera": 16.2
+   },
+   {
+    "tipo": "informacion->uso",
+    "evento": 7720,
+    "causa": 6280,
+    "tick": 1393,
+    "quien": "Lior",
+    "lugar": "Refugio del Claro II",
+    "frio": false,
+    "fuera": 21.5
+   },
+   {
+    "tipo": "informacion->uso",
+    "evento": 7842,
+    "causa": 6280,
+    "tick": 1417,
+    "quien": "Lior",
+    "lugar": "Refugio del Claro II",
+    "frio": false,
+    "fuera": 21.5
+   }
+  ],
+  "origen": "espontáneo: mundo creado desde la semilla con su configuración normal, sin preparar nada"
+ },
+ {
+  "semilla": 5,
+  "abundancia": 0.3,
+  "anios": 2,
+  "vivos_por_anio": [
+   25,
+   25
+  ],
+  "segundos": 3.1,
+  "obras_iniciadas": 16,
+  "terminadas": 16,
+  "abandonadas": 0,
+  "suspendidas": 3,
+  "reanudadas": 3,
+  "por_tipo": {
+   "refugio:lista": 9,
+   "deposito:lista": 7
+  },
+  "utilizadas": 16,
+  "reparadas": 13,
+  "reparaciones": 66,
+  "ruinas": 0,
+  "estancias": 922,
+  "estancias_con_frio": 241,
+  "horas_a_cubierto": 4159,
+  "sin_sitio": 1,
+  "cede_sitio": 0,
+  "madera_aportada": 314,
+  "guardado": 284,
+  "retirado": 131,
+  "depositos_vacios": 0,
+  "compromisos": 297,
+  "compromisos_dejados": 159,
+  "informes": 271,
+  "comprobaciones": 99,
+  "contribuyen": 25,
+  "benefician": 25,
+  "reciben_deposito": 9,
+  "comunidades": [
+   {
+    "id": 1,
+    "nombre": "Comunidad de la Ribera",
+    "estado": "activa",
+    "miembros": 6,
+    "antiguos": 0,
+    "dias": 66,
+    "lugares": [
+     1,
+     7
+    ],
+    "acuerdos": 0,
+    "uniones": 3,
+    "salidas": 0,
+    "recurrentes": 7,
+    "funcional": true
+   },
+   {
+    "id": 2,
+    "nombre": "Comunidad del Claro",
+    "estado": "activa",
+    "miembros": 6,
+    "antiguos": 0,
+    "dias": 62,
+    "lugares": [
+     4,
+     8
+    ],
+    "acuerdos": 0,
+    "uniones": 2,
+    "salidas": 1,
+    "recurrentes": 9,
+    "funcional": true
+   },
+   {
+    "id": 3,
+    "nombre": "Comunidad del Abedul",
+    "estado": "activa",
+    "miembros": 6,
+    "antiguos": 0,
+    "dias": 62,
+    "lugares": [
+     6,
+     12
+    ],
+    "acuerdos": 1,
+    "uniones": 3,
+    "salidas": 0,
+    "recurrentes": 6,
+    "funcional": true
+   },
+   {
+    "id": 4,
+    "nombre": "Comunidad de la Ribera II",
+    "estado": "activa",
+    "miembros": 4,
+    "antiguos": 0,
+    "dias": 54,
+    "lugares": [
+     3,
+     13
+    ],
+    "acuerdos": 0,
+    "uniones": 1,
+    "salidas": 0,
+    "recurrentes": 6,
+    "funcional": true
+   },
+   {
+    "id": 5,
+    "nombre": "Comunidad del Linde",
+    "estado": "activa",
+    "miembros": 4,
+    "antiguos": 0,
+    "dias": 54,
+    "lugares": [
+     5,
+     14
+    ],
+    "acuerdos": 0,
+    "uniones": 1,
+    "salidas": 0,
+    "recurrentes": 6,
+    "funcional": true
+   },
+   {
+    "id": 6,
+    "nombre": "Comunidad del Robledal",
+    "estado": "activa",
+    "miembros": 4,
+    "antiguos": 0,
+    "dias": 49,
+    "lugares": [
+     11,
+     15
+    ],
+    "acuerdos": 0,
+    "uniones": 1,
+    "salidas": 0,
+    "recurrentes": 6,
+    "funcional": true
+   },
+   {
+    "id": 7,
+    "nombre": "Comunidad de los Juncos",
+    "estado": "disuelta",
+    "miembros": 0,
+    "antiguos": 3,
+    "dias": 31,
+    "lugares": [
+     9,
+     16
+    ],
+    "acuerdos": 0,
+    "uniones": 0,
+    "salidas": 3,
+    "recurrentes": 7,
+    "funcional": true
+   }
+  ],
+  "funcionales": 7,
+  "uniones": 11,
+  "salidas": 4,
+  "alejamientos": 10,
+  "disueltas": 1,
+  "acuerdos": [
+   {
+    "id": 1,
+    "tipo": "prioridad_apuro",
+    "comunidad": 3,
+    "aceptan": 3,
+    "rechazan": 0,
+    "cumplidos": 0,
+    "incumplidos": 0
+   }
+  ],
+  "acuerdos_propuestos": 1,
+  "acuerdos_aceptados": 2,
+  "acuerdos_rechazados": 0,
+  "cadenas": [
+   {
+    "tipo": "vivencia->obra",
+    "evento": 688,
+    "causa": 288,
+    "tick": 87,
+    "quien": "Vila",
+    "lugar": "Refugio de la Ribera",
+    "noches_al_raso": 2
+   },
+   {
+    "tipo": "vivencia->obra",
+    "evento": 699,
+    "causa": 262,
+    "tick": 87,
+    "quien": "Dana",
+    "lugar": "Refugio de la Loma",
+    "noches_al_raso": 3
+   },
+   {
+    "tipo": "vivencia->obra",
+    "evento": 1081,
+    "causa": 187,
+    "tick": 129,
+    "quien": "Juna",
+    "lugar": "Refugio de la Ribera II",
+    "noches_al_raso": 3
+   },
+   {
+    "tipo": "informacion->uso",
+    "evento": 4158,
+    "causa": 3728,
+    "tick": 531,
+    "quien": "Beto",
+    "lugar": "Refugio de la Ribera",
+    "frio": false,
+    "fuera": 13.3
+   },
+   {
+    "tipo": "informacion->uso",
+    "evento": 4831,
+    "causa": 3728,
+    "tick": 627,
+    "quien": "Beto",
+    "lugar": "Refugio de la Ribera",
+    "frio": false,
+    "fuera": 6.4
+   },
+   {
+    "tipo": "informacion->uso",
+    "evento": 4846,
+    "causa": 4437,
+    "tick": 629,
+    "quien": "Lida",
+    "lugar": "Refugio del Linde",
+    "frio": false,
+    "fuera": 0.9
+   },
+   {
+    "tipo": "acuerdo",
+    "evento": 12123,
+    "causa": 12122,
+    "tick": 1866,
+    "quien": "Lida",
+    "acuerdo": "prioridad_apuro"
+   },
+   {
+    "tipo": "acuerdo",
+    "evento": 12177,
+    "causa": 12122,
+    "tick": 1886,
+    "quien": "Nilo",
+    "acuerdo": "prioridad_apuro"
+   }
+  ],
+  "origen": "espontáneo: mundo creado desde la semilla con su configuración normal, sin preparar nada"
+ },
+ {
+  "semilla": 6,
+  "abundancia": 0.3,
+  "anios": 2,
+  "vivos_por_anio": [
+   25,
+   25
+  ],
+  "segundos": 3.2,
+  "obras_iniciadas": 13,
+  "terminadas": 13,
+  "abandonadas": 1,
+  "suspendidas": 7,
+  "reanudadas": 7,
+  "por_tipo": {
+   "refugio:lista": 9,
+   "deposito:lista": 4
+  },
+  "utilizadas": 13,
+  "reparadas": 8,
+  "reparaciones": 31,
+  "ruinas": 0,
+  "estancias": 768,
+  "estancias_con_frio": 292,
+  "horas_a_cubierto": 3928,
+  "sin_sitio": 7,
+  "cede_sitio": 1,
+  "madera_aportada": 272,
+  "guardado": 165,
+  "retirado": 112,
+  "depositos_vacios": 0,
+  "compromisos": 251,
+  "compromisos_dejados": 125,
+  "informes": 223,
+  "comprobaciones": 111,
+  "contribuyen": 22,
+  "benefician": 25,
+  "reciben_deposito": 10,
+  "comunidades": [
+   {
+    "id": 1,
+    "nombre": "Comunidad de los Juncos",
+    "estado": "activa",
+    "miembros": 10,
+    "antiguos": 0,
+    "dias": 55,
+    "lugares": [
+     2,
+     8
+    ],
+    "acuerdos": 1,
+    "uniones": 5,
+    "salidas": 1,
+    "recurrentes": 12,
+    "funcional": true
+   },
+   {
+    "id": 2,
+    "nombre": "Comunidad de la Ribera",
+    "estado": "activa",
+    "miembros": 9,
+    "antiguos": 1,
+    "dias": 51,
+    "lugares": [
+     3,
+     9
+    ],
+    "acuerdos": 1,
+    "uniones": 6,
+    "salidas": 1,
+    "recurrentes": 11,
+    "funcional": true
+   },
+   {
+    "id": 3,
+    "nombre": "Comunidad del Abedul",
+    "estado": "activa",
+    "miembros": 9,
+    "antiguos": 0,
+    "dias": 45,
+    "lugares": [
+     1,
+     11
+    ],
+    "acuerdos": 1,
+    "uniones": 6,
+    "salidas": 0,
+    "recurrentes": 9,
+    "funcional": true
+   },
+   {
+    "id": 4,
+    "nombre": "Comunidad del Abedul II",
+    "estado": "activa",
+    "miembros": 5,
+    "antiguos": 0,
+    "dias": 25,
+    "lugares": [
+     4,
+     12
+    ],
+    "acuerdos": 0,
+    "uniones": 3,
+    "salidas": 0,
+    "recurrentes": 5,
+    "funcional": true
+   }
+  ],
+  "funcionales": 4,
+  "uniones": 20,
+  "salidas": 2,
+  "alejamientos": 14,
+  "disueltas": 0,
+  "acuerdos": [
+   {
+    "id": 1,
+    "tipo": "prioridad_apuro",
+    "comunidad": 2,
+    "aceptan": 3,
+    "rechazan": 1,
+    "cumplidos": 1,
+    "incumplidos": 0
+   },
+   {
+    "id": 2,
+    "tipo": "prioridad_apuro",
+    "comunidad": 1,
+    "aceptan": 4,
+    "rechazan": 1,
+    "cumplidos": 0,
+    "incumplidos": 0
+   },
+   {
+    "id": 3,
+    "tipo": "prioridad_apuro",
+    "comunidad": 3,
+    "aceptan": 5,
+    "rechazan": 0,
+    "cumplidos": 0,
+    "incumplidos": 0
+   }
+  ],
+  "acuerdos_propuestos": 3,
+  "acuerdos_aceptados": 15,
+  "acuerdos_rechazados": 3,
+  "cadenas": [
+   {
+    "tipo": "informacion->uso",
+    "evento": 4449,
+    "causa": 4339,
+    "tick": 777,
+    "quien": "Lior",
+    "lugar": "Refugio de los Juncos",
+    "frio": true,
+    "fuera": -1.3
+   },
+   {
+    "tipo": "informacion->uso",
+    "evento": 4464,
+    "causa": 4437,
+    "tick": 779,
+    "quien": "Ilse",
+    "lugar": "Refugio de los Juncos",
+    "frio": false,
+    "fuera": -0.4
+   },
+   {
+    "tipo": "vivencia->obra",
+    "evento": 4515,
+    "causa": 4084,
+    "tick": 786,
+    "quien": "Zael",
+    "lugar": "Depósito del Abedul",
+    "noches_al_raso": null
+   },
+   {
+    "tipo": "informacion->uso",
+    "evento": 4540,
+    "causa": 4517,
+    "tick": 797,
+    "quien": "Alba",
+    "lugar": "Refugio de los Juncos",
+    "frio": false,
+    "fuera": 0.0
+   },
+   {
+    "tipo": "acuerdo",
+    "evento": 5319,
+    "causa": 5318,
+    "tick": 921,
+    "quien": "Lior",
+    "acuerdo": "prioridad_apuro"
+   },
+   {
+    "tipo": "acuerdo",
+    "evento": 5544,
+    "causa": 5543,
+    "tick": 967,
+    "quien": "Cira",
+    "acuerdo": "prioridad_apuro"
+   },
+   {
+    "tipo": "vivencia->obra",
+    "evento": 5797,
+    "causa": 5409,
+    "tick": 1028,
+    "quien": "Olin",
+    "lugar": "Depósito del Robledal",
+    "noches_al_raso": null
+   },
+   {
+    "tipo": "vivencia->obra",
+    "evento": 8044,
+    "causa": 5583,
+    "tick": 1310,
+    "quien": "Goro",
+    "lugar": "Depósito del Claro",
+    "noches_al_raso": null
+   },
+   {
+    "tipo": "acuerdo->cede",
+    "evento": 10616,
+    "causa": 8182,
+    "tick": 1790,
+    "quien": "Gael",
+    "a": "Kora",
+    "lugar": "Refugio de la Ribera"
+   }
+  ],
+  "origen": "espontáneo: mundo creado desde la semilla con su configuración normal, sin preparar nada"
+ },
+ {
+  "semilla": 7,
+  "abundancia": 0.3,
+  "anios": 2,
+  "vivos_por_anio": [
+   25,
+   24
+  ],
+  "segundos": 2.8,
+  "obras_iniciadas": 12,
+  "terminadas": 10,
+  "abandonadas": 2,
+  "suspendidas": 13,
+  "reanudadas": 11,
+  "por_tipo": {
+   "refugio:lista": 6,
+   "refugio:suspendida": 2,
+   "deposito:lista": 4
+  },
+  "utilizadas": 10,
+  "reparadas": 6,
+  "reparaciones": 16,
+  "ruinas": 0,
+  "estancias": 606,
+  "estancias_con_frio": 275,
+  "horas_a_cubierto": 3288,
+  "sin_sitio": 1,
+  "cede_sitio": 0,
+  "madera_aportada": 232,
+  "guardado": 136,
+  "retirado": 136,
+  "depositos_vacios": 1,
+  "compromisos": 226,
+  "compromisos_dejados": 132,
+  "informes": 142,
+  "comprobaciones": 55,
+  "contribuyen": 23,
+  "benefician": 25,
+  "reciben_deposito": 9,
+  "comunidades": [
+   {
+    "id": 1,
+    "nombre": "Comunidad del Robledal",
+    "estado": "activa",
+    "miembros": 5,
+    "antiguos": 1,
+    "dias": 52,
+    "lugares": [
+     3,
+     8
+    ],
+    "acuerdos": 1,
+    "uniones": 2,
+    "salidas": 1,
+    "recurrentes": 7,
+    "funcional": true
+   },
+   {
+    "id": 2,
+    "nombre": "Comunidad de la Ribera",
+    "estado": "activa",
+    "miembros": 6,
+    "antiguos": 0,
+    "dias": 47,
+    "lugares": [
+     4,
+     10
+    ],
+    "acuerdos": 0,
+    "uniones": 4,
+    "salidas": 0,
+    "recurrentes": 8,
+    "funcional": true
+   },
+   {
+    "id": 3,
+    "nombre": "Comunidad del Arroyo",
+    "estado": "activa",
+    "miembros": 6,
+    "antiguos": 0,
+    "dias": 39,
+    "lugares": [
+     1,
+     11
+    ],
+    "acuerdos": 0,
+    "uniones": 4,
+    "salidas": 0,
+    "recurrentes": 8,
+    "funcional": true
+   },
+   {
+    "id": 4,
+    "nombre": "Comunidad del Arroyo II",
+    "estado": "activa",
+    "miembros": 3,
+    "antiguos": 0,
+    "dias": 38,
+    "lugares": [
+     2,
+     12
+    ],
+    "acuerdos": 0,
+    "uniones": 0,
+    "salidas": 0,
+    "recurrentes": 7,
+    "funcional": true
+   },
+   {
+    "id": 5,
+    "nombre": "Comunidad del Robledal II",
+    "estado": "activa",
+    "miembros": 3,
+    "antiguos": 0,
+    "dias": 37,
+    "lugares": [
+     9
+    ],
+    "acuerdos": 0,
+    "uniones": 1,
+    "salidas": 0,
+    "recurrentes": 4,
+    "funcional": true
+   }
+  ],
+  "funcionales": 5,
+  "uniones": 11,
+  "salidas": 1,
+  "alejamientos": 5,
+  "disueltas": 0,
+  "acuerdos": [
+   {
+    "id": 1,
+    "tipo": "reserva_minima",
+    "comunidad": 1,
+    "aceptan": 2,
+    "rechazan": 0,
+    "cumplidos": 0,
+    "incumplidos": 2
+   }
+  ],
+  "acuerdos_propuestos": 1,
+  "acuerdos_aceptados": 2,
+  "acuerdos_rechazados": 0,
+  "cadenas": [
+   {
+    "tipo": "informacion->uso",
+    "evento": 4156,
+    "causa": 4021,
+    "tick": 677,
+    "quien": "Vila",
+    "lugar": "Refugio del Robledal",
+    "frio": false,
+    "fuera": -0.6
+   },
+   {
+    "tipo": "informacion->uso",
+    "evento": 4430,
+    "causa": 4021,
+    "tick": 727,
+    "quien": "Vila",
+    "lugar": "Refugio del Robledal",
+    "frio": true,
+    "fuera": -4.9
+   },
+   {
+    "tipo": "informacion->uso",
+    "evento": 4478,
+    "causa": 4021,
+    "tick": 733,
+    "quien": "Vila",
+    "lugar": "Refugio del Robledal",
+    "frio": true,
+    "fuera": -1.6
+   },
+   {
+    "tipo": "vivencia->obra",
+    "evento": 5536,
+    "causa": 5255,
+    "tick": 975,
+    "quien": "Sira",
+    "lugar": "Depósito del Claro II",
+    "noches_al_raso": null
+   },
+   {
+    "tipo": "vivencia->obra",
+    "evento": 5827,
+    "causa": 5509,
+    "tick": 1015,
+    "quien": "Gael",
+    "lugar": "Depósito del Arroyo",
+    "noches_al_raso": null
+   },
+   {
+    "tipo": "acuerdo",
+    "evento": 9992,
+    "causa": 9991,
+    "tick": 1495,
+    "quien": "Cael",
+    "acuerdo": "reserva_minima"
+   },
+   {
+    "tipo": "acuerdo",
+    "evento": 10197,
+    "causa": 9991,
+    "tick": 1527,
+    "quien": "Cael",
+    "acuerdo": "reserva_minima"
+   }
+  ],
+  "origen": "espontáneo: mundo creado desde la semilla con su configuración normal, sin preparar nada"
+ },
+ {
+  "semilla": 8,
+  "abundancia": 0.3,
+  "anios": 2,
+  "vivos_por_anio": [
+   25,
+   19
+  ],
+  "segundos": 2.6,
+  "obras_iniciadas": 10,
+  "terminadas": 10,
+  "abandonadas": 0,
+  "suspendidas": 2,
+  "reanudadas": 2,
+  "por_tipo": {
+   "refugio:lista": 5,
+   "deposito:lista": 5
+  },
+  "utilizadas": 9,
+  "reparadas": 9,
+  "reparaciones": 52,
+  "ruinas": 0,
+  "estancias": 899,
+  "estancias_con_frio": 172,
+  "horas_a_cubierto": 3885,
+  "sin_sitio": 18,
+  "cede_sitio": 6,
+  "madera_aportada": 190,
+  "guardado": 319,
+  "retirado": 248,
+  "depositos_vacios": 2,
+  "compromisos": 165,
+  "compromisos_dejados": 66,
+  "informes": 204,
+  "comprobaciones": 93,
+  "contribuyen": 24,
+  "benefician": 25,
+  "reciben_deposito": 11,
+  "comunidades": [
+   {
+    "id": 1,
+    "nombre": "Comunidad de la Ribera",
+    "estado": "activa",
+    "miembros": 4,
+    "antiguos": 2,
+    "dias": 71,
+    "lugares": [
+     2,
+     6
+    ],
+    "acuerdos": 0,
+    "uniones": 4,
+    "salidas": 2,
+    "recurrentes": 9,
+    "funcional": true
+   },
+   {
+    "id": 2,
+    "nombre": "Comunidad de la Loma",
+    "estado": "activa",
+    "miembros": 3,
+    "antiguos": 1,
+    "dias": 70,
+    "lugares": [
+     3,
+     5
+    ],
+    "acuerdos": 0,
+    "uniones": 1,
+    "salidas": 1,
+    "recurrentes": 6,
+    "funcional": true
+   },
+   {
+    "id": 3,
+    "nombre": "Comunidad de los Juncos",
+    "estado": "activa",
+    "miembros": 7,
+    "antiguos": 2,
+    "dias": 64,
+    "lugares": [
+     1,
+     7
+    ],
+    "acuerdos": 2,
+    "uniones": 3,
+    "salidas": 2,
+    "recurrentes": 11,
+    "funcional": true
+   },
+   {
+    "id": 4,
+    "nombre": "Comunidad del Vado",
+    "estado": "activa",
+    "miembros": 7,
+    "antiguos": 2,
+    "dias": 62,
+    "lugares": [
+     4,
+     8
+    ],
+    "acuerdos": 2,
+    "uniones": 7,
+    "salidas": 3,
+    "recurrentes": 10,
+    "funcional": true
+   },
+   {
+    "id": 5,
+    "nombre": "Comunidad de la Loma II",
+    "estado": "disuelta",
+    "miembros": 0,
+    "antiguos": 3,
+    "dias": 13,
+    "lugares": [
+     9,
+     10
+    ],
+    "acuerdos": 0,
+    "uniones": 0,
+    "salidas": 3,
+    "recurrentes": 4,
+    "funcional": false
+   },
+   {
+    "id": 6,
+    "nombre": "Comunidad de la Loma II",
+    "estado": "disuelta",
+    "miembros": 0,
+    "antiguos": 2,
+    "dias": 1,
+    "lugares": [
+     9,
+     10
+    ],
+    "acuerdos": 0,
+    "uniones": 0,
+    "salidas": 2,
+    "recurrentes": 4,
+    "funcional": false
+   }
+  ],
+  "funcionales": 4,
+  "uniones": 15,
+  "salidas": 13,
+  "alejamientos": 15,
+  "disueltas": 2,
+  "acuerdos": [
+   {
+    "id": 1,
+    "tipo": "prioridad_apuro",
+    "comunidad": 3,
+    "aceptan": 6,
+    "rechazan": 0,
+    "cumplidos": 0,
+    "incumplidos": 0
+   },
+   {
+    "id": 2,
+    "tipo": "prioridad_apuro",
+    "comunidad": 4,
+    "aceptan": 5,
+    "rechazan": 2,
+    "cumplidos": 6,
+    "incumplidos": 0
+   },
+   {
+    "id": 3,
+    "tipo": "reserva_minima",
+    "comunidad": 4,
+    "aceptan": 3,
+    "rechazan": 0,
+    "cumplidos": 0,
+    "incumplidos": 6
+   },
+   {
+    "id": 4,
+    "tipo": "reserva_minima",
+    "comunidad": 3,
+    "aceptan": 2,
+    "rechazan": 0,
+    "cumplidos": 0,
+    "incumplidos": 0
+   }
+  ],
+  "acuerdos_propuestos": 4,
+  "acuerdos_aceptados": 13,
+  "acuerdos_rechazados": 2,
+  "cadenas": [
+   {
+    "tipo": "vivencia->obra",
+    "evento": 2037,
+    "causa": 724,
+    "tick": 246,
+    "quien": "Dana",
+    "lugar": "Depósito del Abedul",
+    "noches_al_raso": null
+   },
+   {
+    "tipo": "vivencia->obra",
+    "evento": 2113,
+    "causa": 1498,
+    "tick": 254,
+    "quien": "Mael",
+    "lugar": "Depósito del Prado",
+    "noches_al_raso": null
+   },
+   {
+    "tipo": "vivencia->obra",
+    "evento": 3698,
+    "causa": 3135,
+    "tick": 400,
+    "quien": "Cira",
+    "lugar": "Depósito de la Loma",
+    "noches_al_raso": null
+   },
+   {
+    "tipo": "informacion->uso",
+    "evento": 3799,
+    "causa": 3458,
+    "tick": 413,
+    "quien": "Enya",
+    "lugar": "Refugio de los Juncos",
+    "frio": false,
+    "fuera": 19.0
+   },
+   {
+    "tipo": "informacion->uso",
+    "evento": 4309,
+    "causa": 3902,
+    "tick": 458,
+    "quien": "Tobo",
+    "lugar": "Refugio de la Ribera",
+    "frio": false,
+    "fuera": 22.3
+   },
+   {
+    "tipo": "informacion->uso",
+    "evento": 4311,
+    "causa": 3458,
+    "tick": 459,
+    "quien": "Enya",
+    "lugar": "Refugio de los Juncos",
+    "frio": false,
+    "fuera": 21.2
+   },
+   {
+    "tipo": "acuerdo",
+    "evento": 4988,
+    "causa": 4987,
+    "tick": 543,
+    "quien": "Cira",
+    "acuerdo": "prioridad_apuro"
+   },
+   {
+    "tipo": "acuerdo",
+    "evento": 5506,
+    "causa": 4987,
+    "tick": 609,
+    "quien": "Lior",
+    "acuerdo": "prioridad_apuro"
+   },
+   {
+    "tipo": "acuerdo->cede",
+    "evento": 7590,
+    "causa": 3915,
+    "tick": 961,
+    "quien": "Juna",
+    "a": "Hebe",
+    "lugar": "Refugio del Vado"
+   },
+   {
+    "tipo": "acuerdo->cede",
+    "evento": 7592,
+    "causa": 3915,
+    "tick": 961,
+    "quien": "Hebe",
+    "a": "Juna",
+    "lugar": "Refugio del Vado"
+   }
+  ],
+  "origen": "espontáneo: mundo creado desde la semilla con su configuración normal, sin preparar nada"
+ },
+ {
+  "semilla": 9,
+  "abundancia": 0.3,
+  "anios": 2,
+  "vivos_por_anio": [
+   19,
+   8
+  ],
+  "segundos": 2.3,
+  "obras_iniciadas": 9,
+  "terminadas": 8,
+  "abandonadas": 1,
+  "suspendidas": 8,
+  "reanudadas": 7,
+  "por_tipo": {
+   "refugio:lista": 6,
+   "deposito:lista": 2,
+   "deposito:suspendida": 1
+  },
+  "utilizadas": 8,
+  "reparadas": 2,
+  "reparaciones": 10,
+  "ruinas": 0,
+  "estancias": 392,
+  "estancias_con_frio": 212,
+  "horas_a_cubierto": 2194,
+  "sin_sitio": 0,
+  "cede_sitio": 0,
+  "madera_aportada": 180,
+  "guardado": 71,
+  "retirado": 71,
+  "depositos_vacios": 2,
+  "compromisos": 134,
+  "compromisos_dejados": 68,
+  "informes": 47,
+  "comprobaciones": 16,
+  "contribuyen": 12,
+  "benefician": 18,
+  "reciben_deposito": 7,
+  "comunidades": [
+   {
+    "id": 1,
+    "nombre": "Comunidad de los Juncos",
+    "estado": "disuelta",
+    "miembros": 0,
+    "antiguos": 6,
+    "dias": 61,
+    "lugares": [
+     1,
+     3
+    ],
+    "acuerdos": 0,
+    "uniones": 4,
+    "salidas": 6,
+    "recurrentes": 7,
+    "funcional": true
+   },
+   {
+    "id": 2,
+    "nombre": "Comunidad del Prado",
+    "estado": "activa",
+    "miembros": 3,
+    "antiguos": 0,
+    "dias": 32,
+    "lugares": [
+     5,
+     8
+    ],
+    "acuerdos": 0,
+    "uniones": 1,
+    "salidas": 0,
+    "recurrentes": 3,
+    "funcional": true
+   },
+   {
+    "id": 3,
+    "nombre": "Comunidad de los Juncos III",
+    "estado": "disuelta",
+    "miembros": 0,
+    "antiguos": 4,
+    "dias": 17,
+    "lugares": [
+     6,
+     9
+    ],
+    "acuerdos": 0,
+    "uniones": 1,
+    "salidas": 4,
+    "recurrentes": 5,
+    "funcional": false
+   }
+  ],
+  "funcionales": 2,
+  "uniones": 6,
+  "salidas": 10,
+  "alejamientos": 0,
+  "disueltas": 2,
+  "acuerdos": [],
+  "acuerdos_propuestos": 0,
+  "acuerdos_aceptados": 0,
+  "acuerdos_rechazados": 0,
+  "cadenas": [
+   {
+    "tipo": "informacion->uso",
+    "evento": 3207,
+    "causa": 1327,
+    "tick": 508,
+    "quien": "Enya",
+    "lugar": "Refugio de los Juncos",
+    "frio": false,
+    "fuera": 16.5
+   },
+   {
+    "tipo": "informacion->uso",
+    "evento": 3318,
+    "causa": 3262,
+    "tick": 534,
+    "quien": "Mael",
+    "lugar": "Refugio de los Juncos",
+    "frio": false,
+    "fuera": 15.4
+   },
+   {
+    "tipo": "informacion->uso",
+    "evento": 3453,
+    "causa": 1327,
+    "tick": 558,
+    "quien": "Enya",
+    "lugar": "Refugio de los Juncos",
+    "frio": false,
+    "fuera": 7.7
+   },
+   {
+    "tipo": "vivencia->obra",
+    "evento": 6365,
+    "causa": 5226,
+    "tick": 1168,
+    "quien": "Uma",
+    "lugar": "Depósito de la Loma",
+    "noches_al_raso": null
+   }
+  ],
+  "origen": "espontáneo: mundo creado desde la semilla con su configuración normal, sin preparar nada"
+ },
+ {
+  "semilla": 10,
+  "abundancia": 0.3,
+  "anios": 2,
+  "vivos_por_anio": [
+   25,
+   25
+  ],
+  "segundos": 3.4,
+  "obras_iniciadas": 15,
+  "terminadas": 13,
+  "abandonadas": 0,
+  "suspendidas": 7,
+  "reanudadas": 6,
+  "por_tipo": {
+   "refugio:lista": 7,
+   "deposito:lista": 6,
+   "refugio:obra": 1,
+   "refugio:suspendida": 1
+  },
+  "utilizadas": 13,
+  "reparadas": 8,
+  "reparaciones": 49,
+  "ruinas": 0,
+  "estancias": 932,
+  "estancias_con_frio": 386,
+  "horas_a_cubierto": 4772,
+  "sin_sitio": 5,
+  "cede_sitio": 3,
+  "madera_aportada": 279,
+  "guardado": 294,
+  "retirado": 159,
+  "depositos_vacios": 4,
+  "compromisos": 223,
+  "compromisos_dejados": 92,
+  "informes": 348,
+  "comprobaciones": 183,
+  "contribuyen": 23,
+  "benefician": 25,
+  "reciben_deposito": 9,
+  "comunidades": [
+   {
+    "id": 1,
+    "nombre": "Comunidad de la Ribera",
+    "estado": "activa",
+    "miembros": 8,
+    "antiguos": 0,
+    "dias": 65,
+    "lugares": [
+     1,
+     4
+    ],
+    "acuerdos": 2,
+    "uniones": 6,
+    "salidas": 1,
+    "recurrentes": 12,
+    "funcional": true
+   },
+   {
+    "id": 2,
+    "nombre": "Comunidad del Prado",
+    "estado": "activa",
+    "miembros": 10,
+    "antiguos": 0,
+    "dias": 63,
+    "lugares": [
+     2,
+     5
+    ],
+    "acuerdos": 0,
+    "uniones": 7,
+    "salidas": 0,
+    "recurrentes": 12,
+    "funcional": true
+   },
+   {
+    "id": 3,
+    "nombre": "Comunidad del Robledal",
+    "estado": "activa",
+    "miembros": 8,
+    "antiguos": 0,
+    "dias": 61,
+    "lugares": [
+     3,
+     6
+    ],
+    "acuerdos": 1,
+    "uniones": 6,
+    "salidas": 0,
+    "recurrentes": 9,
+    "funcional": true
+   },
+   {
+    "id": 4,
+    "nombre": "Comunidad del Claro",
+    "estado": "activa",
+    "miembros": 5,
+    "antiguos": 0,
+    "dias": 51,
+    "lugares": [
+     7,
+     12
+    ],
+    "acuerdos": 0,
+    "uniones": 3,
+    "salidas": 0,
+    "recurrentes": 5,
+    "funcional": true
+   },
+   {
+    "id": 5,
+    "nombre": "Comunidad del Linde",
+    "estado": "activa",
+    "miembros": 9,
+    "antiguos": 0,
+    "dias": 49,
+    "lugares": [
+     8,
+     11
+    ],
+    "acuerdos": 1,
+    "uniones": 8,
+    "salidas": 1,
+    "recurrentes": 11,
+    "funcional": true
+   },
+   {
+    "id": 6,
+    "nombre": "Comunidad del Prado II",
+    "estado": "activa",
+    "miembros": 3,
+    "antiguos": 0,
+    "dias": 25,
+    "lugares": [
+     10,
+     13
+    ],
+    "acuerdos": 0,
+    "uniones": 1,
+    "salidas": 0,
+    "recurrentes": 7,
+    "funcional": true
+   },
+   {
+    "id": 7,
+    "nombre": "Comunidad de la Ribera II",
+    "estado": "activa",
+    "miembros": 3,
+    "antiguos": 0,
+    "dias": 10,
+    "lugares": [
+     9
+    ],
+    "acuerdos": 0,
+    "uniones": 1,
+    "salidas": 0,
+    "recurrentes": 5,
+    "funcional": false
+   }
+  ],
+  "funcionales": 6,
+  "uniones": 32,
+  "salidas": 2,
+  "alejamientos": 27,
+  "disueltas": 0,
+  "acuerdos": [
+   {
+    "id": 1,
+    "tipo": "prioridad_apuro",
+    "comunidad": 1,
+    "aceptan": 4,
+    "rechazan": 0,
+    "cumplidos": 3,
+    "incumplidos": 0
+   },
+   {
+    "id": 2,
+    "tipo": "prioridad_apuro",
+    "comunidad": 3,
+    "aceptan": 2,
+    "rechazan": 0,
+    "cumplidos": 0,
+    "incumplidos": 0
+   },
+   {
+    "id": 3,
+    "tipo": "reserva_minima",
+    "comunidad": 1,
+    "aceptan": 3,
+    "rechazan": 0,
+    "cumplidos": 0,
+    "incumplidos": 0
+   },
+   {
+    "id": 4,
+    "tipo": "prioridad_apuro",
+    "comunidad": 5,
+    "aceptan": 2,
+    "rechazan": 0,
+    "cumplidos": 0,
+    "incumplidos": 0
+   }
+  ],
+  "acuerdos_propuestos": 4,
+  "acuerdos_aceptados": 15,
+  "acuerdos_rechazados": 0,
+  "cadenas": [
+   {
+    "tipo": "vivencia->obra",
+    "evento": 2353,
+    "causa": 1230,
+    "tick": 352,
+    "quien": "Dorin",
+    "lugar": "Depósito del Linde",
+    "noches_al_raso": null
+   },
+   {
+    "tipo": "informacion->uso",
+    "evento": 2538,
+    "causa": 1290,
+    "tick": 386,
+    "quien": "Oren",
+    "lugar": "Refugio de la Ribera",
+    "frio": false,
+    "fuera": 20.3
+   },
+   {
+    "tipo": "vivencia->obra",
+    "evento": 2701,
+    "causa": 2208,
+    "tick": 417,
+    "quien": "Mira",
+    "lugar": "Depósito de la Ribera",
+    "noches_al_raso": null
+   },
+   {
+    "tipo": "informacion->uso",
+    "evento": 2798,
+    "causa": 1290,
+    "tick": 435,
+    "quien": "Oren",
+    "lugar": "Refugio de la Ribera",
+    "frio": false,
+    "fuera": 12.7
+   },
+   {
+    "tipo": "vivencia->obra",
+    "evento": 2990,
+    "causa": 1634,
+    "tick": 469,
+    "quien": "Uma",
+    "lugar": "Depósito del Arroyo",
+    "noches_al_raso": null
+   },
+   {
+    "tipo": "informacion->uso",
+    "evento": 3223,
+    "causa": 1514,
+    "tick": 509,
+    "quien": "Iria",
+    "lugar": "Refugio del Prado",
+    "frio": false,
+    "fuera": 8.9
+   },
+   {
+    "tipo": "acuerdo",
+    "evento": 5126,
+    "causa": 5125,
+    "tick": 905,
+    "quien": "Kiro",
+    "acuerdo": "prioridad_apuro"
+   },
+   {
+    "tipo": "acuerdo",
+    "evento": 5129,
+    "causa": 5125,
+    "tick": 905,
+    "quien": "Kiro",
+    "acuerdo": "prioridad_apuro"
+   },
+   {
+    "tipo": "acuerdo->cede",
+    "evento": 5266,
+    "causa": 2341,
+    "tick": 941,
+    "quien": "Oren",
+    "a": "Cira",
+    "lugar": "Refugio de la Ribera"
+   },
+   {
+    "tipo": "acuerdo->cede",
+    "evento": 5269,
+    "causa": 2341,
+    "tick": 942,
+    "quien": "Kiro",
+    "a": "Oren",
+    "lugar": "Refugio de la Ribera"
+   }
+  ],
+  "origen": "espontáneo: mundo creado desde la semilla con su configuración normal, sin preparar nada"
+ }
+]

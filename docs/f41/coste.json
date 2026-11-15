@@ -1,0 +1,104 @@
+[
+ {
+  "iniciales": 8,
+  "ordenes": [],
+  "muestras": [
+   {
+    "hora": 120,
+    "horas_por_segundo": 1067.1,
+    "eventos": 238,
+    "vivos": 8,
+    "vinculos": 0,
+    "guardar_ms": 5.7,
+    "leer_lista_y_detalle_ms": 0.06
+   },
+   {
+    "hora": 960,
+    "horas_por_segundo": 1345.9,
+    "eventos": 1778,
+    "vivos": 10,
+    "vinculos": 16,
+    "guardar_ms": 21.3,
+    "leer_lista_y_detalle_ms": 0.36
+   },
+   {
+    "hora": 1080,
+    "horas_por_segundo": 1169.5,
+    "eventos": 2062,
+    "vivos": 10,
+    "vinculos": 18,
+    "guardar_ms": 6.7,
+    "leer_lista_y_detalle_ms": 0.22
+   }
+  ],
+  "bytes": 524288
+ },
+ {
+  "iniciales": 25,
+  "ordenes": [],
+  "muestras": [
+   {
+    "hora": 120,
+    "horas_por_segundo": 464.3,
+    "eventos": 828,
+    "vivos": 25,
+    "vinculos": 33,
+    "guardar_ms": 12.4,
+    "leer_lista_y_detalle_ms": 0.16
+   },
+   {
+    "hora": 960,
+    "horas_por_segundo": 368.8,
+    "eventos": 7175,
+    "vivos": 35,
+    "vinculos": 178,
+    "guardar_ms": 92.5,
+    "leer_lista_y_detalle_ms": 0.86
+   },
+   {
+    "hora": 1080,
+    "horas_por_segundo": 325.3,
+    "eventos": 8087,
+    "vivos": 35,
+    "vinculos": 186,
+    "guardar_ms": 39.2,
+    "leer_lista_y_detalle_ms": 1.79
+   }
+  ],
+  "bytes": 1830912
+ },
+ {
+  "iniciales": 40,
+  "ordenes": [],
+  "muestras": [
+   {
+    "hora": 120,
+    "horas_por_segundo": 256.7,
+    "eventos": 1364,
+    "vivos": 40,
+    "vinculos": 81,
+    "guardar_ms": 25.1,
+    "leer_lista_y_detalle_ms": 0.33
+   },
+   {
+    "hora": 960,
+    "horas_por_segundo": 208.6,
+    "eventos": 11160,
+    "vivos": 48,
+    "vinculos": 392,
+    "guardar_ms": 138.4,
+    "leer_lista_y_detalle_ms": 1.17
+   },
+   {
+    "hora": 1080,
+    "horas_por_segundo": 197.8,
+    "eventos": 12561,
+    "vivos": 48,
+    "vinculos": 402,
+    "guardar_ms": 57.3,
+    "leer_lista_y_detalle_ms": 0.97
+   }
+  ],
+  "bytes": 2822144
+ }
+]

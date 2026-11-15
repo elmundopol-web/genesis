@@ -1,0 +1,20 @@
+{
+  "errores": [],
+  "ritmo": {
+    "mediana_ms": 5.599999999998545,
+    "p95_ms": 10.19999999999709
+  },
+  "reproduccion": {
+    "correcto": true,
+    "comprobaciones": {
+      "mapa": true,
+      "registro_integro": true,
+      "eventos": true,
+      "estado": true
+    },
+    "tick": 812,
+    "eventos": 3726,
+    "ordenes_repetidas": 1
+  },
+  "ordenes": 1
+}

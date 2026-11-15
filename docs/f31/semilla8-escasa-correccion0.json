@@ -1,0 +1,443 @@
+[
+ {
+  "semilla": 8,
+  "abundancia": 0.3,
+  "anios": 2,
+  "vivos_por_anio": [
+   25,
+   19
+  ],
+  "segundos": 2.2,
+  "obras_iniciadas": 10,
+  "terminadas": 10,
+  "abandonadas": 0,
+  "suspendidas": 2,
+  "reanudadas": 2,
+  "por_tipo": {
+   "refugio:lista": 5,
+   "deposito:lista": 5
+  },
+  "utilizadas": 9,
+  "reparadas": 9,
+  "reparaciones": 52,
+  "ruinas": 0,
+  "estancias": 899,
+  "estancias_con_frio": 172,
+  "horas_a_cubierto": 3885,
+  "sin_sitio": 18,
+  "cede_sitio": 6,
+  "madera_aportada": 190,
+  "guardado": 319,
+  "retirado": 248,
+  "depositos_vacios": 2,
+  "compromisos": 165,
+  "compromisos_dejados": 66,
+  "informes": 204,
+  "comprobaciones": 93,
+  "contribuyen": 24,
+  "benefician": 25,
+  "reciben_deposito": 11,
+  "comunidades": [
+   {
+    "id": 1,
+    "nombre": "Comunidad de la Ribera",
+    "estado": "activa",
+    "miembros": 4,
+    "antiguos": 2,
+    "dias": 71,
+    "lugares": [
+     2,
+     6
+    ],
+    "acuerdos": 0,
+    "uniones": 4,
+    "salidas": 2,
+    "recurrentes": 9,
+    "funcional": true
+   },
+   {
+    "id": 2,
+    "nombre": "Comunidad de la Loma",
+    "estado": "activa",
+    "miembros": 3,
+    "antiguos": 1,
+    "dias": 70,
+    "lugares": [
+     3,
+     5
+    ],
+    "acuerdos": 0,
+    "uniones": 1,
+    "salidas": 1,
+    "recurrentes": 6,
+    "funcional": true
+   },
+   {
+    "id": 3,
+    "nombre": "Comunidad de los Juncos",
+    "estado": "activa",
+    "miembros": 7,
+    "antiguos": 2,
+    "dias": 64,
+    "lugares": [
+     1,
+     7
+    ],
+    "acuerdos": 2,
+    "uniones": 3,
+    "salidas": 2,
+    "recurrentes": 11,
+    "funcional": true
+   },
+   {
+    "id": 4,
+    "nombre": "Comunidad del Vado",
+    "estado": "activa",
+    "miembros": 7,
+    "antiguos": 2,
+    "dias": 62,
+    "lugares": [
+     4,
+     8
+    ],
+    "acuerdos": 2,
+    "uniones": 7,
+    "salidas": 3,
+    "recurrentes": 10,
+    "funcional": true
+   },
+   {
+    "id": 5,
+    "nombre": "Comunidad de la Loma II",
+    "estado": "disuelta",
+    "miembros": 0,
+    "antiguos": 3,
+    "dias": 13,
+    "lugares": [
+     9,
+     10
+    ],
+    "acuerdos": 0,
+    "uniones": 0,
+    "salidas": 3,
+    "recurrentes": 4,
+    "funcional": false
+   },
+   {
+    "id": 6,
+    "nombre": "Comunidad de la Loma II",
+    "estado": "disuelta",
+    "miembros": 0,
+    "antiguos": 2,
+    "dias": 1,
+    "lugares": [
+     9,
+     10
+    ],
+    "acuerdos": 0,
+    "uniones": 0,
+    "salidas": 2,
+    "recurrentes": 4,
+    "funcional": false
+   }
+  ],
+  "funcionales": 4,
+  "uniones": 15,
+  "salidas": 13,
+  "alejamientos": 15,
+  "disueltas": 2,
+  "acuerdos": [
+   {
+    "id": 1,
+    "tipo": "prioridad_apuro",
+    "comunidad": 3,
+    "aceptan": 6,
+    "rechazan": 0,
+    "cumplidos": 0,
+    "incumplidos": 0
+   },
+   {
+    "id": 2,
+    "tipo": "prioridad_apuro",
+    "comunidad": 4,
+    "aceptan": 5,
+    "rechazan": 2,
+    "cumplidos": 6,
+    "incumplidos": 0
+   },
+   {
+    "id": 3,
+    "tipo": "reserva_minima",
+    "comunidad": 4,
+    "aceptan": 3,
+    "rechazan": 0,
+    "cumplidos": 0,
+    "incumplidos": 6
+   },
+   {
+    "id": 4,
+    "tipo": "reserva_minima",
+    "comunidad": 3,
+    "aceptan": 2,
+    "rechazan": 0,
+    "cumplidos": 0,
+    "incumplidos": 0
+   }
+  ],
+  "acuerdos_propuestos": 4,
+  "acuerdos_aceptados": 13,
+  "acuerdos_rechazados": 2,
+  "cadenas": [
+   {
+    "tipo": "vivencia->obra",
+    "evento": 2037,
+    "causa": 724,
+    "tick": 246,
+    "quien": "Dana",
+    "lugar": "Depósito del Abedul",
+    "noches_al_raso": null
+   },
+   {
+    "tipo": "vivencia->obra",
+    "evento": 2113,
+    "causa": 1498,
+    "tick": 254,
+    "quien": "Mael",
+    "lugar": "Depósito del Prado",
+    "noches_al_raso": null
+   },
+   {
+    "tipo": "vivencia->obra",
+    "evento": 3698,
+    "causa": 3135,
+    "tick": 400,
+    "quien": "Cira",
+    "lugar": "Depósito de la Loma",
+    "noches_al_raso": null
+   },
+   {
+    "tipo": "informacion->uso",
+    "evento": 3799,
+    "causa": 3458,
+    "tick": 413,
+    "quien": "Enya",
+    "lugar": "Refugio de los Juncos",
+    "frio": false,
+    "fuera": 19.0
+   },
+   {
+    "tipo": "informacion->uso",
+    "evento": 4309,
+    "causa": 3902,
+    "tick": 458,
+    "quien": "Tobo",
+    "lugar": "Refugio de la Ribera",
+    "frio": false,
+    "fuera": 22.3
+   },
+   {
+    "tipo": "informacion->uso",
+    "evento": 4311,
+    "causa": 3458,
+    "tick": 459,
+    "quien": "Enya",
+    "lugar": "Refugio de los Juncos",
+    "frio": false,
+    "fuera": 21.2
+   },
+   {
+    "tipo": "acuerdo",
+    "evento": 4988,
+    "causa": 4987,
+    "tick": 543,
+    "quien": "Cira",
+    "acuerdo": "prioridad_apuro"
+   },
+   {
+    "tipo": "acuerdo",
+    "evento": 5506,
+    "causa": 4987,
+    "tick": 609,
+    "quien": "Lior",
+    "acuerdo": "prioridad_apuro"
+   },
+   {
+    "tipo": "cesion (sucesion)",
+    "evento": 7590,
+    "causa": 3915,
+    "causa_tipo": null,
+    "tick": 961,
+    "quien": "Juna",
+    "a": "Hebe",
+    "lugar": "Refugio del Vado"
+   },
+   {
+    "tipo": "cesion (sucesion)",
+    "evento": 7592,
+    "causa": 3915,
+    "causa_tipo": null,
+    "tick": 961,
+    "quien": "Hebe",
+    "a": "Juna",
+    "lugar": "Refugio del Vado"
+   },
+   {
+    "tipo": "cesion (sucesion)",
+    "evento": 7596,
+    "causa": 3915,
+    "causa_tipo": null,
+    "tick": 962,
+    "quien": "Juna",
+    "a": "Nura",
+    "lugar": "Refugio del Vado"
+   }
+  ],
+  "cesiones": [
+   {
+    "evento": 7590,
+    "tick": 961,
+    "de": 17,
+    "de_nombre": "Juna",
+    "a": 13,
+    "a_nombre": "Hebe",
+    "lugar": "Refugio del Vado",
+    "criterio": "F3",
+    "motivo": null,
+    "acuerdo": 2,
+    "causa": 3915,
+    "causa_tipo": null,
+    "enlace": "sucesion",
+    "salud_recibe": null,
+    "salud_cede": null,
+    "fuera": null,
+    "vuelta_misma_hora": true,
+    "vuelta_en_24h": true,
+    "muere_recibe_48h": false,
+    "muere_cede_48h": false
+   },
+   {
+    "evento": 7592,
+    "tick": 961,
+    "de": 13,
+    "de_nombre": "Hebe",
+    "a": 17,
+    "a_nombre": "Juna",
+    "lugar": "Refugio del Vado",
+    "criterio": "F3",
+    "motivo": null,
+    "acuerdo": 2,
+    "causa": 3915,
+    "causa_tipo": null,
+    "enlace": "sucesion",
+    "salud_recibe": null,
+    "salud_cede": null,
+    "fuera": null,
+    "vuelta_misma_hora": true,
+    "vuelta_en_24h": true,
+    "muere_recibe_48h": false,
+    "muere_cede_48h": false
+   },
+   {
+    "evento": 7596,
+    "tick": 962,
+    "de": 17,
+    "de_nombre": "Juna",
+    "a": 23,
+    "a_nombre": "Nura",
+    "lugar": "Refugio del Vado",
+    "criterio": "F3",
+    "motivo": null,
+    "acuerdo": 2,
+    "causa": 3915,
+    "causa_tipo": null,
+    "enlace": "sucesion",
+    "salud_recibe": null,
+    "salud_cede": null,
+    "fuera": null,
+    "vuelta_misma_hora": false,
+    "vuelta_en_24h": false,
+    "muere_recibe_48h": false,
+    "muere_cede_48h": false
+   },
+   {
+    "evento": 7598,
+    "tick": 964,
+    "de": 17,
+    "de_nombre": "Juna",
+    "a": 12,
+    "a_nombre": "Beto",
+    "lugar": "Refugio del Vado",
+    "criterio": "F3",
+    "motivo": null,
+    "acuerdo": 2,
+    "causa": 3915,
+    "causa_tipo": null,
+    "enlace": "sucesion",
+    "salud_recibe": null,
+    "salud_cede": null,
+    "fuera": null,
+    "vuelta_misma_hora": false,
+    "vuelta_en_24h": false,
+    "muere_recibe_48h": false,
+    "muere_cede_48h": false
+   },
+   {
+    "evento": 7599,
+    "tick": 964,
+    "de": 13,
+    "de_nombre": "Hebe",
+    "a": 17,
+    "a_nombre": "Juna",
+    "lugar": "Refugio del Vado",
+    "criterio": "F3",
+    "motivo": null,
+    "acuerdo": 2,
+    "causa": 3915,
+    "causa_tipo": null,
+    "enlace": "sucesion",
+    "salud_recibe": null,
+    "salud_cede": null,
+    "fuera": null,
+    "vuelta_misma_hora": false,
+    "vuelta_en_24h": false,
+    "muere_recibe_48h": false,
+    "muere_cede_48h": false
+   },
+   {
+    "evento": 13443,
+    "tick": 1904,
+    "de": 23,
+    "de_nombre": "Nura",
+    "a": 16,
+    "a_nombre": "Lura",
+    "lugar": "Refugio del Vado",
+    "criterio": "F3",
+    "motivo": null,
+    "acuerdo": 2,
+    "causa": 12212,
+    "causa_tipo": null,
+    "enlace": "sucesion",
+    "salud_recibe": null,
+    "salud_cede": null,
+    "fuera": null,
+    "vuelta_misma_hora": false,
+    "vuelta_en_24h": false,
+    "muere_recibe_48h": false,
+    "muere_cede_48h": false
+   }
+  ],
+  "cesiones_resumen": {
+   "total": 6,
+   "por_enlace": {
+    "sucesion": 6
+   },
+   "por_motivo": {
+    "None": 6
+   },
+   "circulares_misma_hora": 2,
+   "vueltas_en_24h": 2
+  },
+  "correccion": 0,
+  "origen": "espontáneo: mundo creado desde la semilla con su configuración normal, sin preparar nada"
+ }
+]

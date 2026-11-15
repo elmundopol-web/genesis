@@ -1,0 +1,24 @@
+✔ la escena reutilizada coincide con las posiciones del mundo al mover y acercar la cámara (2.0368ms)
+✔ al cambiar de persona, cámara, ficha y etiqueta siguen a la misma (0.4682ms)
+✔ historia anterior: páginas sin duplicados y sin mezclar personas (1.6356ms)
+✔ cada recuerdo se dice con sus datos y enlaza con el acontecimiento que lo originó (0.5141ms)
+✔ la ficha separa lo que cree de lo que hay en el mundo y lleva de una decisión a su recuerdo y a la otra persona (1.6142ms)
+✔ el aspecto de una persona depende solo de sus datos fijos (0.7221ms)
+✔ cada pose corresponde a una actividad del motor y a ninguna inventada (0.241ms)
+✔ la cámara se queda dentro del mundo y lo centra cuando cabe entero (0.248ms)
+✔ dos personas que tratan se acercan para verse sin salir de su celda real (2.9327ms)
+✔ cada acontecimiento de las reglas 3 tiene una frase completa, con artículo ante el lugar (1.1347ms)
+✔ las poses muestran el trabajo real y la madera que se lleva (0.0977ms)
+✔ quien está a cubierto no se dibuja ni se elige en el mapa, salvo la persona elegida (0.2789ms)
+✔ una cesión de F3.1 dice su motivo y cómo estaba cada cual; una de F3 se cuenta como antes (0.1801ms)
+✔ una creencia se expresa como perspectiva y la orden como un hecho del mundo (0.5041ms)
+✔ los avisos alcanzan a progenitores seguidos y omiten la alimentación rutinaria (0.1391ms)
+✔ una ficha familiar retrasada no sustituye los vínculos de la persona elegida (0.2473ms)
+ℹ tests 16
+ℹ suites 0
+ℹ pass 16
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 152.8233
