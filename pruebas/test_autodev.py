@@ -358,6 +358,23 @@ class SessionTests(unittest.TestCase):
         self.assertTrue(any("misma acción falló tres veces" in line for line in logs))
         self.assertEqual(_git_status(Path(session.state["worktree"])), "")
 
+    def test_context_preserves_goal_and_latest_review(self):
+        session = Session.create(self.repo, "REQUISITOS ORIGINALES", "qwen2.5-coder:7b", minutes=5)
+        for _ in range(20):
+            session.state["messages"].extend([
+                {"role": "assistant", "content": "", "tool_calls": [
+                    {"function": {"name": "read_file", "arguments": {"path": "genesis/motor/demo.py"}}}]},
+                {"role": "tool", "tool_name": "read_file", "content": "x" * 2000}])
+        session.state["messages"].append({"role": "user", "content": "ÚLTIMA REVISIÓN: conservar todos los requisitos"})
+        session._trim()
+        messages = session.state["messages"]
+        self.assertIn("REQUISITOS ORIGINALES", messages[1]["content"])
+        self.assertIn("ÚLTIMA REVISIÓN", messages[-1]["content"])
+        self.assertLessEqual(sum(len(json.dumps(m, ensure_ascii=False)) for m in messages), 12_000)
+        for index, message in enumerate(messages):
+            if message["role"] == "tool":
+                self.assertIn(messages[index - 1]["role"], {"assistant", "tool"})
+
 
 if __name__ == "__main__":
     unittest.main()

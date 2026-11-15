@@ -382,8 +382,7 @@ class Ollama:
         instruction = ("\nPROTOCOLO OBLIGATORIO: responde con UN objeto JSON, nunca con instrucciones al usuario. "
                        "Usa name y arguments para una herramienta, o name=finish con arguments.summary "
                        "para solicitar la validación final. Solo el sistema puede confirmar el éxito. "
-                       "Herramientas: " + json.dumps(TOOLS, ensure_ascii=False) +
-                       "\nEsquema de respuesta: " + json.dumps(ACTION_SCHEMA, ensure_ascii=False))
+                       "Herramientas: " + json.dumps(TOOLS, ensure_ascii=False))
         if conversation and conversation[0]["role"] == "system":
             conversation[0]["content"] += instruction
         else:
@@ -473,15 +472,31 @@ class Session:
 
     def _trim(self) -> None:
         messages = self.state["messages"]
-        if len(messages) <= 24:
+        cost = lambda message: len(json.dumps(message, ensure_ascii=False))
+        if sum(map(cost, messages)) <= 12_000:
             return
-        history = "\n".join(event["message"] for event in self.state["events"][-35:])[-4800:]
-        tail = messages[-10:]
-        while tail and tail[0]["role"] == "tool":
-            tail.pop(0)
-        self.state["messages"] = [messages[0], messages[1],
-            {"role": "user", "content": "REGISTRO PERSISTENTE RECIENTE (no sustituye verificar archivos):\n" + history},
-            *tail]
+        # Conserva siempre encargo y última revisión/retroalimentación, además
+        # de las llamadas recientes junto con sus resultados completos.
+        keep = {0, 1}
+        latest_review = next((i for i in range(len(messages) - 1, 1, -1)
+                              if messages[i]["role"] == "user"), None)
+        if latest_review is not None:
+            keep.add(latest_review)
+        remaining = max(0, 12_000 - sum(cost(messages[i]) for i in keep))
+        groups: list[list[int]] = []
+        for i in range(2, len(messages)):
+            if messages[i]["role"] == "tool" and groups:
+                groups[-1].append(i)
+            else:
+                groups.append([i])
+        for group in reversed(groups):
+            extra = [i for i in group if i not in keep]
+            needed = sum(cost(messages[i]) for i in extra)
+            if needed > remaining:
+                break
+            keep.update(extra)
+            remaining -= needed
+        self.state["messages"] = [messages[i] for i in sorted(keep)]
 
     def _final_check(self, worktree: Path, tools: WorkspaceTools,
                      callback: Callable[[str], None]) -> tuple[bool, str]:
