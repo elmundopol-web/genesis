@@ -195,8 +195,7 @@ class AutoDevApp:
                 if kind == "message":
                     self._append(content)
                 elif kind == "ended":
-                    self.status_var.set({"done": "Completado y validado", "paused": "Pausado · puedes reanudar",
-                                         "done_unverified": "Terminado sin cambios"}.get(content, "Finalizado: " + content))
+                    self.status_var.set({"done": "Completado y validado", "paused": "Pausado · revisa el registro"}.get(content, "Finalizado: " + content))
                     self.start_btn.configure(state="normal")
                     self.resume_btn.configure(state="normal")
                     self.stop_btn.configure(state="disabled")
