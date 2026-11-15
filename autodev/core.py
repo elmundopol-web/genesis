@@ -193,6 +193,7 @@ class WorkspaceTools:
         self.stop = stop or threading.Event()
         self.write_count = 0
         self.last_test_passed = False
+        self.read_files: set[str] = set()
 
     def call(self, name: str, arguments: dict) -> str:
         fn = getattr(self, f"tool_{name}", None)
@@ -224,6 +225,7 @@ class WorkspaceTools:
         lines = file.read_text(encoding="utf-8").splitlines()
         start = max(1, int(start))
         end = min(len(lines), start + 159, int(end) if end is not None else start + 159)
+        self.read_files.add(file.relative_to(self.root).as_posix())
         return "\n".join(f"{idx}: {lines[idx - 1]}" for idx in range(start, end + 1)) or "(vacío)"
 
     def tool_search_code(self, query: str) -> str:
@@ -249,6 +251,8 @@ class WorkspaceTools:
 
     def tool_replace_text(self, path: str, old: str, new: str) -> str:
         file = _safe_path(self.root, path, writable=True)
+        if file.relative_to(self.root).as_posix() not in self.read_files:
+            raise AgentError("Lee primero este archivo con read_file antes de editarlo.")
         if not file.is_file() or file.stat().st_size > MAX_FILE_BYTES:
             raise AgentError("Archivo inexistente o demasiado grande.")
         if len(old) < 3 or len(old.encode("utf-8")) > MAX_REPLACEMENT_BYTES or len(new.encode("utf-8")) > MAX_REPLACEMENT_BYTES:
@@ -263,6 +267,8 @@ class WorkspaceTools:
 
     def tool_create_file(self, path: str, content: str) -> str:
         file = _safe_path(self.root, path, writable=True)
+        if not self.read_files:
+            raise AgentError("Lee primero el código relevante con read_file antes de crear archivos.")
         if len(content.encode("utf-8")) > MAX_REPLACEMENT_BYTES:
             raise AgentError("Archivo nuevo demasiado grande (límite 25 KB).")
         file.parent.mkdir(parents=True, exist_ok=True)

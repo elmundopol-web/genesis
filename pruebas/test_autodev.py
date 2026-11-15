@@ -24,6 +24,9 @@ class FakeOllama:
         self.count += 1
         if self.count == 1:
             return {"role": "assistant", "content": "", "tool_calls": [
+                {"function": {"name": "read_file", "arguments": {"path": "genesis/motor/demo.py"}}}]}
+        if self.count == 2:
+            return {"role": "assistant", "content": "", "tool_calls": [
                 {"function": {"name": "replace_text", "arguments":
                               {"path": "genesis/motor/demo.py", "old": "VALUE = 1", "new": "VALUE = 2"}}}]}
         return {"role": "assistant", "content": "Cambio mínimo aplicado.", "tool_calls": []}
@@ -46,6 +49,10 @@ class FakeOllamaNudged(FakeOllama):
         if self.count == 1:
             self.count += 1
             self.assert_nudge(messages)
+            return {"role": "assistant", "content": "", "tool_calls": [
+                {"function": {"name": "read_file", "arguments": {"path": "genesis/motor/demo.py"}}}]}
+        if self.count == 2:
+            self.count += 1
             return {"role": "assistant", "content": "", "tool_calls": [
                 {"function": {"name": "replace_text", "arguments":
                               {"path": "genesis/motor/demo.py", "old": "VALUE = 1", "new": "VALUE = 2"}}}]}
@@ -143,6 +150,7 @@ class PathsTests(unittest.TestCase):
         (self.root / "genesis").mkdir()
         (self.root / "genesis" / "a.py").write_text("hello\nworld\n", encoding="utf-8")
         self.tools = WorkspaceTools(self.root)
+        self.tools.tool_read_file("genesis/a.py")
 
     def tearDown(self):
         self.temp.cleanup()
@@ -170,6 +178,12 @@ class PathsTests(unittest.TestCase):
     def test_create_does_not_overwrite(self):
         self.tools.tool_create_file("pruebas/new_test.py", "VALUE = 1\n")
         self.assertTrue(self.tools.call("create_file", {"path": "pruebas/new_test.py", "content": "x"}).startswith("ERROR:"))
+
+    def test_writes_require_inspection(self):
+        tools = WorkspaceTools(self.root)
+        self.assertIn("Lee primero", tools.call("create_file", {"path": "new.py", "content": "x = 1"}))
+        self.assertIn("Lee primero", tools.call("replace_text", {"path": "genesis/a.py", "old": "hello", "new": "ciao"}))
+        self.assertFalse((self.root / "new.py").exists())
 
     def test_symlink_outside_denied(self):
         outside = self.root.parent / (self.root.name + "-outside.py")
