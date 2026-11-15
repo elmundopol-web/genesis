@@ -101,6 +101,55 @@ TOOLS = [
 ]
 
 
+def parse_text_tool_calls(content: str) -> list[dict]:
+    """Admite JSON *puro* cuando un modelo no usa tool_calls nativos.
+
+    Se rechaza cualquier texto extra, JSON parcial, nombre no autorizado o
+    argumentos con formato inesperado. La seguridad de rutas y escritura sigue
+    estando en WorkspaceTools, nunca en la salida del modelo.
+    """
+    if not isinstance(content, str) or not 0 < len(content) <= 60_000:
+        return []
+    raw = content.strip()
+    fenced = re.fullmatch(r"```(?:json)?\s*\n([\s\S]*?)\n```", raw, flags=re.IGNORECASE)
+    if fenced:
+        raw = fenced.group(1).strip()
+    decoder = json.JSONDecoder()
+    objects: list[dict] = []
+    try:
+        if raw.startswith("["):
+            parsed = json.loads(raw)
+            if not isinstance(parsed, list):
+                return []
+            objects = parsed
+        else:
+            index = 0
+            while index < len(raw):
+                while index < len(raw) and raw[index].isspace():
+                    index += 1
+                if index >= len(raw):
+                    break
+                item, index = decoder.raw_decode(raw, index)
+                objects.append(item)
+                if len(objects) > 4:
+                    return []
+    except (ValueError, TypeError):
+        return []
+    allowed = {tool["function"]["name"] for tool in TOOLS}
+    if not 1 <= len(objects) <= 4:
+        return []
+    calls = []
+    for item in objects:
+        if not isinstance(item, dict) or not {"name", "arguments"}.issubset(item):
+            return []
+        name = item["name"]
+        arguments = item["arguments"]
+        if name not in allowed or not isinstance(arguments, dict):
+            return []
+        calls.append({"type": "function", "function": {"name": name, "arguments": arguments}})
+    return calls
+
+
 SYSTEM_PROMPT = """Eres GENESIS AUTODEV v0.1, un asistente de programación local.
 Trabajas únicamente en una rama y una copia aislada del proyecto GENESIS.
 Objetivo: resolver la tarea del usuario con cambios pequeños, comprobables y fieles al motor.
@@ -111,6 +160,10 @@ no añadas dependencias sin autorización; no edites ni ejecutes secretos, parti
 Si la tarea pide editar o probar código, debes LLAMAR a las herramientas (tool_calls).
 Una respuesta de texto nunca realiza cambios. Antes de responder, lee archivos con
 list_files o read_file y efectúa las modificaciones solicitadas con las herramientas.
+Si tu modelo NO puede emitir llamadas estructuradas, responde EXCLUSIVAMENTE con JSON:
+{"name":"read_file","arguments":{"path":"genesis/motor/calendario.py"}}
+También puedes enviar varios objetos JSON, uno por línea, sin texto adicional.
+Usa list_files para CARPETAS y read_file para ARCHIVOS. No inventes formatos.
 Solo hay herramientas enumeradas, no hay terminal libre. Nunca afirmes haber pasado pruebas
 que no hayas ejecutado. Si no puedes resolver la tarea, explícalo y detente.
 El resultado final debe ser breve y en español, con archivos cambiados, pruebas y límites.
@@ -135,6 +188,12 @@ class WorkspaceTools:
 
     def tool_list_files(self, folder: str = ".") -> str:
         root = self.root if folder == "." else _safe_path(self.root, folder)
+        if root.is_file():
+            if root.suffix.lower() not in ALLOWED_SUFFIXES:
+                raise AgentError("Esa ruta es un archivo no legible.")
+            return ("AVISO: has usado list_files para un archivo. Se muestran sus primeras "
+                    "100 líneas; usa read_file para continuar.\n" +
+                    self.tool_read_file(folder, 1, 100))
         if not root.is_dir():
             raise AgentError("Carpeta inexistente.")
         items = sorted(p for p in root.iterdir() if not p.name.startswith(".") and p.name not in PROTECTED)
@@ -390,6 +449,13 @@ class Session:
                 self.save()
                 calls = message.get("tool_calls") or []
                 if not calls:
+                    calls = parse_text_tool_calls(message.get("content", ""))
+                    if calls:
+                        self.record(f"Detectadas {len(calls)} llamadas JSON en el texto del modelo.", callback)
+                        message["content"] = ""
+                        message["tool_calls"] = calls
+                        self.save()
+                if not calls:
                     self.state["result"] = str(message.get("content", ""))[:4000]
                     if stop.is_set():
                         self.state["status"] = "paused"
@@ -407,9 +473,12 @@ class Session:
                         self.state["messages"].append({"role": "user", "content":
                             "La tarea aún NO está hecha: no has llamado a ninguna herramienta y "
                             "no se ha modificado ningún archivo. No escribas instrucciones de cómo hacerlo. "
-                            "Llama AHORA a list_files o read_file usando tool_calls para inspeccionar el "
-                            "proyecto y después realiza la edición solicitada. "
-                            "Si no eres capaz de emitir una llamada estructurada a herramienta, dilo claramente."})
+                            "Llama AHORA a read_file(path='genesis/motor/calendario.py') "
+                            "o list_files(folder='genesis/motor') para inspeccionar el proyecto. "
+                            "Si no puedes emitir tool_calls nativos, escribe únicamente "
+                            "un objeto JSON puro como "
+                            "{\"name\":\"read_file\",\"arguments\":{\"path\":\"genesis/motor/calendario.py\"}}. "
+                            "No incluyas prosa alrededor del JSON."})
                         self.save()
                         continue
                     passed, feedback = self._final_check(worktree, tools, callback)
