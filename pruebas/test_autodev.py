@@ -25,6 +25,33 @@ class FakeOllama:
         return {"role": "assistant", "content": "Cambio mínimo aplicado.", "tool_calls": []}
 
 
+class FakeOllamaNoTools:
+    def __init__(self):
+        self.count = 0
+
+    def chat(self, model, messages):
+        self.count += 1
+        return {"role": "assistant", "content": "Aquí tienes el código que deberías escribir.", "tool_calls": []}
+
+
+class FakeOllamaNudged(FakeOllama):
+    def chat(self, model, messages):
+        if self.count == 0:
+            self.count += 1
+            return {"role": "assistant", "content": "Puedes editar demo.py.", "tool_calls": []}
+        if self.count == 1:
+            self.count += 1
+            self.assert_nudge(messages)
+            return {"role": "assistant", "content": "", "tool_calls": [
+                {"function": {"name": "replace_text", "arguments":
+                              {"path": "genesis/motor/demo.py", "old": "VALUE = 1", "new": "VALUE = 2"}}}]}
+        return {"role": "assistant", "content": "Cambio aplicado.", "tool_calls": []}
+
+    @staticmethod
+    def assert_nudge(messages):
+        assert "Llama AHORA" in messages[-1]["content"]
+
+
 def _command(path: Path, *args):
     subprocess.run(["git", "-C", str(path), *args], check=True, capture_output=True)
 
@@ -128,6 +155,21 @@ class SessionTests(unittest.TestCase):
         self.assertEqual((Path(session.state["worktree"]) / "genesis" / "motor" / "demo.py").read_text(), "VALUE = 2\n")
         self.assertEqual(session.state["status"], "done")
         self.assertTrue(session.state_file.is_file())
+
+    def test_no_tool_calls_fail_instead_of_claiming_completion(self):
+        session = Session.create(self.repo, "Cambia VALUE a 2", "qwen2.5-coder:7b", minutes=5)
+        client = FakeOllamaNoTools()
+        logs = []
+        result = session.run(logs.append, threading.Event(), client=client)
+        self.assertEqual(result, "paused")
+        self.assertEqual(client.count, 3)
+        self.assertTrue(any("Prueba fallida" in line for line in logs))
+        self.assertTrue(any("Respuesta del modelo" in line for line in logs))
+
+    def test_retry_if_model_finalizes_without_tools(self):
+        session = Session.create(self.repo, "Cambia VALUE a 2", "qwen2.5-coder:7b", minutes=5)
+        result = session.run(lambda _: None, threading.Event(), client=FakeOllamaNudged())
+        self.assertEqual(result, "done")
 
 
 if __name__ == "__main__":
