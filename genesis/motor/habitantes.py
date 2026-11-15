@@ -588,6 +588,8 @@ class Habitantes:
                     asignar(self.vidas,mundo,menor)
         if self.vidas and c.crecimiento and mundo.tick == c.activacion_crecimiento+1:
             mundo.emitir('vidas.criterio_crecimiento', {'desde_tick': mundo.tick})
+        if self.vidas and c.relaciones and c.activacion_relaciones and mundo.tick == c.activacion_relaciones + 1:
+            mundo.emitir('vidas.criterio_relaciones', {'desde_tick': mundo.tick})
         soc = self.soc
         com = self.com
         cal = mundo.calendario

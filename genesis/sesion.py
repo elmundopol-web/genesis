@@ -405,6 +405,7 @@ class Sesion:
                     "semilla": mundo.config.semilla,
                     "reglas": mundo.config.habitantes.reglas if habitantes else 0,
                     "crecimiento": mundo.config.habitantes.crecimiento,
+                    "relaciones": mundo.config.habitantes.relaciones,
                     "activacion_crecimiento": mundo.config.habitantes.activacion_crecimiento,
                     "cuidados": mundo.config.habitantes.cuidados,
                     "activacion_cuidados": mundo.config.habitantes.activacion_cuidados,
@@ -463,13 +464,32 @@ class Sesion:
             c = sistema.cfg
             ancho = mundo.mapa.ancho
             lista = []
+            vidas = sistema.vidas
+            gestos = vidas.gestos if vidas is not None else {}
             for h in sistema.lista:
                 objetivo = h.mente.objetivo if h.mente is not None else None
+                # con quién trata de verdad en esta hora: el receptor efectivo de una entrega,
+                # no el objetivo que tenía en mente (F4.3)
+                gesto = gestos.get(h.id)
+                if gesto is not None and mundo.tick - gesto[2] > 1:
+                    gesto = None
+                if gesto is not None:
+                    otro = sistema.por_id(gesto[0])
+                    if otro is None or max(abs(otro.x - h.x), abs(otro.y - h.y)) > 2:
+                        gesto = None
+                ficha = vidas.personas.get(str(h.id), {}) if vidas is not None else {}
+                emocion = ficha.get("emocion") or {}
                 lista.append({
+                    "gesto": gesto[1] if gesto else None,
+                    "animo": emocion.get("tipo") if emocion.get("hasta", -1) >= mundo.tick else None,
+                    "animo_con": emocion.get("a") if emocion.get("hasta", -1) >= mundo.tick else None,
+                    "evita": (ficha.get("distancia") or {}).get("a"),
+                    "promete": (ficha.get("promesa") or {}).get("a"),
+                    "anios": sistema.edad(h, mundo.tick, mundo.calendario.ticks_por_anio),
                     'etapa':sistema.vidas.personas.get(str(h.id),{}).get('etapa','adulto') if sistema.vidas else 'adulto',
                     "objetivo": objetivo["tipo"] if objetivo else "",
                     # con quién trata en este momento, para señalarlo sobre el mapa
-                    "con": objetivo["persona"] if objetivo and h.actividad in _ACTIVIDADES_DE_TRATO else None,
+                    "con": gesto[0] if gesto else (objetivo["persona"] if objetivo and h.actividad in _ACTIVIDADES_DE_TRATO else None),
                     "id": h.id,
                     "nombre": h.nombre,
                     "x": h.x,
@@ -490,6 +510,7 @@ class Sesion:
                     "pelo": h.pelo,
                     "ropa": h.ropa,
                     "madera": h.inventario.get("madera", 0),
+                    "comida": h.carga_actual - h.inventario.get("madera", 0),
                     "alojado": h.mente.f3["alojado"] if h.mente is not None and h.mente.f3 is not None else None,
                     "comunidades": sistema.com.comunidades_de(h) if sistema.com is not None and h.vivo else [],
                 })

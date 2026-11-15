@@ -46,6 +46,15 @@ const RUTINA = {
   "habitante.se_repone": ["recuperación", "recuperaciones"],
   "habitante.sobrevive": ["mal rato superado", "malos ratos superados"],
   "habitante.intemperie": ["episodio de frío o calor", "episodios de frío o calor"],
+  // la rutina diaria de las vidas: se agrupa para que destaquen los cambios
+  "vidas.descanso_compartido": ["rato en compañía", "ratos en compañía"],
+  "vidas.acompaña_trayecto": ["tramo acompañado", "tramos acompañados"],
+  "vidas.inicia_costumbre": ["rutina empezada", "rutinas empezadas"],
+  "vidas.fin_costumbre": ["rutina terminada", "rutinas terminadas"],
+  "vidas.recuerda_descanso": ["lugar de descanso recordado", "lugares de descanso recordados"],
+  "vidas.fin_encargo": ["encargo cerrado", "encargos cerrados"],
+  "vidas.plan_interrumpido": ["encargo interrumpido", "encargos interrumpidos"],
+  "vidas.plan_reanudado": ["encargo retomado", "encargos retomados"],
 };
 const NO_ATIENDE = {
   no_quiere: (d) => `${d.nombre} no quiere dar comida a ${d.a_nombre}`,
@@ -583,6 +592,7 @@ function frase(ev) {
       if (d.corresponde) return `${d.nombre} corresponde a ${d.a_nombre}, que le había ayudado: le da ${d.cantidad} de comida`;
       return `${d.nombre} da ${d.cantidad} de comida a ${d.a_nombre}${d.pedido ? "" : " sin que se la pida"}`;
     case "habitante.niega":
+      if (d.promesa) return `${d.nombre} pide a ${d.a_nombre} que espere la ración que le ha prometido`;
       return (NO_ATIENDE[d.razon] || NO_ATIENDE.no_hizo_caso)(d);
     case "habitante.rehusa":
       return `${d.nombre} no acepta la comida que le ofrece ${d.a_nombre}`;
@@ -810,9 +820,11 @@ async function abrirDetalle(id) {
   const participantes = [idHabitante, personal ? ev.datos.a : null]
     .filter((id) => id != null && poblacion.porId.has(id));
   const irAlHabitante = participantes.length
-    ? el("div", { class: "detalle-quienes" }, ...participantes.map((id) =>
+    ? el("div", { class: "detalle-quienes" }, ...participantes.flatMap((id) => [
         el("button", { type: "button", class: "boton-ficha", onclick: () => poblacion.elegir(id, { centrar: true }) },
-          icono("habitantes"), `Ver a ${poblacion.porId.get(id).nombre}`)))
+          icono("habitantes"), `Ver a ${poblacion.porId.get(id).nombre}`),
+        el("button", { type: "button", class: "boton-ficha", onclick: () => poblacion.elegir(id, { centrar: true, seguir: true }) },
+          `Seguir`)]))
     : null;
   const caja = $("eventos");
   caja.replaceChildren(
@@ -847,9 +859,10 @@ async function cargarHitos() {
   if (S.pidiendo.hitos) return;
   S.pidiendo.hitos = true;
   try {
-    const nuevos = await api(`/api/eventos?filtro=hitos&limite=20&despues_de=${S.hitoVisto}`);
+    const nuevos = await api(`/api/eventos?filtro=hitos&limite=40&despues_de=${S.hitoVisto}`);
     if (nuevos.length) {
       S.hitoVisto = nuevos[0].id;
+      for (const ev of nuevos) if (S.estado.tick - ev.tick <= 2) mundo.senalar(ev);
       const rapido = S.estado.control.en_marcha && S.estado.control.velocidad >= 120;
       const anunciar = nuevos.filter((ev) => {
         if (esAvisoSeguido(ev,S.estado.favoritos || [])) return true;
@@ -1277,7 +1290,7 @@ async function iniciar() {
     S.estado = estado;
     // la fase que se ve es la de las reglas de esta partida (una partida F1 o F2 conserva las suyas)
     document.querySelector(".marca-fase").textContent = estado.partida.reglas === 3 && estado.partida.correccion
-      ? "F3.1" : { 1: "F1", 2: "F2", 3: "F3", 4:estado.partida.crecimiento?"F4.2":estado.partida.cuidados?"F4.1":"F4" }[estado.partida.reglas] || "F3";
+      ? "F3.1" : { 1: "F1", 2: "F2", 3: "F3", 4:estado.partida.relaciones?"F4.3":estado.partida.crecimiento?"F4.2":estado.partida.cuidados?"F4.1":"F4" }[estado.partida.reglas] || "F3";
     mundo.fijarMargenes(margenes());
     mundo.fijarEstado({ estacion: estado.fecha.estacion, hora: estado.fecha.hora, cielo: estado.clima.cielo, lluvia: estado.clima.lluvia_mm,
                         helada: estado.clima.helada, sequia: estado.clima.sequia, rioHelado: estado.clima.rio_helado, rapido: false });

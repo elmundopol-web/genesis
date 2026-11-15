@@ -210,6 +210,10 @@ class ConfigHabitantes:
     activacion_cuidados: int = 0
     crecimiento: int = 0
     activacion_crecimiento: int = 0
+    # F4.3: promesas, entregas y negativas comparten información; los antecedentes pesan al
+    # confiar, aceptar otra promesa o perdonar. 0 en las partidas anteriores (se reproducen igual).
+    relaciones: int = 0
+    activacion_relaciones: int = 0
 
     def __post_init__(self) -> None:
         if not isinstance(self.cantidad, int) or isinstance(self.cantidad, bool) or not 0 <= self.cantidad <= 200:
@@ -220,6 +224,8 @@ class ConfigHabitantes:
             raise ValueError("temp_frio debe ser menor que temp_calor")
         if self.crecimiento not in (0, 1) or self.activacion_crecimiento < 0 or (self.crecimiento and (not self.cuidados or self.activacion_crecimiento < self.activacion_cuidados)):
             raise ValueError('criterio de crecimiento no válido')
+        if self.relaciones not in (0, 1) or self.activacion_relaciones < 0 or (self.relaciones and (not self.crecimiento or self.activacion_relaciones < self.activacion_crecimiento)):
+            raise ValueError('criterio de relaciones no válido')
         if self.cuidados not in (0, 1) or self.activacion_cuidados < 0 or (self.cuidados and self.reglas != 4):
             raise ValueError('criterio de crianza no válido')
         if self.activacion_vidas < 0 or self.limite_poblacion < 1 or not 0 < self.infancia_anios < self.juventud_anios:

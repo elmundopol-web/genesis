@@ -358,6 +358,8 @@ class Sociedad:
         accion = intencion.accion
         tick = mundo.tick
         m = h.mente
+        if s.vidas is not None:
+            s.vidas.gestos[h.id] = (o.id, accion, tick)
         if accion == "pedir":
             if o.actividad == "durmiendo":
                 s._rechazar(mundo, h, intencion, "esa persona duerme")
@@ -422,6 +424,8 @@ class Sociedad:
                 )
                 m.relacion(o.id, tick)["ofrecido"] = tick
                 m.anotar(tick, "oferta_rehusada", 12, -5, None, (o.id,), (evento.id,), 0, {})
+                if s.vidas is not None:
+                    s.vidas.gestos[o.id] = (h.id, "rehusa", tick)
                 h.actividad = "hablando"
                 h.motivo = intencion.motivo
                 return
@@ -498,6 +502,9 @@ class Sociedad:
         rel["le_di"] += total
         rel["ofrecido"] = tick
         confiar(rel, aprecio)
+        if s.vidas is not None and s.vidas.relacional(mundo):
+            from .vinculos import por_trato
+            por_trato(s.vidas, mundo, h, o, total, evento.id)
         m.anotar(tick, "ayuda_dada", 25, 15, h.y * s.mapa.ancho + h.x, (o.id,), (evento.id, causa), 0,
                  {"unidades": total, "pedido": 1 if sol is not None else 0})
         if sol is not None:
@@ -541,11 +548,20 @@ class Sociedad:
                 datos["por"] = h.mente.objetivo["porque"].get("necesidad", "")
         if recuerda is not None:
             datos["recuerda"] = recuerda  # se lo niega acordándose de cuando a él se lo negaron
+        prometida = None
+        vidas = self.s.vidas
+        if vidas is not None and vidas.relacional(mundo):
+            pr = vidas.ficha(h).get("promesa")
+            if pr and pr["a"] == o.id and pr["estado"] == "pendiente":
+                prometida = pr["evento"]
+                datos["promesa"] = prometida  # ya le ha prometido una ración: los dos lo saben
         evento = mundo.emitir("habitante.niega", datos, sol[2])
         mo = o.mente
         rel = mo.relacion(h.id, tick)
         rel["pedido"] = tick
-        if razon in _SIN_RESPUESTA:
+        if prometida is not None:
+            juicio, cambio = "le_prometio", 0  # sabe que la ración llegará: espera, sin desaire
+        elif razon in _SIN_RESPUESTA:
             juicio, cambio = "no_atendio", 0  # no llegó a contestarle: no lo cuenta como negativa
         else:
             rel["me_nego"] += 1

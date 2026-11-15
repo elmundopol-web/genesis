@@ -382,7 +382,8 @@ class Almacen:
         return h
 
 
-def ampliar_partida(origen: Path, destino: Path, nombre: str, reglas: int = 3, *, cuidados: bool = False, crecimiento: bool = False) -> dict:
+def ampliar_partida(origen: Path, destino: Path, nombre: str, reglas: int = 3, *, cuidados: bool = False, crecimiento: bool = False,
+                    relaciones: bool = False) -> dict:
     """Crea una copia de una partida F1, F2 o F3 en la que, desde ahora, rigen las reglas actuales (3 con F3.1).
 
     La partida original no se abre para escribir ni se modifica: queda como
@@ -407,9 +408,9 @@ def ampliar_partida(origen: Path, destino: Path, nombre: str, reglas: int = 3, *
         config = fuente.config
         if config.habitantes.cantidad == 0:
             raise ErrorPartida("esa partida no tiene habitantes (F0): no hay vida que ampliar")
-        if reglas not in (3,4) or (cuidados and reglas != 4) or (crecimiento and not cuidados):
+        if reglas not in (3,4) or (cuidados and reglas != 4) or (crecimiento and not cuidados) or (relaciones and not crecimiento):
             raise ErrorPartida('Fase de destino desconocida')
-        if config.habitantes.reglas >= reglas and config.habitantes.correccion >= 1 and not (cuidados and not config.habitantes.cuidados) and not (crecimiento and not config.habitantes.crecimiento):
+        if config.habitantes.reglas >= reglas and config.habitantes.correccion >= 1 and not (cuidados and not config.habitantes.cuidados) and not (crecimiento and not config.habitantes.crecimiento) and not (relaciones and not config.habitantes.relaciones):
             raise ErrorPartida("esa partida ya usa las reglas actuales")
         if info["tick"] < 1:
             raise ErrorPartida("la partida aún no ha avanzado ninguna hora; crea una nueva en su lugar")
@@ -429,9 +430,12 @@ def ampliar_partida(origen: Path, destino: Path, nombre: str, reglas: int = 3, *
         if reglas == 4 and anterior.reglas < 4:
             habitantes = replace(habitantes, reglas=4, activacion_vidas=tick)
         if crecimiento:
-            habitantes = replace(habitantes, cuidados=1, activacion_cuidados=habitantes.activacion_cuidados if anterior.cuidados else tick, crecimiento=1, activacion_crecimiento=tick)
+            if not anterior.crecimiento:
+                habitantes = replace(habitantes, cuidados=1, activacion_cuidados=habitantes.activacion_cuidados if anterior.cuidados else tick, crecimiento=1, activacion_crecimiento=tick)
         elif cuidados:
             habitantes = replace(habitantes, cuidados=1, activacion_cuidados=tick)
+        if relaciones:
+            habitantes = replace(habitantes, relaciones=1, activacion_relaciones=tick)
         etapas = json.loads(fuente._meta.get("etapas") or "[]")
         if not etapas and fuente._meta.get("ampliada_de"):
             # una copia hecha antes de F3 solo anotaba su origen inmediato
@@ -443,6 +447,8 @@ def ampliar_partida(origen: Path, destino: Path, nombre: str, reglas: int = 3, *
             etapas[-1]['cuidados'] = 1
         if crecimiento:
             etapas[-1]['crecimiento'] = 1
+        if relaciones:
+            etapas[-1]['relaciones'] = 1
         copia = sqlite3.connect(destino)
         try:
             fuente._con.backup(copia)  # copia coherente aunque haya escrituras sin consolidar

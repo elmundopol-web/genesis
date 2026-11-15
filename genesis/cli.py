@@ -40,11 +40,12 @@ HABITANTES_INICIALES = 25
 def _crear(
     carpeta: Path, nombre: str, semilla: int, habitantes: int = HABITANTES_INICIALES, abundancia: float = 1.0,
     reglas: int = REGLAS_ACTUALES, limite_poblacion: int = 48, cuidados: bool = True, crecimiento: bool = True,
+    relaciones: bool = True,
 ) -> tuple[Almacen, Mundo]:
     config = ConfigMundo(
         semilla=semilla,
         recursos=recursos_con_abundancia(abundancia),
-        habitantes=ConfigHabitantes(cantidad=habitantes, reglas=reglas if habitantes else 1, limite_poblacion=limite_poblacion, cuidados=int(cuidados and bool(habitantes) and reglas == 4), crecimiento=int(crecimiento and cuidados and bool(habitantes) and reglas==4)),
+        habitantes=ConfigHabitantes(cantidad=habitantes, reglas=reglas if habitantes else 1, limite_poblacion=limite_poblacion, cuidados=int(cuidados and bool(habitantes) and reglas == 4), crecimiento=int(crecimiento and cuidados and bool(habitantes) and reglas==4), relaciones=int(relaciones and crecimiento and cuidados and bool(habitantes) and reglas==4)),
     )
     mundo = Mundo.crear(config)
     return Almacen.crear(_ruta(carpeta, nombre), mundo, nombre), mundo
@@ -70,7 +71,7 @@ def _fase_de(archivo: Path) -> tuple[int, int]:
         return (0, 0)
     try:
         h = almacen.config.habitantes
-        return ((4, 1 + h.cuidados + h.crecimiento) if h.reglas == 4 else (h.reglas, h.correccion)) if h.cantidad > 0 else (0, 0)
+        return ((4, 1 + h.cuidados + h.crecimiento + h.relaciones) if h.reglas == 4 else (h.reglas, h.correccion)) if h.cantidad > 0 else (0, 0)
     finally:
         almacen.cerrar()
 
@@ -190,7 +191,7 @@ def cmd_listar(args) -> int:
             if info["activacion"]:
                 poblacion += f", ampliada de {info['ampliada_de']!r} el día {info['activacion'] // fecha.horas_por_dia + 1}"
         elif info['reglas']==4:
-            poblacion = f"{info['habitantes']} fundadores, vidas y generaciones ({'F4.2' if fecha.habitantes.crecimiento else 'F4.1' if fecha.habitantes.cuidados else 'F4'})"
+            poblacion = f"{info['habitantes']} fundadores, vidas y generaciones ({'F4.3' if fecha.habitantes.relaciones else 'F4.2' if fecha.habitantes.crecimiento else 'F4.1' if fecha.habitantes.cuidados else 'F4'})"
         elif info["activacion_comunidad"]:
             poblacion = (
                 f"{info['habitantes']} habitantes al inicio, ampliada a F3 de {info['ampliada_de']!r}"
@@ -207,12 +208,12 @@ def cmd_listar(args) -> int:
 
 
 def cmd_ampliar(args) -> int:
-    sufijo = 'f42' if _fase_de(_ruta(args.carpeta,args.partida)) >= (4,2) else 'f41' if _reglas_de(_ruta(args.carpeta,args.partida)) == 4 else 'f4'
+    sufijo = 'f43' if _fase_de(_ruta(args.carpeta,args.partida)) >= (4,3) else 'f42' if _fase_de(_ruta(args.carpeta,args.partida)) >= (4,2) else 'f41' if _reglas_de(_ruta(args.carpeta,args.partida)) == 4 else 'f4'
     destino = args.nombre or f"{args.partida}-{sufijo}"
-    informe = ampliar_partida(_ruta(args.carpeta, args.partida), _ruta(args.carpeta, destino), destino, reglas=4, cuidados=True, crecimiento=True)
+    informe = ampliar_partida(_ruta(args.carpeta, args.partida), _ruta(args.carpeta, destino), destino, reglas=4, cuidados=True, crecimiento=True, relaciones=True)
     dia = informe["tick"] // 24 + 1
     print(f"Partida {destino!r} creada a partir de {informe['origen']!r}, que no se ha modificado.")
-    print(f"El criterio de crecimiento F4.2 empieza tras la hora {informe['tick']}.")
+    print(f"Las reglas de relaciones F4.3 empiezan tras la hora {informe['tick']}.")
     if informe["reglas_previas"] == 1:
         print(f"Conserva sus {informe['eventos']} eventos. Memoria, vida social y comunidades empiezan el día {dia},"
               " sin pasado inventado.")
@@ -288,8 +289,8 @@ def cmd_visor(args) -> int:
     if mundo.habitantes:
         print(f"Habitantes vivos: {mundo.habitantes.vivos()} de {len(mundo.habitantes.lista)}")
         reglas = mundo.config.habitantes.reglas
-        if reglas < REGLAS_ACTUALES or not mundo.config.habitantes.crecimiento:
-            fase = ("F1 (sin memoria ni vida social)" if reglas == 1 else "F2 (sin construcciones ni comunidades)"
+        if reglas < REGLAS_ACTUALES or not mundo.config.habitantes.relaciones:
+            fase = ('F4.2' if reglas == 4 and mundo.config.habitantes.crecimiento else "F1 (sin memoria ni vida social)" if reglas == 1 else "F2 (sin construcciones ni comunidades)"
                     if reglas == 2 else 'F4.1' if reglas == 4 and mundo.config.habitantes.cuidados else 'F4' if reglas == 4 else 'F3.1' if mundo.config.habitantes.correccion else 'F3')
             print(
                 f"Esta partida usa las reglas de {fase} y las conserva."

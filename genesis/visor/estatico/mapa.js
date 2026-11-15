@@ -13,6 +13,7 @@
    Todo el azar de dibujo sale de la semilla de la partida. */
 
 import { dibujarLugar, luzDeLugar, caja } from "./construcciones.js";
+import { PIEL, PELO, ROPA } from "./paleta.js";
 
 const TEX = 1280; // lado de la textura del mundo
 const SUB = 4; // submuestras por celda en los campos suavizados
@@ -82,10 +83,7 @@ const COPAS = [
   { hoja: null, conifera: [[28, 58, 54], [46, 84, 74], [122, 152, 144]] },
 ];
 
-const PIEL = [[241, 211, 184], [224, 180, 143], [201, 143, 102], [162, 110, 74], [122, 79, 53]];
-const PELO = [[43, 36, 32], [90, 61, 40], [138, 90, 50], [185, 138, 78], [217, 210, 196]];
-const ROPA = [[201, 87, 63], [217, 154, 61], [227, 207, 122], [127, 174, 106], [79, 156, 154], [91, 127, 196],
-              [160, 107, 181], [215, 210, 196]];
+// piel, pelo y ropa salen de la paleta común (F4.4)
 
 const COLOR_RECURSO = { bayas: [217, 102, 138], madera: [201, 144, 90], semillas: [227, 198, 94], peces: [109, 187, 216] };
 
@@ -149,6 +147,39 @@ const pausa = () => new Promise((resolver) => {
   requestAnimationFrame(() => resolver());
   setTimeout(resolver, 60);
 });
+
+// Gestos del motor que son entregas reales y rechazos: el trazo lo distingue (F4.3).
+const DAR = new Set(["entrega", "alimenta", "da_agua", "corresponde", "repara", "deja_racion", "dar"]);
+const RECHAZO = new Set(["rechaza_promesa", "rehusa", "negar"]);
+const DURA_SENAL = 5200;
+const COLOR_SENAL = {
+  promesa: "rgb(214,200,246)", cumple: "rgb(168,214,150)", rota: "rgb(232,118,96)", reservas: "rgb(226,190,110)",
+  rechazo: "rgb(232,118,96)", enfado: "rgb(232,118,96)", perdona: "rgb(150,206,128)", justifica: "rgb(196,214,150)",
+  nace: "rgb(160,214,120)", duelo: "rgb(126,168,214)", distancia: "rgb(214,170,150)",
+};
+/* Qué señal deja cada acontecimiento y sobre quién: [id, icono, texto]. */
+export function SENAL_DE(ev) {
+  const d = ev.datos || {};
+  switch (ev.tipo) {
+    case "vidas.promete": return [[d.id, "promesa", "promete"], [d.a, "promesa", "espera"]];
+    case "vidas.entrega":
+      return d.motivo === "cumplir la palabra" ? [[d.id, "cumple", "cumple su palabra"], [d.a, "cumple", "recibe"]]
+        : [[d.id, "rota", "da a otra persona"], [d.a, "cumple", "recibe"]];
+    case "vidas.juzga":
+      return d.contenido === "palabra rota" ? [[d.id, "rota", "palabra rota"]]
+        : d.contenido === "necesidad justificada" ? [[d.id, "justifica", "lo entiende"]] : [[d.id, "rota", "no llegó"]];
+    case "vidas.repara":
+      return [[d.id, "promesa", "repara"], [d.a, d.resultado === "rechaza" ? "rechazo" : d.resultado === "acepta con reservas" ? "reservas" : "perdona",
+        d.resultado === "rechaza" ? "no lo acepta" : d.resultado === "acepta con reservas" ? "con reservas" : "perdona"]];
+    case "vidas.rechaza_promesa": return [[d.id, "rechazo", "no le cree"]];
+    case "vidas.tomar_distancia": return [[d.id, "distancia", "se aparta"]];
+    case "vidas.duelo": return [[d.id, "duelo", "duelo"]];
+    case "vidas.nace": return [[d.id, "nace", "nace"]];
+    case "habitante.niega":
+      return ["no_quiere", "desconfianza"].includes(d.razon) ? [[d.id, "rechazo", "se niega"]] : null;
+    default: return null;
+  }
+}
 
 export class MapaVivo {
   constructor(lienzo, avisos = {}, piezas = {}) {
@@ -1007,8 +1038,19 @@ export class MapaVivo {
     if (this.siguiendo) {
       const figura = this.gente.get(this.elegido);
       if (figura) {
-        this.meta.x = figura.rx;
-        this.meta.y = figura.ry;
+        // si trata con alguien, encuadra a los dos; si camina, mira un poco hacia donde va
+        const otro = figura.d && figura.d.con != null ? this.gente.get(figura.d.con) : null;
+        let x = figura.rx + (figura.ax || 0);
+        let y = figura.ry + (figura.ay || 0);
+        if (otro && Math.hypot(otro.rx - figura.rx, otro.ry - figura.ry) < 4) {
+          x += (otro.rx + (otro.ax || 0) - x) * 0.4;
+          y += (otro.ry + (otro.ay || 0) - y) * 0.4;
+        } else if (figura.anda) {
+          x += (figura.hx - figura.rx) * 0.35;
+          y += (figura.hy - figura.ry) * 0.35;
+        }
+        this.meta.x = x;
+        this.meta.y = y;
         this.ancla = null;
         this.libre = false;
       }
@@ -1475,11 +1517,15 @@ export class MapaVivo {
       else hi = mid;
     }
     const tocones = c && z >= 15 * this.dpr;
+    // el solar de cada construcción está desbrozado: ni copas ni matas detrás de su tejado
+    const solares = (this.lugares || []).filter((e) => e.estado !== "ruina")
+      .map((e) => [e.x + 0.5, e.y + 0.62, e.tipo === "refugio" ? 1.15 : 0.85]);
     alta.globalAlpha = alfa;
     for (let i = lo; i < A.n && A.v[i] <= vMax; i++) {
       if ((i & 511) === 0) yield;
       const u = A.u[i];
       if (u < uMin || u > uMax) continue;
+      if (solares.length && solares.some(([x, y, r]) => Math.abs(u - x) < r + A.r[i] * 1.6 && A.v[i] > y - 2.1 && A.v[i] < y + 0.35)) continue;
       const tipo = A.tipo[i];
       const sx = u * z + ox;
       const sy = A.v[i] * z + oy;
@@ -1496,8 +1542,9 @@ export class MapaVivo {
         continue;
       }
       const d = A.r[i] * z * 3.1;
-      if (c && medio > 0.02 && A.borde[i]) arte.sombraDe(c, sx + d * 0.08, sy, d * 1.05, 0.9 * medio);
-      arte.pieza(alta, estacion, tipo === 0 ? P.frondosa(A.var[i]) : P.conifera(A.var[i] + i), sx, sy, d);
+      // F4.4: todos proyectan su sombra abajo a la derecha; los del interior, más a la sombra
+      if (c && medio > 0.02) arte.sombraDe(c, sx + d * 0.2, sy + d * 0.06, d * 1.15, (A.borde[i] ? 0.72 : 0.6) * medio);
+      arte.pieza(alta, estacion, tipo === 0 ? P.frondosa(A.var[i]) : P.conifera(A.var[i] + i), sx, sy, d, !A.borde[i]);
     }
     alta.globalAlpha = 1;
   }
@@ -1820,6 +1867,7 @@ export class MapaVivo {
     // personas sobre el suelo; después el arbolado, que tapa a quien queda detrás de una copa;
     // y otra vez, atenuados, quienes han quedado tapados, para no perderlos de vista
     const gente = this._gentePreparar();
+    this._senderos(c, gente);
     this._genteCuerpos(c, gente, t, 0);
     c.globalAlpha = 1 - 0.94 * this.velo;
     c.drawImage(this.alta, tr.x, tr.y, anchoEscena, altoEscena);
@@ -2127,8 +2175,12 @@ export class MapaVivo {
       c.save();
       c.lineCap = "round";
       c.lineWidth = 1.8 * dpr;
-      c.strokeStyle = d.actividad === "dando" ? "rgba(240,200,120,0.95)" : "rgba(240,237,227,0.8)";
-      c.setLineDash(d.actividad === "pidiendo" ? [2 * dpr, 4 * dpr] : []);
+      const da = d.actividad === "dando" || DAR.has(d.gesto);
+      const rechaza = RECHAZO.has(d.gesto);
+      const junto = d.gesto === "convive" || d.gesto === "descanso_compartido" || d.gesto === "protege";
+      c.strokeStyle = da ? "rgba(240,200,120,0.95)" : rechaza ? "rgba(232,118,96,0.9)"
+        : junto ? "rgba(168,214,150,0.85)" : d.gesto === "promete" ? "rgba(214,200,246,0.9)" : "rgba(240,237,227,0.8)";
+      c.setLineDash(d.actividad === "pidiendo" ? [2 * dpr, 4 * dpr] : rechaza ? [5 * dpr, 4 * dpr] : d.gesto === "promete" ? [7 * dpr, 4 * dpr] : []);
       const separacion = Math.hypot(x2 - x1, y2 - y1);
       c.beginPath();
       if (separacion > s * 0.7) {
@@ -2146,7 +2198,8 @@ export class MapaVivo {
 
   _tamanoFigura() {
     // Una persona mide algo más de una celda de alto; de lejos no baja de un tamaño visible.
-    return limitar(this.cam.z * 1.14, 14 * this.dpr, 78 * this.dpr);
+    // F4.4: figuras de tres cuartos algo mayores, legibles a la escala habitual
+    return limitar(this.cam.z * 1.26, 18 * this.dpr, 84 * this.dpr);
   }
 
   _moverGente(t) {
@@ -2207,6 +2260,47 @@ export class MapaVivo {
       f.mx = 0;
       f.my = 0;
     }
+    // quienes coinciden quietos en la misma celda sin tratar entre sí se reparten el espacio
+    const corros = new Map();
+    for (const f of figuras) {
+      if (!f.d.vivo || f.anda || f.d.alojado != null) continue;
+      const k = Math.floor(f.hx) + Math.floor(f.hy) * 4096;
+      if (!corros.has(k)) corros.set(k, []);
+      corros.get(k).push(f);
+    }
+    const huecos = [null, [[0, 0]], [[-0.24, 0.02], [0.24, -0.02]], [[-0.26, 0.08], [0.26, 0.06], [0, -0.16]],
+                    [[-0.27, 0.1], [0.27, 0.1], [-0.13, -0.17], [0.15, -0.16]]];
+    for (const grupo of corros.values()) {
+      if (grupo.length < 2) continue;
+      grupo.sort((a, b) => a.id - b.id);
+      const sitios = huecos[Math.min(grupo.length, 4)];
+      grupo.forEach((f, i) => {
+        const [du, dv] = sitios[i % sitios.length];
+        const ronda = Math.floor(i / sitios.length) * 0.08;
+        f.mx = Math.floor(f.hx) + 0.5 + du + ronda - f.rx;
+        f.my = Math.floor(f.hy) + 0.55 + dv + ronda - f.ry;
+      });
+    }
+    // y si dos quietos quedan demasiado juntos aunque sea en celdas vecinas, se apartan un poco
+    for (let vuelta = 0; vuelta < 2; vuelta++) {
+      for (let i = 0; i < figuras.length; i++) {
+        const a = figuras[i];
+        if (!a.d.vivo || a.anda || a.d.alojado != null) continue;
+        for (let j = i + 1; j < figuras.length; j++) {
+          const b = figuras[j];
+          if (!b.d.vivo || b.anda || b.d.alojado != null) continue;
+          const du = b.rx + b.mx - (a.rx + a.mx);
+          const dv = b.ry + b.my - (a.ry + a.my);
+          const tumbado = a.d.actividad === "durmiendo" || b.d.actividad === "durmiendo";
+          const minimo = tumbado ? 0.7 : 0.4;
+          if (Math.abs(dv) > (tumbado ? 1.3 : 0.85) || Math.abs(du) >= minimo) continue;
+          const empuje = (minimo - Math.abs(du)) / 2;
+          const lado = du > 0 || (du === 0 && a.id < b.id) ? 1 : -1;
+          a.mx -= lado * empuje;
+          b.mx += lado * empuje;
+        }
+      }
+    }
     const margen = 0.1;
     const hueco = (p, hacia) => {
       const base = Math.floor(p);
@@ -2257,6 +2351,12 @@ export class MapaVivo {
         if (!otro.anda) otro.mira = -f.mira;
       }
     }
+    for (const f of figuras) {
+      if (!f.d.vivo || f.d.evita == null || f.d.con != null) continue;
+      const otro = this.gente.get(f.d.evita);
+      if (!otro || !otro.d.vivo || Math.hypot(otro.rx - f.rx, otro.ry - f.ry) > 3) continue;
+      if (Math.abs(otro.rx - f.rx) > 0.05) f.mira = otro.rx > f.rx ? -1 : 1;
+    }
     figuras.sort((a, b) => a.ry + a.ay - (b.ry + b.ay));
     // construcciones visibles, con su base en pantalla
     const u = Math.max(z, 12 * (this.dpr || 1));
@@ -2277,6 +2377,88 @@ export class MapaVivo {
       f.capa = f.d.vivo && !f.fuera && !f.oculto ? this._bajoCopa(f) || (lugares.length ? MapaVivo.prototype._trasLugar(f, lugares) : 0) : 0;
     }
     return { figuras, s, z, ox, oy, lugares, u };
+  }
+
+  /* Tierra pisada: senderos entre los lugares de una misma comunidad y una explanada ante cada
+     lugar en uso, mayor cuanto más se usa. Se deriva de lo que el motor dice de cada lugar. */
+  _senderos(c, gente) {
+    const { z, ox, oy } = gente;
+    if (!this.lugares || !this.lugares.length || z < 6 * this.dpr) return;
+    const pos = (e) => [(e.x + 0.5) * z + ox, (e.y + 0.78) * z + oy];
+    const porComunidad = new Map();
+    for (const e of this.lugares) {
+      if (e.comunidad == null || e.estado === "ruina") continue;
+      if (!porComunidad.has(e.comunidad)) porComunidad.set(e.comunidad, []);
+      porComunidad.get(e.comunidad).push(e);
+    }
+    c.save();
+    c.lineCap = "round";
+    c.lineJoin = "round";
+    const ancho = this.mapa.ancho;
+    const biomas = this.mapa.biomas;
+    // el sendero se dibuja a tramos y se interrumpe bajo el arbolado: no pisa las copas
+    const trazo = (x1, y1, x2, y2, curva) => {
+      const mx = (x1 + x2) / 2 - (y2 - y1) * curva;
+      const my = (y1 + y2) / 2 + (x2 - x1) * curva;
+      const pasos = Math.max(4, Math.ceil(Math.hypot(x2 - x1, y2 - y1) / (z * 0.3)));
+      c.beginPath();
+      let dentro = false;
+      for (let i = 0; i <= pasos; i++) {
+        const k = i / pasos;
+        const x = (1 - k) * (1 - k) * x1 + 2 * (1 - k) * k * mx + k * k * x2;
+        const y = (1 - k) * (1 - k) * y1 + 2 * (1 - k) * k * my + k * k * y2;
+        const cx = Math.floor((x - ox) / z);
+        const cy = Math.floor((y - oy) / z - 0.2);
+        const libre = cx >= 0 && cy >= 0 && cx < ancho && biomas[cy * ancho + cx] !== "B";
+        if (libre && dentro) c.lineTo(x, y);
+        else if (libre) c.moveTo(x, y);
+        dentro = libre;
+      }
+    };
+    for (const grupo of porComunidad.values()) {
+      if (grupo.length < 2) continue;
+      // cada lugar se une al más cercano de los ya unidos: un camino corto, sin telarañas
+      const unidos = [grupo[0]];
+      const resto = grupo.slice(1);
+      while (resto.length) {
+        let mejor = null;
+        for (const a of unidos) for (const b of resto) {
+          const d = Math.hypot(a.x - b.x, a.y - b.y);
+          if (!mejor || d < mejor[2]) mejor = [a, b, d];
+        }
+        const [a, b, d] = mejor;
+        resto.splice(resto.indexOf(b), 1);
+        unidos.push(b);
+        if (d > 14) continue;
+        const [x1, y1] = pos(a);
+        const [x2, y2] = pos(b);
+        const curva = (((a.id * 7 + b.id * 13) % 9) - 4) * 0.03;
+        c.strokeStyle = "rgba(92,74,48,0.30)";
+        c.lineWidth = Math.max(2, z * 0.3);
+        trazo(x1, y1, x2, y2, curva);
+        c.stroke();
+        c.strokeStyle = "rgba(170,146,104,0.32)";
+        c.lineWidth = Math.max(1, z * 0.13);
+        trazo(x1, y1, x2, y2, curva);
+        c.stroke();
+      }
+    }
+    for (const e of this.lugares) {
+      if (e.estado === "ruina" || e.estado === "abandonada") continue;
+      const uso = (e.ocupantes ? e.ocupantes.length : 0) + Math.min(6, (e.guardado || 0) / 6) + (e.comunidad != null ? 1.5 : 0);
+      if (uso < 0.5) continue;
+      const [x, y] = pos(e);
+      const r = z * (0.38 + Math.min(0.5, uso * 0.07));
+      const g = c.createRadialGradient(x, y, r * 0.1, x, y, r);
+      g.addColorStop(0, "rgba(150,126,88,0.38)");
+      g.addColorStop(0.6, "rgba(126,104,70,0.2)");
+      g.addColorStop(1, "rgba(110,92,60,0)");
+      c.fillStyle = g;
+      c.beginPath();
+      c.ellipse(x, y, r * 1.3, r * 0.62, 0, 0, TAU);
+      c.fill();
+    }
+    c.restore();
   }
 
   /* Detrás de una construcción: se redibuja atenuada encima, para no perderla de vista. */
@@ -2329,7 +2511,7 @@ export class MapaVivo {
     const tiempo = this.ambiente ? t : 0;
     // quien recibe una entrega real tiende las manos mientras el otro da
     const reciben = new Set();
-    for (const f of gente.figuras) if (f.d.vivo && f.d.actividad === "dando" && f.d.con != null) reciben.add(f.d.con);
+    for (const f of gente.figuras) if (f.d.vivo && f.d.con != null && (f.d.actividad === "dando" || DAR.has(f.d.gesto))) reciben.add(f.d.con);
     const lugares = pasada === 0 ? gente.lugares : [];
     let siguiente = 0;
     const opciones = { dpr: this.dpr, nieve: this.estado.estacion === 3 ? 1 : this.escarcha * 0.35 };
@@ -2392,11 +2574,64 @@ export class MapaVivo {
     }
     if (this.creencias && elegido && elegido.d.vivo) this._creencias(c, z, ox, oy);
 
-    for (const f of figuras) {
-      if (f.fuera || !f.d.vivo || f.oculto) continue;
-      this._senal(c, f, s, t, detalle);
-    }
+    this._placas = [];
+    // primero el elegido y quienes tratan: sus placas tienen preferencia
+    const orden = figuras.filter((f) => !f.fuera && f.d.vivo && !f.oculto)
+      .sort((a, b) => (b.id === this.elegido) - (a.id === this.elegido) || (b.d.con != null) - (a.d.con != null));
+    for (const f of orden) this._senal(c, f, s, t, detalle);
     this._tratos(c, z, ox, oy, s);
+    this._acontecimientos(c, s, detalle);
+  }
+
+  /* Un acontecimiento importante de alguien a la vista: una señal breve sobre su cabeza. */
+  senalar(ev) {
+    const que = SENAL_DE(ev);
+    if (!que) return;
+    const ahora = performance.now();
+    this.senales = (this.senales || []).filter((x) => ahora - x.t0 < DURA_SENAL);
+    for (const [id, icono, texto] of que) {
+      if (id == null) continue;
+      this.senales.push({ id, icono, texto, t0: ahora + this.senales.filter((x) => x.id === id).length * 900 });
+    }
+    this.sucia = true;
+  }
+
+  _acontecimientos(c, s, detalle) {
+    const ahora = performance.now();
+    const dpr = this.dpr;
+    const vivas = (this.senales || []).filter((x) => ahora - x.t0 < DURA_SENAL);
+    this.senales = vivas;
+    const r = Math.max(8 * dpr, Math.min(s * 0.2, 14 * dpr));
+    const puestas = [];
+    for (const x of vivas) {
+      const k = (ahora - x.t0) / DURA_SENAL;
+      if (k < 0) continue;
+      const f = this.gente.get(x.id);
+      if (!f || f.fuera || f.oculto || !f.d) continue;
+      const entra = Math.min(1, k * 8);
+      const sale = k > 0.8 ? (1 - k) / 0.2 : 1;
+      c.globalAlpha = entra * sale;
+      const px = f.sx - s * 0.22;
+      let py = f.sy - s * 1.25 - r * 1.2 - k * s * 0.18;
+      // dos señales cercanas no se pisan: la segunda sube
+      for (let n = 0; n < 4 && puestas.some(([qx, qy]) => Math.abs(qx - px) < r * 6 && Math.abs(qy - py) < r * 2.1); n++) py -= r * 2.3;
+      puestas.push([px, py]);
+      this._aviso(c, x.icono, px, py, r * (0.85 + 0.15 * entra), 0, f);
+      if (detalle || f.id === this.elegido) {
+        const tam = Math.round(11 * dpr);
+        c.font = `600 ${tam}px "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif`;
+        c.textAlign = "left";
+        c.textBaseline = "middle";
+        const w = c.measureText(x.texto).width + 10 * dpr;
+        c.fillStyle = "rgba(14,17,13,0.78)";
+        rectRedondo(c, px + r * 1.2, py - tam * 0.75, w, tam * 1.5, tam * 0.75);
+        c.fill();
+        c.fillStyle = COLOR_SENAL[x.icono] || "rgb(240,234,220)";
+        c.fillText(x.texto, px + r * 1.2 + 5 * dpr, py + dpr * 0.5);
+      }
+    }
+    c.globalAlpha = 1;
+    if (vivas.length) this.sucia = true;
   }
 
   _tumba(c, f, sx, sy, s) {
@@ -2493,7 +2728,12 @@ export class MapaVivo {
       }
     }
 
-    // nombre, en una placa bajo los pies
+    // cómo se siente, en pequeño junto a la cabeza: solo de cerca o si está elegido
+    if ((detalle || elegido) && (d.animo === "enfado" || d.animo === "duelo") && act !== "durmiendo") {
+      this._aviso(c, d.animo, sx - s * 0.3, sy - s * 1.05, Math.max(6 * dpr, Math.min(s * 0.13, 9 * dpr)), t, f);
+    }
+
+    // nombre, en una placa bajo los pies; si pisaría otra placa, se omite (salvo el elegido)
     if (elegido || sobre || trato || this.cam.z >= 46 * dpr) {
       const tam = Math.round((elegido ? 13 : 12) * dpr);
       c.font = `600 ${tam}px "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif`;
@@ -2501,7 +2741,15 @@ export class MapaVivo {
       c.textBaseline = "middle";
       const ancho = c.measureText(d.nombre).width + 14 * dpr;
       const alto = tam + 7 * dpr;
-      const y = sy + s * 0.14 + alto / 2;
+      // si pisaría otra placa baja una fila; si tampoco cabe, se omite (salvo el elegido)
+      const placas = this._placas || (this._placas = []);
+      const pisa = (y0) => placas.some((b) => sx - ancho / 2 < b[2] && sx + ancho / 2 > b[0] && y0 - alto / 2 < b[3] && y0 + alto / 2 > b[1]);
+      let y = sy + s * 0.14 + alto / 2;
+      if (pisa(y)) {
+        if (!pisa(y + alto + 2 * dpr)) y += alto + 2 * dpr;
+        else if (!elegido && !sobre) return;
+      }
+      placas.push([sx - ancho / 2, y - alto / 2, sx + ancho / 2, y + alto / 2]);
       c.fillStyle = "rgba(14,17,13,0.82)";
       rectRedondo(c, sx - ancho / 2, y - alto / 2, ancho, alto, alto / 2);
       c.fill();
@@ -2570,6 +2818,69 @@ export class MapaVivo {
         c.arc(x + k * r * 0.36, y, r * 0.12, 0, TAU);
         c.fill();
       }
+    } else if (que === "promesa" || que === "cumple" || que === "rota" || que === "reservas") {
+      // dos eslabones: unidos al prometer y al cumplir, separados si se rompe
+      const sep = que === "rota" ? r * 0.22 : 0;
+      c.strokeStyle = COLOR_SENAL[que];
+      c.beginPath();
+      c.ellipse(x - r * 0.22 - sep, y, r * 0.3, r * 0.2, -0.5, 0, TAU);
+      c.stroke();
+      c.beginPath();
+      if (que === "reservas") c.ellipse(x + r * 0.22, y, r * 0.3, r * 0.2, -0.5, Math.PI * 0.2, Math.PI * 1.2);
+      else c.ellipse(x + r * 0.22 + sep, y, r * 0.3, r * 0.2, -0.5, 0, TAU);
+      c.stroke();
+      if (que === "cumple") {
+        c.beginPath();
+        c.moveTo(x - r * 0.3, y + r * 0.42);
+        c.lineTo(x - r * 0.08, y + r * 0.6);
+        c.lineTo(x + r * 0.34, y + r * 0.3);
+        c.stroke();
+      }
+    } else if (que === "rechazo" || que === "enfado") {
+      c.strokeStyle = COLOR_SENAL[que];
+      c.beginPath();
+      if (que === "rechazo") {
+        c.moveTo(x - r * 0.38, y - r * 0.38);
+        c.lineTo(x + r * 0.38, y + r * 0.38);
+        c.moveTo(x + r * 0.38, y - r * 0.38);
+        c.lineTo(x - r * 0.38, y + r * 0.38);
+      } else {
+        c.moveTo(x - r * 0.5, y + r * 0.2);
+        c.lineTo(x - r * 0.2, y - r * 0.35);
+        c.lineTo(x + r * 0.05, y + r * 0.15);
+        c.lineTo(x + r * 0.3, y - r * 0.35);
+        c.lineTo(x + r * 0.5, y + r * 0.1);
+      }
+      c.stroke();
+    } else if (que === "perdona" || que === "justifica" || que === "nace") {
+      // una hoja o un brote: algo que vuelve a crecer
+      c.fillStyle = COLOR_SENAL[que];
+      c.beginPath();
+      c.moveTo(x - r * 0.4, y + r * 0.4);
+      c.quadraticCurveTo(x - r * 0.4, y - r * 0.45, x + r * 0.45, y - r * 0.45);
+      c.quadraticCurveTo(x + r * 0.4, y + r * 0.35, x - r * 0.4, y + r * 0.4);
+      c.fill();
+    } else if (que === "duelo") {
+      c.fillStyle = COLOR_SENAL[que];
+      c.beginPath();
+      c.moveTo(x, y - r * 0.55);
+      c.bezierCurveTo(x + r * 0.45, y, x + r * 0.3, y + r * 0.5, x, y + r * 0.5);
+      c.bezierCurveTo(x - r * 0.3, y + r * 0.5, x - r * 0.45, y, x, y - r * 0.55);
+      c.fill();
+    } else if (que === "distancia") {
+      c.strokeStyle = COLOR_SENAL[que];
+      c.beginPath();
+      c.moveTo(x - r * 0.15, y);
+      c.lineTo(x - r * 0.5, y);
+      c.moveTo(x - r * 0.32, y - r * 0.18);
+      c.lineTo(x - r * 0.5, y);
+      c.lineTo(x - r * 0.32, y + r * 0.18);
+      c.moveTo(x + r * 0.15, y);
+      c.lineTo(x + r * 0.5, y);
+      c.moveTo(x + r * 0.32, y - r * 0.18);
+      c.lineTo(x + r * 0.5, y);
+      c.lineTo(x + r * 0.32, y + r * 0.18);
+      c.stroke();
     } else if (que === "frio" || que === "calor") {
       c.strokeStyle = que === "frio" ? "rgb(169,198,218)" : "rgb(236,150,84)";
       c.beginPath();

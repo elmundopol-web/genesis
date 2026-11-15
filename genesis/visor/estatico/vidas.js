@@ -40,8 +40,12 @@ export function fraseVida(ev, nombre = id => "habitante " + id) {
     inspecciona: h + " inspeccionó el lugar" + (d.cantidad ? " y recogió " + d.cantidad + " bayas" : " y concluyó «" + d.contenido + "»"),
     revisa: h + " revisó su creencia · " + d.contenido, relata: h + " contó a " + o + " su versión · " + d.contenido,
     investigar: h + " se acercó para investigar", rodear: h + " se apartó por precaución",
-    promete: h + " prometió dos unidades de alimento a " + o, entrega: h + " dio comida a " + o + " para " + d.motivo,
-    juzga: h + " juzgó la promesa de " + o + " · " + d.contenido, repara: h + " intentó reparar su palabra con " + o,
+    promete: h + " prometió dos unidades de alimento a " + o,
+    entrega: h + " dio comida a " + o + " para " + d.motivo + (d.via === "trato" ? " (al darle de lo que llevaba)" : "") + (d.beneficiario && d.beneficiario !== d.a ? " · se la había prometido a " + nombre(d.beneficiario) : ""),
+    juzga: h + " juzgó la promesa de " + o + " · " + d.contenido + (d.hambre_ajena != null ? " (su hambre " + d.hambre_propia + ", la de quien la recibió " + d.hambre_ajena + ")" : ""),
+    repara: h + (d.resultado ? " reparó su palabra con " + o + " · " + o + ({ perdona: " le perdona", "acepta con reservas": " lo acepta con reservas", rechaza: " no lo acepta" }[d.resultado] || "") : " intentó reparar su palabra con " + o),
+    rechaza_promesa: h + " no aceptó otra promesa de " + o + " · ya le había fallado " + d.fallos + (d.fallos === 1 ? " vez" : " veces"),
+    criterio_relaciones: "Comienza el criterio de relaciones F4.3",
     tomar_distancia: h + " tomó distancia tras el incumplimiento", convive: h + (d.motivo==="acompañar a un aprendiz conocido"?" pasó un rato con ":" descansó con ") + o,
     esperan: h + " y " + o + " se prepararon para criar", nace: "Nació " + h, crece: h + " llegó a la etapa de " + d.etapa,
     enseña: h + " enseñó a " + o + " dónde encontrar agua", alimenta: h + " alimentó a " + o, da_agua: h + " dio de beber a " + o,
@@ -56,7 +60,7 @@ export function fraseVida(ev, nombre = id => "habitante " + id) {
 }
 
 export function esAvisoSeguido(ev, ids) {
-  return ["vidas.nace","habitante.muere","vidas.juzga","vidas.repara","vidas.enseña","vidas.crece","vidas.interpreta","vidas.nuevo_cuidado","vidas.relevo_efectivo","vidas.ayuda_aceptada","vidas.duelo"].includes(ev.tipo) &&
+  return ["vidas.nace","habitante.muere","vidas.juzga","vidas.repara","vidas.rechaza_promesa","vidas.enseña","vidas.crece","vidas.interpreta","vidas.nuevo_cuidado","vidas.relevo_efectivo","vidas.ayuda_aceptada","vidas.duelo"].includes(ev.tipo) &&
     [ev.datos.id, ev.datos.a, ...(ev.datos.progenitores || [])].some(i => ids.includes(i));
 }
 

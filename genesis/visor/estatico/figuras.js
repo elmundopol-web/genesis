@@ -32,10 +32,15 @@ const OJOS = [[92, 62, 40], [74, 96, 58], [64, 100, 134], [118, 88, 52], [84, 86
 export function aspecto(d, paletas) {
   const id = d.id | 0;
   const peinado = (id * 7 + (d.pelo | 0) * 3) % 5; // 0 corto, 1 media melena, 2 largo, 3 moño, 4 rapado
+  // con los años el pelo encanece y la espalda se curva: por tramos, para que la caché no crezca
+  const canas = d.anios >= 50 ? Math.min(1, Math.floor((d.anios - 45) / 5) * 0.22) : 0;
+  const peloBase = paletas.pelo[(d.pelo | 0) % paletas.pelo.length];
   return {
     id,
+    mayor: d.anios >= 58,
+    nino: d.etapa === "infancia",
     piel: paletas.piel[(d.piel | 0) % paletas.piel.length],
-    pelo: paletas.pelo[(d.pelo | 0) % paletas.pelo.length],
+    pelo: canas ? peloBase.map((v, i) => Math.round(v + ([206, 204, 198][i] - v) * canas)) : peloBase,
     ropa: paletas.ropa[(d.ropa | 0) % paletas.ropa.length],
     peinado,
     barba: (peinado === 4 || peinado === 0) && id % 3 === 0,
@@ -47,16 +52,34 @@ export function aspecto(d, paletas) {
     ojos: OJOS[(id * 3) % OJOS.length],
     manga: id % 3 === 1 ? 0 : 1, // 1 manga larga, 0 remangada
     complexion: 0.92 + ((id * 13) % 7) * 0.025, // anchura de hombros y cuerpo
-    clave: `${id}-${d.piel | 0}-${d.pelo | 0}-${d.ropa | 0}`, // identifica el dibujo en la caché
+    clave: `${id}-${d.piel | 0}-${d.pelo | 0}-${d.ropa | 0}-${canas}-${d.anios >= 58 ? 1 : 0}-${d.etapa === "infancia" ? 1 : 0}`, // identifica el dibujo en la caché
   };
 }
 
 /* Qué pose corresponde a la actividad del motor. `recibe` indica que otra persona le está dando. */
+const POSE_DE_GESTO = {
+  entrega: "da", alimenta: "da", da_agua: "da", corresponde: "da", repara: "da", deja_racion: "da",
+  promete: "ofrece", rechaza_promesa: "rechaza", rehusa: "rechaza", negar: "rechaza",
+  convive: "sienta", descanso_compartido: "sienta", protege: "cuida",
+};
+const POSE_DE_ACTIVIDAD = {
+  prometiendo: "ofrece", "reparando su palabra": "da", "en compañía": "sienta", cuidando: "cuida",
+};
+
 export function poseDe(d, anda, recibe = false) {
-  // quien lleva madera la carga a la espalda mientras anda o espera: es carga real del inventario
-  const haz = d.madera > 0 ? "+haz" : "";
+  // quien lleva madera la carga a la espalda mientras anda o espera: es carga real del inventario;
+  // quien lleva comida, un cesto al costado
+  const haz = d.madera > 0 ? "+haz" : d.comida > 0 ? "+cesto" : "";
   if (anda) return "anda" + haz;
   if (recibe && d.actividad !== "durmiendo") return "recibe";
+  if (d.actividad !== "durmiendo" && d.actividad !== "caminando") {
+    const gesto = POSE_DE_GESTO[d.gesto] || POSE_DE_ACTIVIDAD[d.actividad];
+    if (gesto) return gesto;
+  }
+  if (d.actividad === "quieto" || d.actividad === "esperando cuidado") {
+    if (d.animo === "duelo") return "abatido";
+    if (d.animo === "enfado") return "cruza";
+  }
   switch (d.actividad) {
     case "talando": return "tala";
     case "construyendo": return "construye";
@@ -71,6 +94,45 @@ export function poseDe(d, anda, recibe = false) {
     case "hablando": return "habla" + haz;
     default: return "quieto" + haz;
   }
+}
+
+/* Cesto de mimbre al costado con lo que ha recogido. */
+function cesto(c, u, x, y) {
+  const w = u * 0.095;
+  const h = u * 0.075;
+  c.fillStyle = "rgb(84,58,34)";
+  c.beginPath();
+  c.ellipse(x, y + h * 0.2, w * 1.08, h * 1.12, 0, 0, TAU);
+  c.fill();
+  // fruto asomando: bayas y semillas
+  for (const [dx, dy, col] of [[-0.35, -0.55, "rgb(196,64,86)"], [0.25, -0.62, "rgb(214,92,104)"], [0, -0.75, "rgb(218,186,96)"]]) {
+    c.fillStyle = col;
+    c.beginPath();
+    c.arc(x + dx * w, y + dy * h, w * 0.32, 0, TAU);
+    c.fill();
+  }
+  c.fillStyle = "rgb(168,124,72)";
+  c.beginPath();
+  c.moveTo(x - w, y - h * 0.3);
+  c.quadraticCurveTo(x, y - h * 0.05, x + w, y - h * 0.3);
+  c.lineTo(x + w * 0.82, y + h * 0.95);
+  c.quadraticCurveTo(x, y + h * 1.2, x - w * 0.82, y + h * 0.95);
+  c.closePath();
+  c.fill();
+  c.strokeStyle = "rgba(96,66,38,0.8)";
+  c.lineWidth = Math.max(0.6, u * 0.008);
+  for (let k = 0; k < 3; k++) {
+    c.beginPath();
+    c.moveTo(x - w * 0.9, y + h * (0.05 + k * 0.32));
+    c.quadraticCurveTo(x, y + h * (0.3 + k * 0.32), x + w * 0.9, y + h * (0.05 + k * 0.32));
+    c.stroke();
+  }
+  // asa
+  c.strokeStyle = "rgb(120,86,50)";
+  c.lineWidth = Math.max(0.8, u * 0.014);
+  c.beginPath();
+  c.arc(x, y - h * 0.3, w * 0.75, Math.PI * 1.1, Math.PI * 1.9);
+  c.stroke();
 }
 
 /* Haz de leña atado, en diagonal sobre la espalda. */
@@ -197,6 +259,16 @@ function lejana(c, s, a, poseCompleta, t, luz) {
   const bote = pose === "anda" ? Math.abs(Math.sin(t * 9)) * s * 0.05 : 0;
   const y = -bote;
   const agacha = pose === "recolecta" || pose === "bebe" || pose === "guarda" ? 0.16 : pose === "construye" ? 0.08 : 0;
+  if (extra === "cesto") {
+    c.fillStyle = "rgb(150,110,64)";
+    c.beginPath();
+    c.ellipse(s * 0.17, y - s * 0.42, s * 0.09, s * 0.07, 0, 0, TAU);
+    c.fill();
+    c.fillStyle = "rgb(208,92,96)";
+    c.beginPath();
+    c.arc(s * 0.17, y - s * 0.47, s * 0.04, 0, TAU);
+    c.fill();
+  }
   if (extra === "haz") {
     c.strokeStyle = "rgb(120,84,52)";
     c.lineWidth = Math.max(2, s * 0.09);
@@ -363,6 +435,57 @@ function parametros(pose, tt, u) {
       p.cabeza = 0.2;
       p.objeto = "cesto";
       break;
+    case "ofrece":
+      // tiende la mano abierta: promete o propone, sin entregar nada todavía
+      p.inclina = 0.06;
+      p.muslo = [0.18, -0.1];
+      p.hombro = [1.05 + Math.sin(tt * 2) * 0.05, 0.05];
+      p.codo = [0.35, 0.25];
+      p.cabeza = 0.02;
+      break;
+    case "rechaza":
+      // echa el cuerpo atrás y levanta la palma: no acepta
+      p.inclina = -0.1;
+      p.muslo = [-0.12, 0.2];
+      p.rodilla = [0.1, 0.18];
+      p.hombro = [1.45 + Math.sin(tt * 4) * 0.06, -0.2];
+      p.codo = [1.25, 0.2];
+      p.cabeza = -0.16;
+      break;
+    case "sienta":
+      // sentado en el suelo junto a alguien
+      p.cadera = 0.27;
+      p.muslo = [1.5, 1.38];
+      p.rodilla = [1.5, 1.6];
+      p.hombro = [0.45, 0.25 + Math.sin(tt * 1.1) * 0.04];
+      p.codo = [0.6, 0.3];
+      p.inclina = 0.05;
+      p.cabeza = 0.04 + Math.sin(tt * 0.9) * 0.03;
+      break;
+    case "cuida":
+      // agachado hacia quien cuida, con el brazo por delante
+      p.inclina = 0.42;
+      p.cadera = 0.1;
+      p.muslo = [0.8, 0.25];
+      p.rodilla = [1.1, 0.7];
+      p.hombro = [1.2 + Math.sin(tt * 1.6) * 0.06, 0.9];
+      p.codo = [0.3, 0.5];
+      p.cabeza = 0.18;
+      break;
+    case "abatido":
+      // duelo: hombros caídos y la cabeza baja
+      p.inclina = 0.14;
+      p.hombro = [0.04, -0.02];
+      p.codo = [0.12, 0.1];
+      p.cabeza = 0.38 + Math.sin(tt * 0.8) * 0.02;
+      break;
+    case "cruza":
+      // enfado: brazos cruzados y la barbilla alta
+      p.hombro = [0.55, 0.5];
+      p.codo = [2.25, 2.15];
+      p.cabeza = -0.1;
+      p.bote = Math.sin(tt * 1.4) * u * 0.004;
+      break;
     case "habla":
       p.hombro = [0.9 + Math.sin(tt * 6) * 0.25, 0.1];
       p.codo = [1.1 + Math.sin(tt * 3 + 1) * 0.3, 0.3];
@@ -388,7 +511,30 @@ function parametros(pose, tt, u) {
 
 /* Dibuja a una persona con los pies en (x, y) y `s` píxeles de alto.
    `mira` es 1 si mira a la derecha y −1 si a la izquierda. */
+/* Dibuja a una persona con los pies en (x, y) y `s` píxeles de alto (F4.4: figura de tres cuartos).
+   `mira` es 1 si mira a la derecha y −1 si a la izquierda. */
 export function dibujarPersona(c, x, y, s, a, poseCompleta, mira, t, fase) {
+  const [pose, extra] = poseCompleta.split("+");
+  c.save();
+  c.translate(x, y);
+  c.scale(mira < 0 ? -1 : 1, 1);
+  const L = mira < 0 ? 1 : -1; // la luz llega de arriba a la izquierda del mundo
+  const tt = t + fase;
+  if (s < 22) {
+    lejanaChibi(c, s, a, pose, extra, tt, L);
+  } else {
+    const p = parametros(pose, tt, s);
+    if (a.mayor && pose !== "duerme") {
+      p.inclina += 0.14;
+      p.cabeza += 0.12;
+    }
+    figuraChibi(c, s, a, pose, extra, p, tt, L);
+  }
+  c.restore();
+}
+
+/* La figura de cinco cabezas y media de F2.5, que conserva el retrato de la ficha. */
+export function dibujarPersonaF25(c, x, y, s, a, poseCompleta, mira, t, fase) {
   const [pose, extra] = poseCompleta.split("+");
   c.save();
   c.translate(x, y);
@@ -663,6 +809,7 @@ export function dibujarPersona(c, x, y, s, a, poseCompleta, mira, t, fase) {
   // brazo de delante y lo que lleva en la mano
   const [mx, my] = brazo(0, ropa, false);
   objetoEnMano(c, p.objeto, mx, my, manoTrasera, u, tt, luz);
+  if (extra === "cesto") cesto(c, u, u * 0.15, -u * 0.08);
   c.restore(); // torso
 
   // pierna de delante, sobre la falda
@@ -993,7 +1140,8 @@ function objetoEnMano(c, objeto, mx, my, manoTrasera, u, tt, luz) {
 // tamaño y orientación, y se reutiliza. De muy cerca (pocas personas a la vista) se dibuja en
 // directo, para que el movimiento sea continuo.
 const RITMO = { anda: [8.4, 12], recolecta: [4.2, 8], pesca: [1.3, 8], bebe: [3.6, 8], come: [4.5, 8], da: [2.6, 8],
-                habla: [3, 8], duerme: [1.2, 6], quieto: [1.4, 6], tala: [3.2, 10], construye: [3, 8], guarda: [2, 6] };
+                habla: [3, 8], duerme: [1.2, 6], quieto: [1.4, 6], tala: [3.2, 10], construye: [3, 8], guarda: [2, 6],
+                ofrece: [2, 6], rechaza: [4, 6], sienta: [1.1, 6], cuida: [1.6, 6], abatido: [0.8, 4], cruza: [1.4, 4] };
 const sprites = new Map();
 const LIMITE_SPRITES = 900;
 const DIRECTO = 76; // a partir de este tamaño, en píxeles, se dibuja en directo
@@ -1518,4 +1666,333 @@ function peloDeRetrato(c, a, pelo, az) {
     c.fill();
     mechones([[31, 12, 36, 4, 45, 9], [32, 15, 40, 9, 46, 13]], rgb(tono(pelo, 1.6), 0.5), 1);
   }
+}
+
+// -- F4.4: figura de tres cuartos con cabeza grande ----------------------------------------
+// Vista desde arriba en tres cuartos: cabeza de un tercio de la altura, cuerpo corto y
+// legible a la escala habitual. Cada pieza con tres tonos en bandas (luz arriba a la
+// izquierda, sombra abajo a la derecha) y contorno oscuro de su propio color. La sombra
+// de contacto es el azul común de la paleta, desplazada abajo a la derecha.
+
+const SOMBRA_FIG = "rgba(22,30,62,0.38)";
+const oscuro = (col, k = 0.38) => [Math.round(col[0] * k), Math.round(col[1] * k + 2), Math.round(col[2] * (k + 0.06) + 8)];
+const claro = (col) => [Math.min(255, Math.round(col[0] * 1.14 + 20)), Math.min(255, Math.round(col[1] * 1.12 + 16)), Math.min(255, Math.round(col[2] * 1.05 + 8))];
+const frio = (col) => [Math.round(col[0] * 0.68), Math.round(col[1] * 0.68 + 4), Math.round(col[2] * 0.76 + 12)];
+
+/* Relleno en tres bandas: luz, base y sombra, en la diagonal de la luz. */
+function tresTonos(c, col, x0, y0, x1, y1, L) {
+  // L = -1: la luz entra por la izquierda de la figura (mira a la derecha); 1, por la derecha
+  const g = c.createLinearGradient(L < 0 ? x0 : x1, y0, L < 0 ? x1 : x0, y1);
+  const l = claro(col), b = col, s = frio(col);
+  g.addColorStop(0, rgb(l)); g.addColorStop(0.32, rgb(l));
+  g.addColorStop(0.33, rgb(b)); g.addColorStop(0.66, rgb(b));
+  g.addColorStop(0.67, rgb(s)); g.addColorStop(1, rgb(s));
+  return g;
+}
+
+function perfil(c, col, lw) {
+  c.strokeStyle = rgb(oscuro(col));
+  c.lineWidth = lw;
+  c.lineJoin = "round";
+  c.lineCap = "round";
+  c.stroke();
+}
+
+/* Un miembro: cápsula entre dos puntos, con su color en tres tonos y contorno. */
+function capsula(c, x1, y1, x2, y2, r, col, L, lw) {
+  const ang = Math.atan2(y2 - y1, x2 - x1);
+  const nx = Math.cos(ang + Math.PI / 2) * r;
+  const ny = Math.sin(ang + Math.PI / 2) * r;
+  c.beginPath();
+  c.moveTo(x1 + nx, y1 + ny);
+  c.lineTo(x2 + nx, y2 + ny);
+  c.arc(x2, y2, r, ang + Math.PI / 2, ang - Math.PI / 2, true);
+  c.lineTo(x1 - nx, y1 - ny);
+  c.arc(x1, y1, r, ang - Math.PI / 2, ang + Math.PI / 2, true);
+  c.closePath();
+  c.fillStyle = tresTonos(c, col, Math.min(x1, x2) - r, Math.min(y1, y2) - r, Math.max(x1, x2) + r, Math.max(y1, y2) + r, L);
+  c.fill();
+  perfil(c, col, lw);
+}
+
+function bolaTono(c, x, y, r, col, L, lw) {
+  c.beginPath();
+  c.arc(x, y, r, 0, TAU);
+  c.fillStyle = tresTonos(c, col, x - r, y - r, x + r, y + r, L);
+  c.fill();
+  perfil(c, col, lw);
+}
+
+/* La figura entera con los pies en (0, 0), mirando a la derecha (+x). */
+function figuraChibi(c, s, a, pose, extra, p, tt, L) {
+  const nino = a.nino;
+  const R = s * (nino ? 0.215 : 0.17); // radio de la cabeza: un tercio de la altura (algo más en la infancia)
+  const lw = Math.max(1, s * 0.032);
+  const piel = a.piel, ropa = a.ropa, calzas = a.calzas;
+  const ancho = (nino ? 0.27 : 0.3) * a.complexion;
+
+  // sombra de contacto, azul y abajo a la derecha
+  c.fillStyle = SOMBRA_FIG;
+  c.beginPath();
+  c.ellipse(s * 0.07, s * 0.015, s * (0.2 + (p.cadera ? 0.05 : 0)), s * 0.065, 0, 0, TAU);
+  c.fill();
+
+  if (pose === "duerme") {
+    // tumbado de lado sobre una manta de su color
+    c.fillStyle = rgb(oscuro(ropa, 0.75));
+    c.beginPath();
+    c.ellipse(-s * 0.02, -s * 0.07, s * 0.44, s * 0.11, 0, 0, TAU);
+    c.fill();
+    const cuerpo = new Path2D();
+    cuerpo.ellipse(-s * 0.06, -s * 0.13, s * 0.3, s * 0.11, 0, 0, TAU);
+    c.fillStyle = tresTonos(c, ropa, -s * 0.36, -s * 0.24, s * 0.24, -s * 0.02, L);
+    c.fill(cuerpo);
+    c.strokeStyle = rgb(oscuro(ropa));
+    c.lineWidth = lw;
+    c.stroke(cuerpo);
+    c.save();
+    c.translate(s * 0.3, -s * 0.15);
+    c.rotate(0.35);
+    cabezaChibi(c, R * 0.92, a, L, lw, true, s);
+    c.restore();
+    return;
+  }
+
+  const bote = p.bote;
+  const caderaY = -s * (0.3 - p.cadera * 0.75) - bote;
+  const largoPierna = s * 0.3;
+  const muslo = largoPierna * 0.5;
+  const pierna = (lado, col) => {
+    const xh = lado * s * 0.055;
+    const a1 = p.muslo[lado < 0 ? 0 : 1];
+    const a2 = a1 - p.rodilla[lado < 0 ? 0 : 1];
+    const xr = xh + Math.sin(a1) * muslo;
+    const yr = caderaY + Math.cos(a1) * muslo;
+    const xp = xr + Math.sin(a2) * muslo;
+    const yp = Math.min(-bote * 0.2, yr + Math.cos(a2) * muslo);
+    capsula(c, xh, caderaY, xr, yr, s * 0.05, col, L, lw);
+    capsula(c, xr, yr, xp, yp, s * 0.045, col, L, lw);
+    // pie con calzado
+    c.beginPath();
+    c.ellipse(xp + s * 0.03, yp - s * 0.01, s * 0.055, s * 0.032, 0, 0, TAU);
+    c.fillStyle = rgb([70, 50, 36]);
+    c.fill();
+    perfil(c, [70, 50, 36], lw * 0.9);
+  };
+  // pierna trasera, más oscura
+  pierna(1, frio(calzas));
+
+  // torso inclinado sobre la cadera
+  c.save();
+  c.translate(0, caderaY);
+  c.rotate(p.inclina);
+  const alto = s * (nino ? 0.24 : 0.32);
+  const hombroY = -alto;
+  const brazo = (lado, col) => {
+    const xs = lado * s * ancho * 0.42;
+    const ys = hombroY + s * 0.04;
+    const a1 = p.hombro[lado < 0 ? 0 : 1];
+    const a2 = a1 + p.codo[lado < 0 ? 0 : 1];
+    const l1 = s * (nino ? 0.11 : 0.13);
+    const xc = xs + Math.sin(a1) * l1;
+    const yc = ys + Math.cos(a1) * l1;
+    const xm = xc + Math.sin(a2) * l1;
+    const ym = yc + Math.cos(a2) * l1;
+    capsula(c, xs, ys, xc, yc, s * 0.045, col, L, lw);
+    capsula(c, xc, yc, xm, ym, s * 0.04, a.manga ? col : piel, L, lw);
+    bolaTono(c, xm, ym, s * 0.038, piel, L, lw * 0.8);
+    return [xm, ym];
+  };
+  // capa por detrás
+  if (a.adorno === 2 && !nino) {
+    c.beginPath();
+    c.moveTo(-s * ancho * 0.5, hombroY + s * 0.02);
+    c.quadraticCurveTo(-s * ancho * 0.85, -s * 0.05, -s * ancho * 0.6, s * 0.05);
+    c.lineTo(s * ancho * 0.1, s * 0.02);
+    c.lineTo(s * ancho * 0.2, hombroY + s * 0.02);
+    c.closePath();
+    c.fillStyle = tresTonos(c, a.capa, -s * 0.3, hombroY, s * 0.1, s * 0.05, L);
+    c.fill();
+    perfil(c, a.capa, lw);
+  }
+  const manoTrasera = brazo(-1, frio(ropa));
+  if (extra === "haz") haz(c, s * 0.85, -s * 0.24, hombroY - s * 0.12, s * 0.02, -s * 0.02);
+  // túnica: hombros redondeados y vuelo hasta medio muslo
+  const t = new Path2D();
+  const bajo = s * (0.12 - p.cadera * 0.4);
+  t.moveTo(-s * ancho * 0.48, hombroY + s * 0.05);
+  t.quadraticCurveTo(-s * ancho * 0.45, hombroY - s * 0.01, -s * ancho * 0.2, hombroY);
+  t.lineTo(s * ancho * 0.2, hombroY);
+  t.quadraticCurveTo(s * ancho * 0.45, hombroY - s * 0.01, s * ancho * 0.48, hombroY + s * 0.05);
+  t.quadraticCurveTo(s * ancho * 0.5, -s * 0.05, s * (ancho * 0.56 + p.falda), bajo);
+  t.quadraticCurveTo(0, bajo + s * 0.035, -s * (ancho * 0.56 - p.falda), bajo);
+  t.quadraticCurveTo(-s * ancho * 0.5, -s * 0.05, -s * ancho * 0.48, hombroY + s * 0.05);
+  t.closePath();
+  c.fillStyle = tresTonos(c, ropa, -s * ancho * 0.5, hombroY, s * ancho * 0.5, bajo, L);
+  c.fill(t);
+  // cinturón
+  c.fillStyle = rgb(oscuro(ropa, 0.55));
+  c.fillRect(-s * ancho * 0.49, -s * 0.03, s * ancho * 0.98, s * 0.035);
+  c.strokeStyle = rgb(oscuro(ropa));
+  c.lineWidth = lw;
+  c.lineJoin = "round";
+  c.stroke(t);
+  // pañuelo o zurrón
+  if (a.adorno === 1) {
+    c.beginPath();
+    c.ellipse(0, hombroY + s * 0.01, s * ancho * 0.36, s * 0.035, 0, 0, TAU);
+    c.fillStyle = rgb(a.panuelo);
+    c.fill();
+    perfil(c, a.panuelo, lw * 0.8);
+  } else if (a.adorno === 3 && !nino) {
+    c.strokeStyle = rgb([84, 58, 36]);
+    c.lineWidth = lw * 1.2;
+    c.beginPath();
+    c.moveTo(s * ancho * 0.3, hombroY + s * 0.01);
+    c.lineTo(-s * ancho * 0.35, -s * 0.02);
+    c.stroke();
+    c.beginPath();
+    c.ellipse(-s * ancho * 0.48, -s * 0.0, s * 0.06, s * 0.05, 0, 0, TAU);
+    c.fillStyle = rgb([150, 106, 62]);
+    c.fill();
+    perfil(c, [150, 106, 62], lw * 0.8);
+  }
+  // cabeza: grande, sobre los hombros
+  c.save();
+  c.translate(s * 0.01, hombroY - R * 0.82);
+  c.rotate(p.cabeza * 0.7);
+  cabezaChibi(c, R, a, L, lw, false, s);
+  c.restore();
+  // brazo de delante y lo que lleva
+  const [mx, my] = brazo(1, ropa);
+  objetoEnMano(c, p.objeto, mx, my, manoTrasera, s * 0.85, tt, L);
+  if (extra === "cesto") cesto(c, s * 0.9, s * 0.17, -s * 0.03);
+  c.restore();
+  // pierna de delante
+  pierna(-1, calzas);
+}
+
+function cabezaChibi(c, R, a, L, lw, dormido, s) {
+  const pelo = a.pelo;
+  // pelo por detrás (melena, largo)
+  if (a.peinado === 1 || a.peinado === 2) {
+    c.beginPath();
+    const largo = a.peinado === 2 ? 1.25 : 0.85;
+    c.moveTo(-R * 1.02, -R * 0.1);
+    c.quadraticCurveTo(-R * 1.15, R * largo, -R * 0.2, R * largo);
+    c.lineTo(R * 0.55, R * 0.55);
+    c.lineTo(R * 0.4, -R * 0.4);
+    c.closePath();
+    c.fillStyle = rgb(frio(pelo));
+    c.fill();
+    perfil(c, pelo, lw);
+  }
+  // cara
+  bolaTono(c, 0, 0, R, a.piel, L, lw);
+  // oreja hacia el lado de la vista
+  c.beginPath();
+  c.ellipse(-R * 0.1, R * 0.12, R * 0.16, R * 0.2, 0, 0, TAU);
+  c.fillStyle = rgb(frio(a.piel));
+  c.fill();
+  // pelo por arriba: casquete, con raya hacia la frente
+  c.beginPath();
+  if (a.peinado === 4) {
+    c.arc(0, 0, R * 1.0, Math.PI * 1.08, Math.PI * 1.95);
+    c.quadraticCurveTo(R * 0.2, -R * 0.62, -R * 0.98, -R * 0.15);
+  } else {
+    c.arc(0, -R * 0.04, R * 1.06, Math.PI * 0.95, Math.PI * 2.02);
+    c.quadraticCurveTo(R * 0.75, -R * 0.35, R * 0.3, -R * 0.42);
+    c.quadraticCurveTo(-R * 0.1, -R * 0.15, -R * 0.55, -R * 0.08);
+    c.quadraticCurveTo(-R * 0.8, R * 0.15, -R * 1.02, R * 0.18);
+  }
+  c.closePath();
+  c.fillStyle = tresTonos(c, pelo, -R, -R * 1.1, R, R * 0.2, L);
+  c.fill();
+  perfil(c, pelo, lw);
+  if (a.peinado === 3) {
+    // moño
+    bolaTono(c, -R * 0.45, -R * 0.95, R * 0.34, pelo, L, lw);
+  }
+  if (a.barba) {
+    c.beginPath();
+    c.moveTo(R * 0.15, R * 0.45);
+    c.quadraticCurveTo(R * 0.55, R * 1.05, R * 0.95, R * 0.35);
+    c.quadraticCurveTo(R * 0.6, R * 0.6, R * 0.15, R * 0.45);
+    c.fillStyle = rgb(frio(pelo));
+    c.fill();
+  }
+  if (s < 26) return;
+  // ojos hacia donde mira; cerrados si duerme
+  c.fillStyle = "rgb(30,24,24)";
+  c.strokeStyle = "rgb(30,24,24)";
+  c.lineWidth = Math.max(0.8, R * 0.09);
+  for (const ox of [R * 0.38, R * 0.8]) {
+    if (dormido) {
+      c.beginPath();
+      c.moveTo(ox - R * 0.1, R * 0.12);
+      c.lineTo(ox + R * 0.1, R * 0.12);
+      c.stroke();
+    } else {
+      c.beginPath();
+      c.ellipse(ox, R * 0.1, R * 0.08, R * 0.12, 0, 0, TAU);
+      c.fill();
+    }
+  }
+  // mejilla
+  c.fillStyle = "rgba(220,96,86,0.28)";
+  c.beginPath();
+  c.ellipse(R * 0.6, R * 0.42, R * 0.17, R * 0.1, 0, 0, TAU);
+  c.fill();
+}
+
+/* De lejos: la misma figura reducida a sus masas de color. */
+function lejanaChibi(c, s, a, pose, extra, t, L) {
+  c.fillStyle = SOMBRA_FIG;
+  c.beginPath();
+  c.ellipse(s * 0.08, s * 0.02, s * 0.22, s * 0.07, 0, 0, TAU);
+  c.fill();
+  const lw = Math.max(1, s * 0.06);
+  if (pose === "duerme") {
+    c.fillStyle = rgb(a.ropa);
+    c.beginPath();
+    c.ellipse(-s * 0.04, -s * 0.12, s * 0.34, s * 0.12, 0, 0, TAU);
+    c.fill();
+    perfil(c, a.ropa, lw);
+    c.fillStyle = rgb(a.piel);
+    c.beginPath();
+    c.arc(s * 0.3, -s * 0.14, s * 0.13, 0, TAU);
+    c.fill();
+    perfil(c, a.piel, lw);
+    return;
+  }
+  const agacha = pose === "recolecta" || pose === "bebe" || pose === "guarda" || pose === "cuida" ? 0.14 : pose === "sienta" ? 0.2 : 0;
+  const bote = pose === "anda" ? Math.abs(Math.sin(t * 9)) * s * 0.05 : 0;
+  const paso = pose === "anda" ? Math.sin(t * 9) * s * 0.07 : 0;
+  c.fillStyle = rgb(oscuro(a.calzas, 0.8));
+  c.fillRect(-s * 0.09 + paso, -s * 0.28 - bote, s * 0.08, s * 0.28);
+  c.fillRect(s * 0.01 - paso, -s * 0.28 - bote, s * 0.08, s * 0.28);
+  const y = -bote + agacha * s;
+  c.beginPath();
+  c.moveTo(-s * 0.16, y - s * 0.24);
+  c.lineTo(-s * 0.15, y - s * 0.58);
+  c.quadraticCurveTo(0, y - s * 0.64, s * 0.15, y - s * 0.58);
+  c.lineTo(s * 0.16, y - s * 0.24);
+  c.closePath();
+  c.fillStyle = tresTonos(c, a.ropa, -s * 0.16, y - s * 0.6, s * 0.16, y - s * 0.24, L);
+  c.fill();
+  perfil(c, a.ropa, lw * 0.8);
+  if (extra === "haz" || extra === "cesto") {
+    c.fillStyle = extra === "haz" ? "rgb(140,98,58)" : "rgb(176,132,78)";
+    c.fillRect(extra === "haz" ? -s * 0.24 : s * 0.12, y - s * 0.5, s * 0.1, s * 0.16);
+  }
+  c.beginPath();
+  c.arc(s * 0.01, y - s * 0.78, s * 0.19, 0, TAU);
+  c.fillStyle = tresTonos(c, a.piel, -s * 0.2, y - s * 0.97, s * 0.2, y - s * 0.59, L);
+  c.fill();
+  perfil(c, a.piel, lw * 0.8);
+  c.beginPath();
+  c.arc(s * 0.0, y - s * 0.8, s * 0.2, Math.PI * 0.95, Math.PI * 2.05);
+  c.closePath();
+  c.fillStyle = rgb(a.pelo);
+  c.fill();
 }

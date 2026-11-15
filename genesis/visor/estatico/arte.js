@@ -822,6 +822,12 @@ function atlasDeEstacion(estacion, semilla) {
   en(5, 3, () => bayas(c, 0, 0, estacion));
   en(6, 3, () => hojarasca(c, 0, 0, estacion, semilla));
   en(7, 3, () => guijarros(c, 0, 0, semilla));
+  // F4.4: volumen y silueta. Árboles, arbustos, rocas y matas reciben tres tonos en la
+  // diagonal de la luz y un contorno oscuro de su propio color; la hierba y las flores no.
+  for (let fila = 0; fila < 3; fila++) {
+    // juncos y matas del prado: contorno suave, para que no salpiquen la hierba de manchas
+    for (let col = 0; col < COLUMNAS; col++) perfilar(base, col, fila, fila === 2 && col >= 4);
+  }
   // Versiones a la mitad y a la cuarta parte, para reducir sin dientes de sierra.
   const niveles = [base];
   for (let n = 1; n < 4; n++) {
@@ -836,15 +842,58 @@ function atlasDeEstacion(estacion, semilla) {
   return niveles;
 }
 
+/* Contorno y tres tonos de una pieza del atlas, sobre su propia celda. */
+function perfilar(base, col, fila, suave = false) {
+  const pieza = lienzo(CW, CH);
+  const p = pieza.getContext("2d");
+  p.drawImage(base, col * CW, fila * CH, CW, CH, 0, 0, CW, CH);
+  // tres tonos: luz cálida arriba a la izquierda, sombra fría abajo a la derecha
+  p.globalCompositeOperation = "source-atop";
+  const g = p.createLinearGradient(CW * 0.15, CH * 0.1, CW * 0.85, CH * 0.85);
+  g.addColorStop(0, "rgba(255,236,170,0.20)");
+  g.addColorStop(0.36, "rgba(255,236,170,0.04)");
+  g.addColorStop(0.5, "rgba(0,0,0,0)");
+  g.addColorStop(0.72, "rgba(18,30,70,0.20)");
+  g.addColorStop(1, "rgba(18,30,70,0.38)");
+  p.fillStyle = g;
+  p.fillRect(0, 0, CW, CH);
+  // contorno: la silueta oscurecida, desplazada alrededor
+  const contorno = lienzo(CW, CH);
+  const k = contorno.getContext("2d");
+  k.filter = suave ? "brightness(0.62)" : "brightness(0.3) saturate(1.4)";
+  const o = (suave ? 0.9 : 1.7) * ESCALA;
+  for (const [dx, dy] of [[o, 0], [-o, 0], [0, o], [0, -o], [o * 0.7, o * 0.7], [-o * 0.7, o * 0.7], [o * 0.7, -o * 0.7], [-o * 0.7, -o * 0.7]]) {
+    k.drawImage(pieza, dx, dy);
+  }
+  k.filter = "none";
+  k.drawImage(pieza, 0, 0);
+  const c = base.getContext("2d");
+  c.clearRect(col * CW, fila * CH, CW, CH);
+  c.drawImage(contorno, col * CW, fila * CH);
+}
+
+/* El mismo atlas, más oscuro y frío: copas del interior del bosque, a la sombra de las vecinas. */
+function oscurecer(niveles) {
+  return niveles.map((n) => {
+    const l = lienzo(n.width, n.height);
+    const c = l.getContext("2d");
+    c.drawImage(n, 0, 0);
+    c.globalCompositeOperation = "source-atop";
+    c.fillStyle = "rgba(10,26,36,0.34)";
+    c.fillRect(0, 0, l.width, l.height);
+    return l;
+  });
+}
+
 function sombraBlanda() {
   const l = lienzo(96, 48);
   const c = l.getContext("2d");
   c.translate(48, 24);
   c.scale(1, 0.5);
   const g = c.createRadialGradient(0, 0, 4, 0, 0, 46);
-  g.addColorStop(0, "rgba(8,18,12,0.62)");
-  g.addColorStop(0.55, "rgba(8,18,12,0.34)");
-  g.addColorStop(1, "rgba(8,18,12,0)");
+  g.addColorStop(0, "rgba(22,30,62,0.62)");
+  g.addColorStop(0.55, "rgba(22,30,62,0.36)");
+  g.addColorStop(1, "rgba(22,30,62,0)");
   c.fillStyle = g;
   c.beginPath();
   c.arc(0, 0, 46, 0, TAU);
@@ -856,12 +905,15 @@ export class Arte {
   constructor(semilla) {
     this.semilla = (semilla | 0) + 2500;
     this.atlas = [0, 1, 2, 3].map((e) => atlasDeEstacion(e, this.semilla));
+    this.oscuros = [];
     this.sombra = sombraBlanda();
   }
 
-  /* Dibuja una pieza apoyada en (x, y), con `ancho` píxeles de lado a lado. */
-  pieza(c, estacion, [columna, fila], x, y, ancho) {
-    const niveles = this.atlas[estacion];
+  /* Dibuja una pieza apoyada en (x, y), con `ancho` píxeles de lado a lado.
+     `oscura`: la versión a la sombra, para el interior del bosque. */
+  pieza(c, estacion, [columna, fila], x, y, ancho, oscura = false) {
+    if (oscura && !this.oscuros[estacion]) this.oscuros[estacion] = oscurecer(this.atlas[estacion]);
+    const niveles = oscura ? this.oscuros[estacion] : this.atlas[estacion];
     const n = ancho >= CW * 0.7 ? 0 : ancho >= CW * 0.35 ? 1 : ancho >= CW * 0.17 ? 2 : 3;
     const k = 1 << n;
     const alto = (ancho * CH) / CW;

@@ -41,6 +41,7 @@ _ARCHIVOS = {
     "/figuras.js": ("figuras.js", "text/javascript; charset=utf-8"),
     "/lugares.js": ("lugares.js", "text/javascript; charset=utf-8"),
     "/construcciones.js": ("construcciones.js", "text/javascript; charset=utf-8"),
+    "/paleta.js": ("paleta.js", "text/javascript; charset=utf-8"),
 }
 _ANFITRIONES = {"127.0.0.1", "localhost", "[::1]"}
 _MAX_CUERPO = 4096

@@ -1,0 +1,29 @@
+{
+ "escena": {
+  "errores": []
+ },
+ "rendimiento": {
+  "medida_34px": {
+   "fps": 113.8,
+   "segundos": 8,
+   "visibles": 29,
+   "ancho": 1440,
+   "alto": 900,
+   "dpr": 1,
+   "zoom_px": 34,
+   "gpu": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 (0x00002F04) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+  },
+  "medida_todos": {
+   "fps": 113.9,
+   "segundos": 8,
+   "visibles": 37,
+   "ancho": 1440,
+   "alto": 900,
+   "dpr": 1,
+   "zoom_px": 20,
+   "gpu": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 (0x00002F04) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+  },
+  "errores": [],
+  "vivos": 48
+ }
+}

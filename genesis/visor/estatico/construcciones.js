@@ -27,21 +27,214 @@ const PAJA = [192, 158, 98];
 const PALO = [128, 90, 56];
 const MIMBRE = [168, 128, 78];
 
+/* Sombra proyectada de un volumen de `alto` y `ancho`: cae abajo a la derecha, azul y plana. */
+function sombraProyectada(c, u, ancho, alto) {
+  c.fillStyle = "rgba(22,30,62,0.34)";
+  c.beginPath();
+  c.moveTo(-ancho * 0.9, u * 0.02);
+  c.lineTo(ancho * 0.95, u * 0.02);
+  c.lineTo(ancho * 0.95 + alto * 0.55, u * 0.02 + alto * 0.3);
+  c.quadraticCurveTo(alto * 0.4, u * 0.08 + alto * 0.42, -ancho * 0.6 + alto * 0.35, u * 0.04 + alto * 0.3);
+  c.closePath();
+  c.fill();
+}
+
+const oscuro = (k) => [Math.round(k[0] * 0.36), Math.round(k[1] * 0.36 + 2), Math.round(k[2] * 0.42 + 8)];
+const luzDe = (k) => [Math.min(255, Math.round(k[0] * 1.16 + 18)), Math.min(255, Math.round(k[1] * 1.14 + 14)), Math.min(255, Math.round(k[2] * 1.05 + 6))];
+const sombraDe = (k) => [Math.round(k[0] * 0.66), Math.round(k[1] * 0.66 + 4), Math.round(k[2] * 0.74 + 12)];
+
+/* Choza terminada en tres cuartos: fachada de varas trenzadas con su puerta, cubierta de paja
+   a dos aguas con alero, contorno oscuro de su propio color. La luz llega de arriba a la izquierda. */
+function chozaLista(c, u, e, o, apagado, detalle) {
+  const W = u * 0.56; // media anchura de la fachada
+  const muro = u * 0.6; // alto del muro: una persona cabe por la puerta
+  const cima = u * 1.32; // alto de la cumbrera
+  const lw = Math.max(1, u * 0.022);
+  const pared = col(MIMBRE, apagado);
+  const paja = col(PAJA, apagado);
+  const desgaste = Math.max(0, Math.min(1, (900 - e.conservacion) / 800));
+  sombraProyectada(c, u, W * 1.15, cima * 0.8);
+  // zócalo de tierra apisonada
+  c.fillStyle = css(col([116, 90, 62], apagado));
+  c.beginPath();
+  c.ellipse(u * 0.02, u * 0.01, W * 1.18, u * 0.1, 0, 0, TAU);
+  c.fill();
+  // fachada: varas verticales, luz a la izquierda y sombra a la derecha
+  const g = c.createLinearGradient(-W, 0, W, 0);
+  g.addColorStop(0, css(luzDe(pared))); g.addColorStop(0.3, css(luzDe(pared)));
+  g.addColorStop(0.31, css(pared)); g.addColorStop(0.7, css(pared));
+  g.addColorStop(0.71, css(sombraDe(pared))); g.addColorStop(1, css(sombraDe(pared)));
+  c.fillStyle = g;
+  c.beginPath();
+  c.rect(-W, -muro, W * 2, muro);
+  c.fill();
+  c.strokeStyle = css(sombraDe(sombraDe(pared)), 0.7);
+  c.lineWidth = Math.max(0.7, u * 0.012);
+  c.beginPath();
+  const varas = detalle ? 11 : 6;
+  for (let k = 1; k < varas; k++) {
+    const x = -W + (k / varas) * W * 2;
+    c.moveTo(x, 0);
+    c.lineTo(x, -muro);
+  }
+  if (detalle) {
+    for (let k = 1; k < 4; k++) {
+      const y = -muro * (k / 4);
+      c.moveTo(-W, y);
+      c.quadraticCurveTo(0, y + u * 0.015, W, y);
+    }
+  }
+  c.stroke();
+  // puerta: arco oscuro a la medida de una persona
+  const dx = u * 0.06;
+  const pw = u * 0.17;
+  const ph = u * 0.56;
+  c.fillStyle = css(col([94, 66, 40], apagado));
+  c.beginPath();
+  c.moveTo(dx - pw - u * 0.035, 0);
+  c.lineTo(dx - pw - u * 0.035, -ph + pw * 0.6);
+  c.quadraticCurveTo(dx, -ph - u * 0.08, dx + pw + u * 0.035, -ph + pw * 0.6);
+  c.lineTo(dx + pw + u * 0.035, 0);
+  c.closePath();
+  c.fill();
+  c.fillStyle = "rgb(18,12,10)";
+  c.beginPath();
+  c.moveTo(dx - pw, 0);
+  c.lineTo(dx - pw, -ph + pw * 0.6);
+  c.quadraticCurveTo(dx, -ph - u * 0.02, dx + pw, -ph + pw * 0.6);
+  c.lineTo(dx + pw, 0);
+  c.closePath();
+  c.fill();
+  c.strokeStyle = css(oscuro(pared));
+  c.lineWidth = lw;
+  c.strokeRect(-W, -muro, W * 2, muro);
+  // alero: sombra de la cubierta sobre la parte alta del muro
+  c.fillStyle = "rgba(22,30,62,0.38)";
+  c.fillRect(-W, -muro, W * 2, u * 0.09);
+  // cubierta de paja a cuatro aguas, vista en tres cuartos: el faldón de la izquierda
+  // recibe la luz, el de la derecha queda en sombra; la paja baja de la cumbre al alero
+  const vuelo = u * 0.13;
+  const izq = -W - vuelo, der = W + vuelo, borde = -muro + u * 0.06;
+  const cumbre = -cima;
+  const cx = u * 0.02;
+  const cumbreIzq = cx - u * 0.16, cumbreDer = cx + u * 0.16;
+  const tejado = new Path2D();
+  tejado.moveTo(izq, borde);
+  tejado.quadraticCurveTo(izq - u * 0.02, borde - u * 0.06, izq + u * 0.08, borde - u * 0.14);
+  tejado.lineTo(cumbreIzq, cumbre);
+  tejado.lineTo(cumbreDer, cumbre);
+  tejado.lineTo(der - u * 0.08, borde - u * 0.14);
+  tejado.quadraticCurveTo(der + u * 0.02, borde - u * 0.06, der, borde);
+  tejado.quadraticCurveTo(cx, borde + u * 0.05, izq, borde);
+  tejado.closePath();
+  c.fillStyle = css(paja);
+  c.fill(tejado);
+  c.save();
+  c.clip(tejado);
+  // faldón en sombra (derecha) y lateral iluminado (izquierda)
+  c.fillStyle = css(sombraDe(sombraDe(paja)), 0.75);
+  c.beginPath();
+  c.moveTo(cumbreDer, cumbre - u * 0.05);
+  c.lineTo(der + u * 0.2, borde - u * 0.2);
+  c.lineTo(der + u * 0.2, borde + u * 0.2);
+  c.lineTo(cx + u * 0.16, borde + u * 0.2);
+  c.lineTo(cx + u * 0.04, cumbre - u * 0.05);
+  c.closePath();
+  c.fill();
+  c.fillStyle = css(luzDe(luzDe(paja)), 0.7);
+  c.beginPath();
+  c.moveTo(cumbreIzq, cumbre - u * 0.05);
+  c.lineTo(izq - u * 0.2, borde - u * 0.2);
+  c.lineTo(izq - u * 0.2, borde + u * 0.2);
+  c.lineTo(cx - u * 0.3, borde + u * 0.2);
+  c.lineTo(cx - u * 0.1, cumbre - u * 0.05);
+  c.closePath();
+  c.fill();
+  // haces de paja que bajan de la cumbre, y hileras
+  c.strokeStyle = css(sombraDe(paja), 0.75);
+  c.lineWidth = Math.max(0.7, u * 0.013);
+  const haces = detalle ? 15 : 8;
+  for (let k = 0; k <= haces; k++) {
+    const f = k / haces;
+    c.beginPath();
+    c.moveTo(cumbreIzq + (cumbreDer - cumbreIzq) * f, cumbre);
+    c.lineTo(izq + (der - izq) * f, borde + u * 0.03 * Math.sin(f * Math.PI));
+    c.stroke();
+  }
+  const hileras = detalle ? 4 : 2;
+  c.strokeStyle = css(sombraDe(sombraDe(paja)), 0.5);
+  for (let k = 1; k <= hileras; k++) {
+    const f = k / (hileras + 1);
+    const y = cumbre + (borde - cumbre) * f;
+    const a = izq + (cumbreIzq - izq) * (1 - f);
+    const b = der + (cumbreDer - der) * (1 - f);
+    c.beginPath();
+    c.moveTo(a, y);
+    c.quadraticCurveTo(cx, y + u * 0.04 * f, b, y);
+    c.stroke();
+  }
+  // desgaste real: huecos donde la conservación ha bajado
+  const huecos = Math.round(desgaste * 6);
+  for (let i = 0; i < huecos; i++) {
+    const x = izq + (0.2 + azar(e.id, i, 81) * 0.6) * (der - izq);
+    const y = borde + (0.15 + azar(e.id, i, 82) * 0.5) * (cumbre - borde);
+    c.fillStyle = "rgba(40,28,16,0.85)";
+    c.beginPath();
+    c.ellipse(x, y, u * 0.05, u * 0.025, 0, 0, TAU);
+    c.fill();
+  }
+  c.restore();
+  // flecos del alero sobre la fachada
+  c.fillStyle = css(sombraDe(paja));
+  c.beginPath();
+  c.moveTo(izq, borde);
+  for (let x = izq; x <= der; x += u * 0.045) c.lineTo(x, borde + u * (0.03 + 0.025 * azar(e.id, Math.round(x * 10), 91)));
+  c.lineTo(der, borde);
+  c.closePath();
+  c.fill();
+  c.strokeStyle = css(oscuro(paja));
+  c.lineWidth = lw;
+  c.stroke(tejado);
+  // cumbrera atada, con las puntas de los palos
+  c.strokeStyle = css(col(PALO, apagado));
+  c.lineWidth = Math.max(1.4, u * 0.035);
+  c.lineCap = "round";
+  c.beginPath();
+  c.moveTo(cumbreIzq, cumbre);
+  c.lineTo(cumbreDer, cumbre);
+  c.stroke();
+  for (const x of [cumbreIzq, cumbreDer]) {
+    c.beginPath();
+    c.moveTo(x, cumbre);
+    c.lineTo(x + (x < cx ? -1 : 1) * u * 0.07, cumbre - u * 0.11);
+    c.stroke();
+  }
+  const atras = tejado;
+  if (o.nieve > 0.02) {
+    c.save();
+    c.clip(atras);
+    c.fillStyle = `rgba(240,244,248,${0.85 * o.nieve})`;
+    c.fillRect(izq - u * 0.1, cumbre, der - izq + u * 0.2, (borde - cumbre) * 0.55);
+    c.restore();
+  }
+}
+
 /* Una choza es bastante más alta que una persona; el depósito, algo más. */
 export const ESCALA = { refugio: 1.5, deposito: 1.35 };
 
 /* Cuánto ocupa en pantalla una construcción, medida desde su base: para elegirla con el ratón. */
 export function caja(tipo, celda) {
   const u = celda * ESCALA[tipo];
-  return tipo === "refugio" ? { izq: -0.72 * u, der: 0.95 * u, arr: -1.22 * u, aba: 0.1 * u }
+  return tipo === "refugio" ? { izq: -0.75 * u, der: 0.95 * u, arr: -1.36 * u, aba: 0.1 * u }
     : { izq: -0.55 * u, der: 0.85 * u, arr: -1.0 * u, aba: 0.1 * u };
 }
 
 function sombra(c, u, ancho, alto) {
+  // contacto: una elipse azul oscura bajo la base
   const g = c.createRadialGradient(u * 0.06, 0, 0, u * 0.06, 0, u * ancho);
-  g.addColorStop(0, "rgba(8,14,10,0.5)");
-  g.addColorStop(0.65, "rgba(8,14,10,0.24)");
-  g.addColorStop(1, "rgba(8,14,10,0)");
+  g.addColorStop(0, "rgba(22,30,62,0.5)");
+  g.addColorStop(0.7, "rgba(22,30,62,0.26)");
+  g.addColorStop(1, "rgba(22,30,62,0)");
   c.save();
   c.scale(1, alto / ancho);
   c.fillStyle = g;
@@ -220,6 +413,10 @@ function refugio(c, u, e, o) {
     return;
   }
   const lista = e.estado === "lista";
+  if (lista) {
+    chozaLista(c, u, e, o, Math.max(apagado, Math.max(0, (500 - e.conservacion) / 900)), detalle);
+    return;
+  }
   const madera = lista ? 1 : e.madera[0] / Math.max(1, e.madera[2]);
   const trabajo = lista ? 1 : e.trabajo[0] / Math.max(1, e.trabajo[1]);
   const cubierta = lista ? 1 : Math.max(0, Math.min(1, (trabajo - 0.3) / 0.7));
@@ -292,6 +489,7 @@ function deposito(c, u, e, o) {
   const detalle = u >= 26 * o.dpr;
   const madera = lista ? 1 : e.madera[0] / Math.max(1, e.madera[2]);
   const trabajo = lista ? 1 : e.trabajo[0] / Math.max(1, e.trabajo[1]);
+  if (lista) sombraProyectada(c, u, u * 0.4, u * 0.85);
   sombra(c, u, 0.58, 0.18);
   const grosor = Math.max(1, u * 0.03);
   if (e.estado === "ruina") {
@@ -458,7 +656,7 @@ export function dibujarLugar(c, x, y, celda, e, o) {
 export function luzDeLugar(c, x, y, celda, e, o) {
   if (e.tipo !== "refugio" || e.estado !== "lista" || !e.ocupantes.length) return;
   const u = celda * ESCALA.refugio;
-  const dx = x + u * 0.08;
+  const dx = x + u * 0.06;
   if (o.noche > 0.04) {
     const g = c.createRadialGradient(dx, y - u * 0.12, 0, dx, y - u * 0.12, u * 0.24);
     const vivo = o.ambiente ? 0.85 + 0.15 * Math.sin(o.t * 7 + e.id) * Math.sin(o.t * 3.1) : 1;
@@ -466,10 +664,10 @@ export function luzDeLugar(c, x, y, celda, e, o) {
     g.addColorStop(1, "rgba(255,150,60,0)");
     c.fillStyle = g;
     c.beginPath();
-    c.moveTo(dx - u * 0.13, y);
-    c.lineTo(dx - u * 0.13, y - u * 0.24);
-    c.quadraticCurveTo(dx, y - u * 0.4, dx + u * 0.13, y - u * 0.24);
-    c.lineTo(dx + u * 0.13, y);
+    c.moveTo(dx - u * 0.17, y);
+    c.lineTo(dx - u * 0.17, y - u * 0.46);
+    c.quadraticCurveTo(dx, y - u * 0.6, dx + u * 0.17, y - u * 0.46);
+    c.lineTo(dx + u * 0.17, y);
     c.closePath();
     c.fill();
     // charco de luz en el suelo, delante de la puerta
@@ -491,7 +689,7 @@ export function luzDeLugar(c, x, y, celda, e, o) {
     for (let i = 0; i < 4; i++) {
       const f = ((o.t * 0.22 + i / 4 + e.id * 0.137) % 1 + 1) % 1;
       const hx = x + Math.sin(f * 5 + i + o.t * 0.6) * u * 0.08 + f * u * 0.25;
-      const hy = y - u * 1.08 - f * u * 0.9;
+      const hy = y - u * 1.3 - f * u * 0.9;
       c.fillStyle = `rgba(200,200,196,${0.22 * (1 - f) * Math.min(1, f * 5)})`;
       c.beginPath();
       c.arc(hx, hy, u * (0.05 + 0.1 * f), 0, TAU);

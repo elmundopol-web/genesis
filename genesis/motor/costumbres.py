@@ -112,7 +112,8 @@ def actuar(v, p, f):
                     and v.ficha(v.s.por_id(i)).get("etapa", "adulto") == "adulto"
                 ):
                     opciones.append(
-                        (-rel["afecto"], -memoria["visto"], i, j, rel["evento"])
+                        (-rel["afecto"], -memoria["visto"], i, j,
+                         rel.get("positivo", rel["evento"]) if v.relacional(p._mundo) else rel["evento"])
                     )
             if not opciones:
                 return False

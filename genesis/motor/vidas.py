@@ -6,6 +6,14 @@ from .presencia import Presencia
 from . import crianza, vinculos
 
 
+# Actos que se hacen en persona, junto a otra: el visor los dibuja entre las dos.
+CARA_A_CARA = frozenset((
+    "entrega", "alimenta", "da_agua", "protege", "corresponde", "repara", "promete", "rechaza_promesa",
+    "convive", "descanso_compartido", "acompaña_trayecto", "enseña", "enseña_pesca", "enseña_a_recoger",
+    "deja_racion", "relata", "pide_compania", "cuidado_cumplido", "cuidado_pendiente",
+))
+
+
 class Vidas:
     def __init__(self, sistema):
         self.s = sistema
@@ -13,6 +21,8 @@ class Vidas:
         self.familias = []
         self.agua = dict(llenada=0, bebida=0)
         self.presencia = Presencia(self)
+        # Con quién hace cada uno lo que hace en esta hora (solo para dibujarlo; no se guarda).
+        self.gestos = {}
 
     def ficha(self, h):
         k = str(h.id)
@@ -33,6 +43,8 @@ class Vidas:
         return self.personas[k]
 
     def evento(self, m, tipo, h, historia, causa, **datos):
+        if tipo in CARA_A_CARA and isinstance(datos.get("a"), int):
+            self.gestos[h.id] = (datos["a"], tipo, m.tick)
         return m.emitir(
             "vidas." + tipo,
             dict(id=h.id, nombre=h.nombre, historia=historia, **datos),
@@ -64,6 +76,10 @@ class Vidas:
 
     def estable(self, m):
         return self.s.cfg.cuidados and m.tick > self.s.cfg.activacion_cuidados
+
+    def relacional(self, m):
+        """F4.3: las relaciones comparten información entre promesas, tratos y antecedentes."""
+        return self.s.cfg.relaciones and m.tick > self.s.cfg.activacion_relaciones
 
     def crecer(self, m):
         return self.s.cfg.crecimiento and m.tick > self.s.cfg.activacion_crecimiento

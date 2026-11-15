@@ -711,11 +711,15 @@ def pertenencia(p, cid, eid: int, resumen: dict) -> tuple[str, dict]:
     dias = (tick - ultima) // hpd
     ausencia = p.ajustes_comunidad.dias_ausencia
     porque["dias_sin_participar"] = dias
+    f43 = p._mundo.habitantes.vidas is not None and p._mundo.habitantes.vidas.relacional(p._mundo)
     if negativos:
         porque["negativos"] = len(negativos)
-        porque["recuerdos"] = [r["n"] for r in negativos[-3:]]
+        # F4.3: los recuerdos solo se presentan como motivo cuando deciden; si no, son contexto
+        porque["contexto" if f43 else "recuerdos"] = [r["n"] for r in negativos[-3:]]
     if len(negativos) >= 3 and resumen["confianza_media"] < -5:
         porque["razon"] = "decepcion"
+        if f43:
+            porque["recuerdos"] = porque.pop("contexto")
         return "marcharse", porque
     if dias > ausencia * 3:
         porque["razon"] = "lejania"
