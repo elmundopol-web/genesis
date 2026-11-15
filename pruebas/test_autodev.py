@@ -199,6 +199,18 @@ class PathsTests(unittest.TestCase):
         self.assertEqual((self.root / "genesis/a.py").read_text(), "new\n")
         self.assertIn("archivo completo", tools.call("rewrite_file", {"path": "genesis/a.py", "content": "again\n"}))
 
+    def test_invalid_python_never_replaces_files(self):
+        original = (self.root / "genesis/a.py").read_text()
+        for name, args in [
+            ("create_file", {"path": "invalid.py", "content": "def broken(:"}),
+            ("replace_text", {"path": "genesis/a.py", "old": "hello", "new": "def broken(:"}),
+            ("rewrite_file", {"path": "genesis/a.py", "content": "def broken(:"}),
+        ]:
+            with self.subTest(name=name):
+                self.assertIn("Python no válido", self.tools.call(name, args))
+                self.assertEqual((self.root / "genesis/a.py").read_text(), original)
+        self.assertFalse((self.root / "invalid.py").exists())
+
     def test_symlink_outside_denied(self):
         outside = self.root.parent / (self.root.name + "-outside.py")
         outside.write_text("secret", encoding="utf-8")

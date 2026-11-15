@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import json
 import hashlib
+import ast
 import os
 import re
 import shutil
@@ -72,6 +73,15 @@ def _safe_path(root: Path, candidate: str, *, writable: bool = False) -> Path:
     if writable and (relative.suffix.lower() not in ALLOWED_SUFFIXES or relative.name.startswith(".")):
         raise AgentError("Tipo de archivo no permitido para escritura.")
     return destination
+
+
+def _validate_python(file: Path, content: str) -> None:
+    if file.suffix.lower() == ".py":
+        try:
+            ast.parse(content, filename=file.name)
+        except SyntaxError as exc:
+            raise AgentError(f"Python no válido: {exc.msg}, línea {exc.lineno}: "
+                             f"{(exc.text or '').strip()}. El archivo no se ha guardado.") from exc
 
 
 def _schema(name: str, description: str, properties: dict, required: list[str]) -> dict:
@@ -268,7 +278,9 @@ class WorkspaceTools:
             raise AgentError(f"El texto antiguo aparece {data.count(old)} veces; debe aparecer exactamente una. "
                              "Conserva la sangría exacta; vuelve a leer el archivo. "
                              "Para archivos pequeños puedes usar rewrite_file tras leerlos completos.")
-        file.write_text(data.replace(old, new, 1), encoding="utf-8")
+        updated = data.replace(old, new, 1)
+        _validate_python(file, updated)
+        file.write_text(updated, encoding="utf-8")
         self.write_count += 1
         self.last_test_passed = False
         return f"MODIFICADO: {path}"
@@ -279,6 +291,7 @@ class WorkspaceTools:
             raise AgentError("Lee primero el código relevante con read_file antes de crear archivos.")
         if len(content.encode("utf-8")) > MAX_REPLACEMENT_BYTES:
             raise AgentError("Archivo nuevo demasiado grande (límite 25 KB).")
+        _validate_python(file, content)
         file.parent.mkdir(parents=True, exist_ok=True)
         with file.open("x", encoding="utf-8") as stream:
             stream.write(content)
@@ -299,6 +312,7 @@ class WorkspaceTools:
             raise AgentError("Contenido demasiado grande para rewrite_file (25 KB).")
         if file.read_text(encoding="utf-8") == content:
             raise AgentError("El contenido propuesto es idéntico; no hay cambios.")
+        _validate_python(file, content)
         tmp = file.with_name(file.name + ".autodev-tmp")
         tmp.write_text(content, encoding="utf-8")
         os.replace(tmp, file)
