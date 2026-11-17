@@ -80,6 +80,18 @@ try {
       await js(`document.querySelector(${JSON.stringify(paso.clic)}).click()`);
     } else if (paso.pausa) {
       await dormir(paso.pausa);
+    } else if (paso.blob) {
+      // Descarga local de la grabación sin enviar el vídeo entero por CDP.
+      const bytes = await js(paso.blob + ".size");
+      const trozos = [];
+      for (let i = 0; i < bytes; i += 24576) {
+        const datos = await js(`(async () => {
+          const parte = await ${paso.blob}.slice(${i}, ${i + 24576}).arrayBuffer();
+          return btoa(String.fromCharCode(...new Uint8Array(parte)));
+        })()`);
+        trozos.push(Buffer.from(datos, "base64"));
+      }
+      writeFileSync(paso.ruta, Buffer.concat(trozos));
     } else if (paso.foto) {
       await foto(paso.foto, paso.calidad);
     } else if (paso.fotogramas) {

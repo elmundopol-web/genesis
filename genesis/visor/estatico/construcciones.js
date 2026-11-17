@@ -644,6 +644,11 @@ function deposito(c, u, e, o) {
 
 /* Dibuja una construcción con su base en (x, y); `u` es el tamaño de una celda en píxeles. */
 export function dibujarLugar(c, x, y, celda, e, o) {
+  // F4.4: refugios y depósitos terminados con el arte ilustrado; obras y ruinas, como antes
+  if (o.ilustrado && e.estado === "lista") {
+    o.ilustrado.lugar(c, x, y, o.adulto, e, o.invierno);
+    return;
+  }
   const u = celda * ESCALA[e.tipo];
   c.save();
   c.translate(x, y);
@@ -655,6 +660,7 @@ export function dibujarLugar(c, x, y, celda, e, o) {
 /* Lo que no apaga la noche: el fuego de dentro, si hay gente, y su humo. */
 export function luzDeLugar(c, x, y, celda, e, o) {
   if (e.tipo !== "refugio" || e.estado !== "lista" || !e.ocupantes.length) return;
+  if (o.ilustrado) return luzIlustrada(c, x, y, e, o);
   const u = celda * ESCALA.refugio;
   const dx = x + u * 0.06;
   if (o.noche > 0.04) {
@@ -703,6 +709,41 @@ export function luzDeLugar(c, x, y, celda, e, o) {
       c.fillStyle = "rgba(255,206,130,0.9)";
       c.beginPath();
       c.arc(x - u * 0.5 + i * u * 0.075, y + u * 0.07, Math.max(1.2, u * 0.022), 0, TAU);
+      c.fill();
+    }
+  }
+}
+
+/* La puerta y la chimenea de las chozas ilustradas: dónde están en cada pieza pintada. */
+const PUERTA = { choza_alta: [-0.11, 0.34, 0.09], choza_baja: [-0.15, 0.42, 0.085] };
+function luzIlustrada(c, x, y, e, o) {
+  const m = o.ilustrado.medidaDeLugar(e, o.adulto);
+  const [px, alto, ancho] = PUERTA[m.nombre];
+  const dx = x + px * m.w;
+  const pw = ancho * m.w;
+  const ph = alto * m.h;
+  if (o.noche > 0.04) {
+    const vivo = o.ambiente ? 0.85 + 0.15 * Math.sin(o.t * 7 + e.id) * Math.sin(o.t * 3.1) : 1;
+    const g = c.createRadialGradient(dx, y - ph * 0.35, 0, dx, y - ph * 0.35, ph * 0.8);
+    g.addColorStop(0, `rgba(255,196,110,${0.9 * o.noche * vivo})`);
+    g.addColorStop(1, "rgba(255,150,60,0)");
+    c.fillStyle = g;
+    c.beginPath();
+    c.moveTo(dx - pw, y);
+    c.lineTo(dx - pw, y - ph * 0.8);
+    c.quadraticCurveTo(dx, y - ph * 1.05, dx + pw, y - ph * 0.8);
+    c.lineTo(dx + pw, y);
+    c.closePath();
+    c.fill();
+  }
+  if (o.ambiente) {
+    for (let i = 0; i < 4; i++) {
+      const f = ((o.t * 0.22 + i / 4 + e.id * 0.137) % 1 + 1) % 1;
+      const hx = x + Math.sin(f * 5 + i + o.t * 0.6) * m.w * 0.04 + f * m.w * 0.12;
+      const hy = y - m.h * 0.98 - f * m.h * 0.5;
+      c.fillStyle = `rgba(200,200,196,${0.22 * (1 - f) * Math.min(1, f * 5)})`;
+      c.beginPath();
+      c.arc(hx, hy, m.w * (0.025 + 0.05 * f), 0, TAU);
       c.fill();
     }
   }

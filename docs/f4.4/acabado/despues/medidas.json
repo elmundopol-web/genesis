@@ -1,0 +1,64 @@
+{
+ "claro": {
+  "fps": 88.9,
+  "p95_ms": 13.6,
+  "zoom": 40,
+  "cam": [
+   39.5,
+   26.5
+  ],
+  "tick": 2338
+ },
+ "general": {
+  "fps": 81.1,
+  "p95_ms": 16.8,
+  "zoom": 14,
+  "cam": [
+   31.999999999999996,
+   31.042857142857144
+  ],
+  "tick": 2338
+ },
+ "bosque": {
+  "fps": 85.7,
+  "p95_ms": 16.7,
+  "zoom": 40,
+  "cam": [
+   47,
+   15.5
+  ],
+  "tick": 2338
+ },
+ "recorrido": {
+  "origen": [
+   45,
+   30
+  ],
+  "destino": [
+   29.500941251059565,
+   21.000813603553038
+  ],
+  "tickInicial": 2338,
+  "tickFinal": 2346,
+  "zoom": 40,
+  "navegador": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.0.0 Safari/537.36",
+  "ventana": [
+   1440,
+   900
+  ],
+  "gpu": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 (0x00002F04) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+  "fpsConGrabacion": 96.6,
+  "p95_ms": 16.9
+ },
+ "errores": [],
+ "invierno": {
+  "fps": 108.1,
+  "p95_ms": 15.9,
+  "zoom": 40,
+  "cam": [
+   39.5,
+   26.5
+  ],
+  "tick": 2816
+ }
+}

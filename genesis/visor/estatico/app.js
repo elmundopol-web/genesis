@@ -4,6 +4,7 @@
 
 import { MapaVivo, PIEL, ROPA } from "/mapa.js";
 import { Arte, PIEZA } from "/arte.js";
+import { ArteIlustrado } from "/sprites.js";
 import { aspecto, poseDe, dibujarPersona, dibujarPersonaRapida, pintarRetrato } from "/figuras.js";
 import * as mente from "/mente.js";
 import { fraseVida, esAvisoSeguido } from "/vidas.js";
@@ -1239,6 +1240,12 @@ async function iniciar() {
     alDejarDeSeguir: () => poblacion.dejoDeSeguir(),
     alMover: pintarEscala,
   }, { Arte, PIEZA, aspecto, poseDe, dibujarPersona, dibujarPersonaRapida, pintarRetrato });
+  // F4.4: el arte ilustrado llega aparte; mientras tanto (o si falta) se dibuja el de código
+  ArteIlustrado.cargar().then((arte) => {
+    mundo.ilustrado = arte;
+    mundo.recomponer = true;
+    mundo.sucia = true;
+  }).catch((error) => console.warn("Arte ilustrado no disponible:", error.message));
   lugares = new Lugares({
     $, el, icono, api,
     texto: { fechaCorta, entero },

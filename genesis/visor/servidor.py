@@ -22,6 +22,7 @@ sobre una ``Sesion``. No contiene lógica de simulación.
 from __future__ import annotations
 
 import json
+import re
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import parse_qs, urlsplit
@@ -42,7 +43,9 @@ _ARCHIVOS = {
     "/lugares.js": ("lugares.js", "text/javascript; charset=utf-8"),
     "/construcciones.js": ("construcciones.js", "text/javascript; charset=utf-8"),
     "/paleta.js": ("paleta.js", "text/javascript; charset=utf-8"),
+    "/sprites.js": ("sprites.js", "text/javascript; charset=utf-8"),
 }
+_ARTE = re.compile(r"/arte/[a-z0-9_-]+\.(png|json)")
 _ANFITRIONES = {"127.0.0.1", "localhost", "[::1]"}
 _MAX_CUERPO = 4096
 # Filtros del registro que ofrece el visor. "hitos" deja fuera el detalle técnico.
@@ -153,6 +156,10 @@ class _Manejador(BaseHTTPRequestHandler):
         if ruta in _ARCHIVOS:
             nombre, tipo = _ARCHIVOS[ruta]
             self._enviar(200, (_ESTATICO / nombre).read_bytes(), tipo)
+        elif _ARTE.fullmatch(ruta) and (_ESTATICO / ruta.lstrip("/")).is_file():
+            # arte ilustrado ya preparado (F4.4): solo nombres simples dentro de estatico/arte
+            tipo = "application/json" if ruta.endswith(".json") else "image/png"
+            self._enviar(200, (_ESTATICO / ruta.lstrip("/")).read_bytes(), tipo)
         elif ruta == "/api/estado":
             self._json(self.sesion.resumen())
         elif ruta == "/api/mapa":

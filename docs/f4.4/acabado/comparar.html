@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="es"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GENESIS · Río, prado y refugios</title>
+<style>
+*{box-sizing:border-box}body{background:#19201c;color:#f3ecdd;margin:0;font:16px/1.45 "Segoe UI",sans-serif}main{max-width:1488px;margin:auto;padding:22px}
+header,.control{display:flex;gap:16px;align-items:center;justify-content:space-between;flex-wrap:wrap}h1{font:500 28px/1.15 Georgia,serif;margin:0}
+select{font:inherit;background:#29342d;color:inherit;border:1px solid #748472;border-radius:4px;padding:5px}figure{margin:16px 0 8px}
+.vista{position:relative;aspect-ratio:8/5;background:#28362e;overflow:hidden;--corte:50%}.vista img{position:absolute;inset:0;width:100%;height:100%}
+#antes{clip-path:inset(0 calc(100% - var(--corte)) 0 0)}.vista::after{content:"";position:absolute;background:#fff8e0;width:2px;top:0;bottom:0;left:var(--corte);pointer-events:none}
+figcaption{color:#c4cabb;margin:8px 0}.control{gap:10px;flex-wrap:nowrap}.control input{flex:1;accent-color:#bbcd90}.nota{font-size:14px;color:#c4cabb}
+</style>
+<main>
+<header><h1>Río, prado y refugios</h1><label>Escena <select id="escena">
+<option value="claro">Claro a escala habitual</option><option value="general">Vista general</option>
+<option value="bosque">Tramo norte del río</option><option value="invierno">Río helado en invierno</option></select></label></header>
+<figure><div class="vista" id="vista"><img id="despues" alt="Paisaje después de la pasada"><img id="antes" alt="Paisaje anterior en la misma posición"></div><figcaption id="datos"></figcaption></figure>
+<div class="control"><span>Antes</span><input id="corte" type="range" min="0" max="100" value="50" aria-label="Porcentaje visible de la captura anterior"><span>Después</span></div>
+<p class="nota">Mueve el deslizador para comparar las dos capturas en el mismo encuadre.</p>
+</main>
+<script>
+const vistas = {
+  claro:"Verano · día 98, 10 h · 40 px por celda",
+  general:"Verano · día 98, 10 h · 14 px por celda",
+  bosque:"Verano · día 98, 10 h · 40 px por celda",
+  invierno:"Invierno · día 118, 8 h · 40 px por celda"
+};
+const escena=document.getElementById("escena"), corte=document.getElementById("corte");
+function mostrar(){
+  for(const momento of ["antes","despues"]) document.getElementById(momento).src=momento+"/"+escena.value+".jpg";
+  document.getElementById("datos").textContent="Semilla 14 · "+vistas[escena.value];
+}
+escena.addEventListener("change",mostrar);
+corte.addEventListener("input",()=>document.getElementById("vista").style.setProperty("--corte",corte.value+"%"));
+mostrar();
+</script></html>

@@ -89,8 +89,8 @@ const COLOR_RECURSO = { bayas: [217, 102, 138], madera: [201, 144, 90], semillas
 
 // Luz del día: [hora, r, g, b] como multiplicador de color.
 const LUZ_HORA = [
-  [0, 0.38, 0.45, 0.68], [4.5, 0.42, 0.49, 0.7], [6.3, 0.94, 0.76, 0.66], [8, 1, 1, 1], [17, 1, 1, 1],
-  [19, 1, 0.78, 0.62], [20.6, 0.54, 0.54, 0.76], [22, 0.42, 0.48, 0.7], [24, 0.38, 0.45, 0.68],
+  [0, 0.3, 0.38, 0.66], [4.5, 0.34, 0.42, 0.7], [6.3, 1, 0.92, 0.82], [8, 1, 0.98, 0.95], [9.5, 1, 1, 1], [16.5, 1, 1, 1],
+  [19, 1, 0.91, 0.8], [20.6, 0.52, 0.56, 0.8], [22, 0.34, 0.42, 0.72], [24, 0.3, 0.38, 0.66],
 ];
 const LUZ_CIELO = { despejado: [1, 1, 1], nublado: [0.94, 0.95, 0.97], lluvia: [0.87, 0.9, 0.94],
                     tormenta: [0.72, 0.75, 0.84], nieve: [0.94, 0.96, 0.99] };
@@ -135,6 +135,21 @@ function lienzoNuevo(ancho, alto) {
   c.width = ancho;
   c.height = alto || ancho;
   return c;
+}
+
+// Cada intervalo es una sección continua de agua pintada en una fila del mapa.
+// También funciona cuando un meandro corta la misma fila más de una vez.
+export function seccionesDelRio(agua, lado) {
+  return Array.from({length: lado}, (_, y) => {
+    const tramos = [];
+    for (let x = 0; x < lado;) {
+      if (agua[y * lado + x] < 112) { x++; continue; }
+      const izq = x++;
+      while (x < lado && agua[y * lado + x] >= 112) x++;
+      tramos.push({izq, der:x, centro:(x + izq) / 2});
+    }
+    return tramos;
+  });
 }
 
 function rectRedondo(c, x, y, w, h, r) {
@@ -289,6 +304,8 @@ export class MapaVivo {
     const agua = new Float32Array(G * G);
     const ribera = new Float32Array(G * G);
     const fertil = new Float32Array(G * G);
+    const rodal = new Float32Array(G * G);
+    const loma = new Float32Array(G * G);
     for (let gy = 0; gy < G; gy++) {
       for (let gx = 0; gx < G; gx++) {
         const i = ((gy / SUB) | 0) * N + ((gx / SUB) | 0);
@@ -298,13 +315,19 @@ export class MapaVivo {
         agua[k] = b === "R" ? 1 : 0;
         ribera[k] = b === "R" || this.mapa.ribera[i] === "1" ? 1 : 0;
         fertil[k] = this.mapa.fertilidad[i] / 1000;
+        const u = (gx + 0.5) / SUB, v = (gy + 0.5) / SUB;
+        const deriva = ruido(u / 8, v / 8, this.semilla + 184) * 2;
+        const pliegue = ruido((u+.63*v)/7.4 + deriva, (v-.30*u)/3.5, this.semilla+191);
+        loma[k] = suave(.32, .61, pliegue) * .72 + pliegue * .28;
+        rodal[k] = suave(0.33, 0.68, 0.69 * ruido(u / 4.7 + deriva, v / 3.5, this.semilla + 185)
+          + 0.31 * ruido(u / 1.9, v / 2.7, this.semilla + 186));
       }
     }
-    desenfocar(bosque, G, 1, 3);
-    desenfocar(agua, G, 1, 3);
-    desenfocar(ribera, G, 2, 2);
+    desenfocar(bosque, G, 2, 3);
+    desenfocar(agua, G, 2, 3);
+    desenfocar(ribera, G, 4, 2);
     desenfocar(fertil, G, 2, 3);
-    this.campos = { G, bosque, agua, ribera, fertil };
+    this.campos = { G, bosque, agua, ribera, fertil, rodal, loma };
   }
 
   // Desplazamiento orgánico de las fronteras, en celdas.
@@ -332,7 +355,8 @@ export class MapaVivo {
     const px = {
       bosque: new Uint8Array(n), agua: new Uint8Array(n), ribera: new Uint8Array(n),
       fertil: new Uint8Array(n), grano: new Uint8Array(n), mancha: new Uint8Array(n),
-      pasto: new Uint8Array(n), veta: new Uint8Array(n),
+      pasto: new Uint8Array(n), veta: new Uint8Array(n), rodal: new Uint8Array(n),
+      loma: new Uint8Array(n),
     };
     // el campo de hierba alta, muestreado a un cuarto de resolución e interpolado
     const Q = TEX / 4;
@@ -350,6 +374,8 @@ export class MapaVivo {
         const dy = (ruido(u / 2.6, v / 2.6, s + 13) - 0.5) * 0.6 + (ruido(u / 0.7, v / 0.7, s + 14) - 0.5) * 0.16;
         const i = y * TEX + x;
         px.bosque[i] = muestra(bosque, G, u + dx, v + dy) * 255;
+        px.rodal[i] = muestra(this.campos.rodal, G, u, v) * 255;
+        px.loma[i] = muestra(this.campos.loma, G, u + dx, v + dy) * 255;
         const W = muestra(agua, G, u + dx * 0.85, v + dy * 0.85);
         px.ribera[i] = muestra(ribera, G, u + dx, v + dy) * 255;
         px.fertil[i] = muestra(fertil, G, u, v) * 255;
@@ -379,13 +405,16 @@ export class MapaVivo {
     this.px = px;
     this.pxBosque = px.bosque; // se conservan para colocar los detalles
     this.pxAgua = px.agua;
+    this.seccionesRio = seccionesDelRio(px.agua, TEX);
+    this._pinturaRio = null;
   }
 
   _colorear(estacion) {
     const p = TERRENO[estacion];
     const { bosque, agua, ribera, fertil, grano, mancha, pasto, veta } = this.px;
     const alta = HIERBA_ALTA[estacion];
-    const tierra = [150, 126, 86];
+    const tierra = [179, 156, 110];
+    const hojarasca = estacion === 3 ? [22, 22, 18] : [65, 38, 22];
     const lienzo = lienzoNuevo(TEX);
     const c = lienzo.getContext("2d");
     const imagen = c.createImageData(TEX, TEX);
@@ -416,14 +445,17 @@ export class MapaVivo {
         b += (p.ribera[2] - b) * rb;
         // hierba alta (más honda y saturada) frente a hierba rala (más clara y seca), y algún claro de tierra
         const pa = pasto[i] / 255;
-        r += (alta[0] - r) * pa * 0.5;
-        v += (alta[1] - v) * pa * 0.5;
-        b += (alta[2] - b) * pa * 0.5;
-        const rala = (1 - pa) * 0.22;
+        // El pincel rompe el borde del rodal y deja entrever un segundo plano.
+        const bordePasto = pa + m*.20 + g*.055;
+        const masa = suave(.18,.51,bordePasto)*.27 + suave(.54,.73,bordePasto)*.35;
+        r += (alta[0] - r) * masa;
+        v += (alta[1] - v) * masa;
+        b += (alta[2] - b) * masa;
+        const rala = (1 - pa) * 0.48;
         r += (p.seco[0] - r) * rala;
         v += (p.seco[1] - v) * rala;
         b += (p.seco[2] - b) * rala;
-        const claro = estacion === 3 ? 0 : suave(0.12, 0.02, pa) * suave(0.55, 0.8, mancha[i] / 255) * 0.45;
+        const claro = estacion === 3 ? 0 : (1 - suave(0.04, 0.3, pa + m * .28)) * (0.28 + .30 * (1 - fe));
         if (claro > 0) {
           r += (tierra[0] - r) * claro;
           v += (tierra[1] - v) * claro;
@@ -435,13 +467,16 @@ export class MapaVivo {
         r += (p.soto[0] - r) * so;
         v += (p.soto[1] - v) * so;
         b += (p.soto[2] - b) * so;
-        const f = suave(0.56, 0.82, F);
-        r += (p.suelo[0] - r) * f;
-        v += (p.suelo[1] - v) * f;
-        b += (p.suelo[2] - b) * f;
+        const f = suave(0.44, 0.94, F);
+        const abertura = 1 - this.px.rodal[i] / 255;
+        r += (p.suelo[0] + 8 + abertura * hojarasca[0] - r) * f;
+        v += (p.suelo[1] + 6 + abertura * hojarasca[1] - v) * f;
+        b += (p.suelo[2] + 5 + abertura * hojarasca[2] - b) * f;
 
         // textura y sombra que el bosque arroja sobre la pradera
-        let k = 1 + g * 0.12 + m * 0.24 + (veta[i] / 255 - 0.5) * (0.1 + pa * 0.22);
+        let k = 1 + g * 0.075 + m * 0.15 + (veta[i] / 255 - 0.5) * (0.04 + pa * 0.12);
+        const pendiente = (this.px.loma[ys*TEX+xs] - this.px.loma[yn*TEX+xn]) / 255;
+        k += limitar(pendiente*.40,-.13,.13) * (1-F*.73) * (1-rb);
         const sombraBosque = bosque[yn * TEX + xn] / 255 - F;
         if (sombraBosque > 0) k *= 1 - 0.42 * sombraBosque * (1 - f);
         else k *= 1 - 0.16 * sombraBosque * f;
@@ -450,7 +485,14 @@ export class MapaVivo {
         b *= k;
 
         // orilla
-        const or = suave(0.12, 0.36, W) * (1 - suave(0.44, 0.5, W));
+        const limo = suave(.07, .52, rb + .10 * m) * (1 - .74 * pa);
+        const humedad = estacion === 3 ? 0 : limo * (.50 + .26 * abertura);
+        r += (146 - r) * humedad;
+        v += (136 - v) * humedad;
+        b += (108 - b) * humedad;
+        const deposito = suave(.28, .74, abertura * .64 + (m + .5) * .36);
+        const or = suave(.13 - .15 * deposito, .41 - .16 * deposito, W + m*.06)
+          * (.55 + .45 * deposito) * (1 - suave(.44, .5, W));
         if (or > 0) {
           const ko = 1 + g * 0.34 + m * 0.12; // grava: granos claros y oscuros
           r += (p.orilla[0] * ko - r) * or;
@@ -465,7 +507,7 @@ export class MapaVivo {
           // el talud: una franja de tierra mojada y en sombra justo antes del agua da espesor a la orilla
           const talud = suave(0.36, 0.43, W) * (1 - suave(0.46, 0.5, W));
           if (talud > 0) {
-            const kt = 1 - 0.4 * talud;
+            const kt = 1 - 0.22 * talud;
             r *= kt;
             v *= kt * 0.98;
             b *= kt * 0.94;
@@ -483,7 +525,7 @@ export class MapaVivo {
           const sombraOrilla = W - agua[(y >= 3 ? y - 3 : 0) * TEX + (x >= 3 ? x - 3 : 0)] / 255;
           if (sombraOrilla > 0) ka *= 1 - 0.55 * sombraOrilla;
           // un hilo claro donde el agua lame la orilla
-          ka *= 1 + 0.22 * a * (1 - suave(0.5, 0.56, W));
+          ka *= 1 + 0.06 * deposito * a * (1 - suave(0.5, 0.56, W));
           r += ((p.bajo[0] + (p.hondo[0] - p.bajo[0]) * hondo) * ka - r) * a;
           v += ((p.bajo[1] + (p.hondo[1] - p.bajo[1]) * hondo) * ka - v) * a;
           b += ((p.bajo[2] + (p.hondo[2] - p.bajo[2]) * hondo) * ka - b) * a;
@@ -506,7 +548,50 @@ export class MapaVivo {
       }
     }
     c.putImageData(imagen, 0, 0);
+    this._pinceladasSuelo(c, estacion);
     return lienzo;
+  }
+
+  // Pincel seco a escala intermedia entre las grandes masas y las briznas.
+  // Se hornea en la textura anual, con los mismos claros en todas las cámaras.
+  _pinceladasSuelo(c, estacion) {
+    const esc = TEX / this.N;
+    const sal = this.semilla + 1887;
+    const px = this.px;
+    const indice = (x,y) => Math.floor(y*esc)*TEX + Math.floor(x*esc);
+    c.save();
+    c.scale(esc, esc);
+    for (let y=1; y<this.N-1; y++) for (let x=1; x<this.N-1; x++) {
+      const r = k => azar(x,y,sal+k);
+      const u = x+r(0), v = y+r(1);
+      const i = indice(u,v);
+      if (px.agua[i] > 55) continue;
+      const boscoso = px.bosque[i] > 135;
+      const humedo = px.ribera[i] > 88;
+      const pasto = px.pasto[i]/255;
+      if (r(2) > (humedo ? .53 : boscoso ? .30 : .16 + .48 * pasto)) continue;
+      const w = .28 + .70*r(3), h = .06 + .15*r(4);
+      if (px.agua[indice(u-w,v)] > 55 || px.agua[indice(u+w,v)] > 55) continue;
+      const luz = r(7) > .46;
+      c.fillStyle = estacion === 3 ? (luz ? "#f7f6e9" : "#859b9a") : boscoso
+        ? (luz ? "#cec098" : "#4e5943") : humedo ? (luz ? "#ddc498" : "#766f52")
+        : (luz ? "#e1d594" : "#718251");
+      c.globalAlpha = .11 + .12*r(8);
+      c.save();
+      c.translate(u,v);
+      const dx = px.loma[i+1] - px.loma[i-1], dy = px.loma[i+TEX] - px.loma[i-TEX];
+      const direccion = (dx || dy) ? Math.atan2(-dx,dy) : -.22;
+      c.rotate((r(5)-.5)*.45 + (humedo ? 1.1 : direccion));
+      c.beginPath();
+      c.moveTo(-w*.58,h*.20);
+      c.quadraticCurveTo(-w*.28,-h*.60,w*.48,-h*.37);
+      c.lineTo(w*.18,h*.12);
+      c.lineTo(w*.36,h*.18);
+      c.quadraticCurveTo(-w*.04,h*.57,-w*.58,h*.20);
+      c.fill();
+      c.restore();
+    }
+    c.restore();
   }
 
   /* Más allá del borde: el mismo terreno reflejado, borroso, apagado y sin saturar. No es mundo
@@ -527,7 +612,7 @@ export class MapaVivo {
       }
     }
     c.globalCompositeOperation = "saturation";
-    c.fillStyle = "rgba(128,128,128,0.4)";
+    c.fillStyle = "rgba(128,128,128,0.18)";
     c.fillRect(0, 0, T * 3, T * 3);
     c.globalCompositeOperation = "source-over";
     c.fillStyle = "rgba(10,15,13,0.22)";
@@ -560,8 +645,8 @@ export class MapaVivo {
         im.data[j] = im.data[j + 1] = im.data[j + 2] = 255;
         im.data[j + 3] = suave(0.5, 0.62, W) * 255;
         const k = 0.9 + (mancha[i] / 255 - 0.5) * 0.22 + (grano[i] / 255 - 0.5) * 0.1;
-        ih.data[j] = 206 * k;
-        ih.data[j + 1] = 224 * k;
+        ih.data[j] = 190 * k;
+        ih.data[j + 1] = 222 * k;
         ih.data[j + 2] = 234 * k;
         ih.data[j + 3] = suave(0.45, 0.52, W) * 255;
       }
@@ -581,6 +666,57 @@ export class MapaVivo {
         }
       }
       ct.putImageData(it, 0, 0);
+      // F4.4: la pradera ilustrada deja ver la orilla de tierra y la transición al bosque
+      this.mascaraPradera = lienzoNuevo(FX);
+      const cp = this.mascaraPradera.getContext("2d");
+      const ip = cp.createImageData(FX, FX);
+      for (let y = 0; y < FX; y++) {
+        for (let x = 0; x < FX; x++) {
+          const i = ((y * paso) | 0) * TEX + ((x * paso) | 0);
+          const j = (y * FX + x) * 4;
+          ip.data[j] = ip.data[j + 1] = ip.data[j + 2] = 255;
+          const pasto = this.px.pasto[i] / 255;
+          ip.data[j + 3] = (0.14 + 0.63 * pasto) * (1 - suave(0.02, 0.31, agua[i] / 255))
+            * (1 - suave(0.17, 0.76, this.px.bosque[i] / 255)) * 255;
+        }
+      }
+      cp.putImageData(ip, 0, 0);
+      // orilla húmeda: una franja oscura y fundida donde la tierra firme se acerca al agua
+      this.mascaraOrilla = lienzoNuevo(FX);
+      const co = this.mascaraOrilla.getContext("2d");
+      const io = co.createImageData(FX, FX);
+      // nieve: manchas de borde suave, estables en el mundo
+      this.mascaraNieve = lienzoNuevo(FX);
+      const cn = this.mascaraNieve.getContext("2d");
+      const inv = cn.createImageData(FX, FX);
+      for (let y = 0; y < FX; y++) {
+        for (let x = 0; x < FX; x++) {
+          const i = ((y * paso) | 0) * TEX + ((x * paso) | 0);
+          const j = (y * FX + x) * 4;
+          const w = agua[i] / 255;
+          io.data[j] = io.data[j + 1] = io.data[j + 2] = 255;
+          const limo = this.px.rodal[i]/255;
+          io.data[j + 3] = suave(.03+.11*limo,.31,w) * (1-suave(.34,.47,w))
+            * (.22+.74*limo) * 255;
+          const u = (x / FX) * this.N;
+          const v = (y / FX) * this.N;
+          const n = ruido(u / 3.1, v / 3.1, this.semilla + 4601) * 0.65 + ruido(u / 1.1, v / 1.1, this.semilla + 4602) * 0.35;
+          inv.data[j] = inv.data[j + 1] = inv.data[j + 2] = 255;
+          inv.data[j + 3] = suave(0.3, 0.46, n) * 255;
+        }
+      }
+      co.putImageData(io, 0, 0);
+      cn.putImageData(inv, 0, 0);
+      // bordes fundidos: sin escalones de celda en la linde del bosque ni en la orilla
+      const fundir = (l, celdas) => {
+        const b = lienzoNuevo(FX);
+        const cb = b.getContext("2d");
+        cb.filter = `blur(${(celdas * FX) / this.N}px)`;
+        cb.drawImage(l, 0, 0);
+        return b;
+      };
+      this.mascaraPradera = fundir(this.mascaraPradera, 0.7);
+      this.mascaraOrilla = fundir(this.mascaraOrilla, 0.45);
     }
     // el hielo no es una lámina lisa: grietas finas, placas más oscuras y brillos sesgados por la luz
     const s = this.semilla + 950;
@@ -672,8 +808,34 @@ export class MapaVivo {
     }
     lista.sort((a, b) => a.v - b.v);
     const n = lista.length;
+    // Los pies se eligen una vez en coordenadas del mundo. Dentro de un
+    // rodal hay varios árboles próximos, en el calvero solo pies aislados.
+    const pies = new Map();
+    const copas = lista.map((a, i) => {
+      if (a.tipo === 2 || this.mapa.biomas[a.celda] !== "B") return null;
+      const masa = muestra(this.campos.rodal, this.campos.G, a.u, a.v);
+      const interior = a.borde ? .56 : 1;
+      if (azar(i, 7, s + 4700) > .018 + interior * (.065 + .30 * masa * masa)) return null;
+      const x = Math.floor(a.u), y = Math.floor(a.v);
+      const margen = .52 + (1 - masa) * .32;
+      for (let fy = Math.max(0, y-1); fy <= Math.min(N-1, y+1); fy++) {
+        for (let fx = Math.max(0, x-1); fx <= Math.min(N-1, x+1); fx++) {
+          if (pies.get(fy*N+fx)?.some(b => Math.hypot(b.u-a.u, b.v-a.v) < margen)) return null;
+        }
+      }
+      if (!pies.has(a.celda)) pies.set(a.celda, []);
+      pies.get(a.celda).push(a);
+      const mezcla = ruido(a.u / 5, a.v / 5, s + 305) * .62 + azar(i, 4, s) * .38;
+      const pieza = a.tipo === 1 ? (mezcla < .67 ? "pino" : "copa_estrecha")
+        : mezcla < .33 ? "abedul" : mezcla < .65 ? "roble" : "copa_ancha";
+      const joven = azar(i, 2, s) < (a.borde ? .36 : .18);
+      const alto = (joven ? 1.15 : 1.78) + azar(i, 3, s) * (joven ? .55 : .92) + (a.tipo === 1 ? .24 : 0);
+      const anchura = {roble:1.29, copa_ancha:1.30, abedul:.76, pino:.65, copa_estrecha:.53}[pieza];
+      return { pieza, alto, ancho: alto * anchura * (.88 + azar(i, 1, s) * .24),
+        hondura: Math.round(3 * masa * interior), tono: Math.floor(azar(i, 8, s) * 3) };
+    });
     this.arboles = {
-      n,
+      n, copas,
       borde: Uint8Array.from(lista, (a) => a.borde || 0),
       u: Float32Array.from(lista, (a) => a.u),
       v: Float32Array.from(lista, (a) => a.v),
@@ -692,6 +854,25 @@ export class MapaVivo {
     const paso = 0.3;
     const lado = Math.ceil(N / paso);
     const lista = [];
+    this.depositosRibera = [];
+    const esc = TEX / N;
+    for (let y = 5; y < TEX-5; y += 11) for (const tramo of this.seccionesRio[y]) {
+      for (const lado of [-1,1]) {
+        const v = (y+.5)/esc;
+        const orilla = (lado < 0 ? tramo.izq : tramo.der)/esc;
+        const grupo = ruido(v/3.3, orilla/4.8, s+723);
+        if (grupo < .46 || azar(y,lado,s+724) > (grupo-.32)*1.45) continue;
+        const u = orilla + lado*(.08 + .24*azar(y,lado,s+725));
+        if (u < .4 || u > N-.4 || this.mapa.biomas[Math.floor(v)*N+Math.floor(u)] === "R") continue;
+        const arbolado = this._bosqueEn(u+lado*.85,v) > .40;
+        const tipo = azar(y,lado,s+726);
+        const nombre = arbolado && tipo < .49 ? "raices" : tipo > .64 ? "grava" : "guijarros";
+        if (nombre !== "guijarros" && this.depositosRibera.some(d => d.nombre === nombre
+            && Math.abs(d.v-v)<2.4 && Math.abs(d.u-u)<1.4)) continue;
+        this.depositosRibera.push({u,v,lado,nombre,ancho:.63+azar(y,lado,s+727)*.94,
+          giro: .25 + .53*azar(y,lado,s+728)});
+      }
+    }
     for (let gy = 0; gy < lado; gy++) {
       for (let gx = 0; gx < lado; gx++) {
         const u = (gx + azar(gx, gy, s + 61) * 0.9) * paso;
@@ -1235,7 +1416,8 @@ export class MapaVivo {
       }
     }
     const cielo = LUZ_CIELO[e.cielo] || LUZ_CIELO.despejado;
-    return [hora[0] * cielo[0], hora[1] * cielo[1], hora[2] * cielo[2]];
+    const frio = this.ilustrado && e.estacion === 3 ? [0.92, 0.96, 1] : [1, 1, 1];
+    return [hora[0] * cielo[0] * frio[0], hora[1] * cielo[1] * frio[1], hora[2] * cielo[2] * frio[2]];
   }
 
   // -- escena: lo que solo cambia con la cámara o con los datos --------------
@@ -1377,6 +1559,10 @@ export class MapaVivo {
     const cerca = suave(17 * dpr, 30 * dpr, z); // cuánto se ven los detalles finos
     const medio = suave(7 * dpr, 13 * dpr, z); // rocas, juncos y sombras proyectadas
     const estacion = t > 0.5 ? a : de;
+    if (this.ilustrado && this.velo < 0.5) {
+      this._pradera(c, x0, y0, lado, estacion);
+      this._pintarCauce(c, x0, y0, lado);
+    }
 
     if (cerca > 0.02 && this.patronHierba && this.velo < 0.5) {
       // briznas finas sobre la tierra firme, a dos escalas para que no se note la repetición
@@ -1404,15 +1590,17 @@ export class MapaVivo {
       ch.globalCompositeOperation = "destination-in";
       ch.drawImage(this.mascaraTierra, x0, y0, lado, lado);
       ch.globalCompositeOperation = "source-over";
-      c.globalAlpha = Math.min(1, cerca * 1.2) * (estacion === 3 ? 0.5 : 1);
+      c.globalAlpha = Math.min(1, cerca * 1.2) * (estacion === 3 ? 0.5 : 1) * (this.ilustrado ? 0.35 : 1);
       c.drawImage(capa, 0, 0);
       c.globalAlpha = 1;
     }
     yield;
     yield* this._suelo(c, visible, estacion, cerca, medio);
+    if (this.velo < .5) this._senderos(c, {z, ox:x0, oy:y0});
     yield* this._arbolado(c, alta, de, t > 0 ? 1 - suave(0.55, 1, t) : 1, medio);
     if (t > 0) yield* this._arbolado(null, alta, a, suave(0, 0.7, t), medio);
-    if (cerca > 0) yield* this._frutos(alta, visible, estacion, cerca);
+    // las bayas reales salpicadas sobre las copas parecen ruido con el arte ilustrado: se ven con su capa
+    if (cerca > 0 && (!this.ilustrado || this.capa === "bayas")) yield* this._frutos(alta, visible, estacion, cerca);
 
     if (this.velo > 0.01 && this.capa !== "terreno") this._capaDeDatos(c, visible);
     else if (this.velo > 0.01) {
@@ -1421,7 +1609,8 @@ export class MapaVivo {
     }
 
     // retícula de celdas, visible al acercarse
-    const rejilla = suave(22 * dpr, 40 * dpr, z) * (this.velo > 0.5 ? 0.2 : 0.07);
+    // con el arte ilustrado la retícula solo acompaña a las capas de datos: sobre el paisaje se ven cuadrados
+    const rejilla = suave(22 * dpr, 40 * dpr, z) * (this.velo > 0.5 ? 0.2 : this.ilustrado ? 0 : 0.07);
     if (rejilla > 0.005) {
       c.strokeStyle = `rgba(255,255,255,${rejilla})`;
       c.lineWidth = Math.max(1, dpr * 0.75);
@@ -1455,7 +1644,7 @@ export class MapaVivo {
     if (this.capa !== "terreno" || this.velo > 0.01 || !this.arboles) return null;
     const A = this.arboles;
     let h = 0;
-    for (let i = 0; i < A.n; i++) if (!this._enPie(i)) h = (Math.imul(h, 31) + i + 1) | 0;
+    for (let i = 0; i < A.n; i++) if (!this._aclarado(i) && !this._enPie(i)) h = (Math.imul(h, 31) + i + 1) | 0;
     const dpr = this.dpr;
     const z = this.cam.z;
     const cerca = suave(17 * dpr, 30 * dpr, z);
@@ -1484,14 +1673,20 @@ export class MapaVivo {
     const proporcion = this._proporcion("semillas", celda);
     if (proporcion <= 0.04) return 0;
     const espigal = this._pasto(x + 0.5, y + 0.5);
-    return Math.round(proporcion * (0.3 + 5 * espigal * espigal) * cerca);
+    const grupo = suave(.56, .9, espigal);
+    return Math.round(proporcion * grupo * (0.35 + 2.65 * azar(x, y, this.semilla + 142)) * cerca);
   }
 
   /* ¿Sigue en pie este árbol? Cuanta menos madera queda en su celda, menos árboles. */
+  _aclarado(i) {
+    return this.ilustrado && !this.arboles.copas[i];
+  }
+
   _enPie(i) {
     const A = this.arboles;
     if (A.tipo[i] === 2 || !this.capacidad.madera) return true;
-    return A.rango[i] <= 0.1 + 0.92 * this._proporcion("madera", A.celda[i]);
+    const madera = this._proporcion("madera", A.celda[i]);
+    return this.ilustrado ? madera > 0 && A.rango[i] <= madera : A.rango[i] <= .1 + .92 * madera;
   }
 
   /* Árboles y arbustos. Las copas van a la capa alta; sombras, arbustos y tocones, al suelo.
@@ -1505,9 +1700,9 @@ export class MapaVivo {
     const ox = ancho / 2 - this.cam.x * z;
     const oy = alto / 2 - this.cam.y * z;
     const vMin = this.cam.y - alto / 2 / z - 0.6;
-    const vMax = this.cam.y + alto / 2 / z + 2.8; // la copa de un árbol que nace más abajo puede asomar
-    const uMin = this.cam.x - ancho / 2 / z - 1.2;
-    const uMax = this.cam.x + ancho / 2 / z + 1.2;
+    const vMax = this.cam.y + alto / 2 / z + 3.2;
+    const uMin = this.cam.x - ancho / 2 / z - 2.2;
+    const uMax = this.cam.x + ancho / 2 / z + 2.2;
     // la lista está ordenada por v: búsqueda del primer árbol visible
     let lo = 0;
     let hi = A.n;
@@ -1517,20 +1712,25 @@ export class MapaVivo {
       else hi = mid;
     }
     const tocones = c && z >= 15 * this.dpr;
+    // de cerca, los árboles ilustrados se dibujan en cada cuadro para que el viento los mueva
+    this._arbolVivo = Boolean(this.ilustrado) && z >= 22 * this.dpr;
+    this._estacionArboles = estacion;
     // el solar de cada construcción está desbrozado: ni copas ni matas detrás de su tejado
-    const solares = (this.lugares || []).filter((e) => e.estado !== "ruina")
-      .map((e) => [e.x + 0.5, e.y + 0.62, e.tipo === "refugio" ? 1.15 : 0.85]);
+    const solares = this._solares();
     alta.globalAlpha = alfa;
     for (let i = lo; i < A.n && A.v[i] <= vMax; i++) {
       if ((i & 511) === 0) yield;
       const u = A.u[i];
       if (u < uMin || u > uMax) continue;
-      if (solares.length && solares.some(([x, y, r]) => Math.abs(u - x) < r + A.r[i] * 1.6 && A.v[i] > y - 2.1 && A.v[i] < y + 0.35)) continue;
+      if (this._aclarado(i)) continue;
+      const copa = this.ilustrado && A.copas[i];
+      if (solares.length && this._enSolar(solares, u, A.v[i], copa ? copa.ancho * .4 : A.r[i])) continue;
       const tipo = A.tipo[i];
       const sx = u * z + ox;
       const sy = A.v[i] * z + oy;
       if (!this._enPie(i)) {
-        if (tocones) arte.pieza(c, estacion, P.tocon, sx, sy, z * 1.25);
+        if (tocones && this.ilustrado) this._tocon(c, sx, sy, z);
+        else if (tocones) arte.pieza(c, estacion, P.tocon, sx, sy, z * 1.25);
         continue;
       }
       if (tipo === 2) {
@@ -1539,6 +1739,11 @@ export class MapaVivo {
         const d = A.r[i] * z * 5;
         if (c && medio > 0.02) arte.sombraDe(c, sx, sy, d * 0.7, 0.7 * medio);
         arte.pieza(alta, estacion, P.arbusto(A.var[i] + i), sx, sy, d);
+        continue;
+      }
+      if (this.ilustrado) {
+        if (c && medio > 0.02) this.ilustrado.sombraDeArbol(c, sx, sy, copa, z);
+        if (!this._arbolVivo || !this._alViento(i)) this.ilustrado.arbol(alta, sx, sy, copa, z, estacion);
         continue;
       }
       const d = A.r[i] * z * 3.1;
@@ -1559,7 +1764,7 @@ export class MapaVivo {
     const oy = this.alto / 2 - this.cam.y * z;
     const N = this.N;
 
-    if (medio > 0.02) {
+    if (medio > 0.02 && !this.ilustrado) {
       const R = this.ribera;
       let lo = 0;
       let hi = R.n;
@@ -1587,6 +1792,20 @@ export class MapaVivo {
       }
       c.globalAlpha = 1;
     }
+    if (this.ilustrado && medio > .02) {
+      c.save();
+      c.globalAlpha = medio * (estacion === 3 ? .57 : .88);
+      for (const d of this.depositosRibera) {
+        if (d.v < vy0-1 || d.v > vy1+1 || d.u < vx0-1 || d.u > vx1+1) continue;
+        c.save();
+        c.translate(d.u*z + ox,d.v*z + oy);
+        if (d.nombre === "grava") c.rotate(d.giro*d.lado);
+        const tam = d.ancho*z*(d.nombre === "guijarros" ? .13 : 1);
+        this.ilustrado.detalle(c,d.nombre,0,0,tam,d.lado>0,0);
+        c.restore();
+      }
+      c.restore();
+    }
     if (cerca <= 0) return;
 
     // La pradera no se rellena celda a celda: los manojos salen de una rejilla fija del mundo
@@ -1609,7 +1828,7 @@ export class MapaVivo {
       const i = ((v * esc) | 0) * TEX + ((u * esc) | 0);
       return this.pxBosque[i] <= 120 && this.pxAgua[i] <= 70;
     };
-    for (let gy = gy0; gy < gy1; gy++) {
+    for (let gy = gy0; !this.ilustrado && gy < gy1; gy++) {
       if ((gy & 7) === 0) yield;
       for (let gx = gx0; gx < gx1; gx++) {
         if (azar(gx, gy, s + 3) > parte) continue;
@@ -1671,10 +1890,13 @@ export class MapaVivo {
      del río, con manchas a varias escalas; no sabe nada de las celdas. */
   _pasto(u, v) {
     const s = this.semilla + 1300;
-    const n = ruido(u / 3.4, v / 3.4, s) * 0.55 + ruido(u / 1.4, v / 1.4, s + 1) * 0.3 + ruido(u / 0.6, v / 0.6, s + 2) * 0.15;
+    const curva = ruido(u / 8, v / 8, s + 3) * 3;
+    const n = ruido(u / 7.8 + v / 17, v / 4.4 + curva, s) * .66
+      + ruido(u / 3.1, v / 2.2, s + 1) * .25 + ruido(u / 1.1, v / .8, s + 2) * .09;
     const fe = muestra(this.campos.fertil, this.campos.G, u, v);
     const rb = muestra(this.campos.ribera, this.campos.G, u, v);
-    return suave(0.38, 0.74, n * 0.8 + fe * 0.24 + rb * 0.12);
+    const relieve = muestra(this.campos.loma, this.campos.G, u, v);
+    return suave(.31,.70,n*.68 + relieve*.19 + fe*.16 - rb*.10);
   }
 
   *_frutos(c, { vx0, vx1, vy0, vy1 }, estacion, cerca) {
@@ -1836,7 +2058,7 @@ export class MapaVivo {
       }
     }
 
-    if (this.ambiente && vida > 0.02 && this.hielo < 0.98) {
+    if (this.ambiente && vida > 0.02 && this.hielo < 0.98 && !this.ilustrado) {
       // corriente del río, de norte a sur
       const f = this.ctxFx;
       f.setTransform(1, 0, 0, 1, 0, 0);
@@ -1861,16 +2083,21 @@ export class MapaVivo {
       c.drawImage(this.fx, x0, y0, lado, lado);
       c.globalCompositeOperation = "source-over";
       c.globalAlpha = 1;
-      if (z >= 22 * dpr) this._peces(c, t, suave(22 * dpr, 34 * dpr, z) * (1 - this.hielo) * vida);
+    }
+    if (this.ambiente && vida > .02 && !this.estado.rioHelado && this.hielo < .98) {
+      const visible = (1-this.hielo) * vida;
+      if (this.ilustrado) this._corrientePintada(c, t, x0, y0, z, visible);
+      if (z >= 22 * dpr) this._peces(c, t, suave(22*dpr, 34*dpr, z) * visible);
     }
 
     // personas sobre el suelo; después el arbolado, que tapa a quien queda detrás de una copa;
     // y otra vez, atenuados, quienes han quedado tapados, para no perderlos de vista
     const gente = this._gentePreparar();
-    this._senderos(c, gente);
+    if (this.ilustrado && vida > 0.02) this._detallesVivos(c, t);
     this._genteCuerpos(c, gente, t, 0);
     c.globalAlpha = 1 - 0.94 * this.velo;
     c.drawImage(this.alta, tr.x, tr.y, anchoEscena, altoEscena);
+    if (this._arbolVivo && vida > 0.02) this._arbolesVivos(c, t);
     c.globalAlpha = 1;
     this._genteCuerpos(c, gente, t, 1);
 
@@ -1878,12 +2105,13 @@ export class MapaVivo {
       // sombras de nubes que cruzan el mundo
       c.save();
       c.globalCompositeOperation = "multiply";
-      c.globalAlpha = this.nubes * vida;
+      c.globalAlpha = this.nubes * vida * (this.ilustrado ? 0.45 : 1);
       c.translate(x0, y0);
       const k = (z * 24) / 512;
       c.scale(k, k);
-      const dx = (t * 5) % 512;
-      const dy = (t * 2.2) % 512;
+      const lento = this.ilustrado ? 0.4 : 1;
+      const dx = (t * 5 * lento) % 512;
+      const dy = (t * 2.2 * lento) % 512;
       c.translate(dx - 512, dy - 512);
       c.fillStyle = this.patronNubes;
       c.fillRect(0, 0, lado / k + 1024, lado / k + 1024);
@@ -2022,23 +2250,42 @@ export class MapaVivo {
       const hx = d.x + 0.5 + (azar(d.id, 1, 4242) - 0.5) * 0.44;
       const hy = d.y + 0.5 + (azar(d.id, 2, 4242) - 0.5) * 0.44;
       if (!f) {
-        f = { id: d.id, rx: hx, ry: hy, dx: hx, dy: hy, hx, hy, t0: 0, dur: 0, mira: 1, fase: azar(d.id, 3, 4242) * TAU, anda: false };
+        f = { id: d.id, rx: hx, ry: hy, dx: hx, dy: hy, hx, hy, t0: 0, dur: 0,
+          mira: 1, vista: "frente", recorrido: 0, fase: azar(d.id, 3, 4242) * TAU, anda: false };
         this.gente.set(d.id, f);
-      } else if (hx !== f.hx || hy !== f.hy) {
+      }
+      const intervalo = ritmo.enMarcha ? limitar(1000 / ritmo.velocidad, 110, 1050) : 520;
+      const transicion = this.ambiente ? Math.min(220, intervalo * 0.28) : 0;
+      const bebe = d.vivo && d.actividad === "bebiendo";
+      if (f.bebe && !bebe) f.seAlzaHasta = ahora + transicion;
+      if (hx !== f.hx || hy !== f.hy) {
+        const vx = d.x - f.d.x;
+        const vy = d.y - f.d.y;
         const salto = Math.hypot(hx - f.rx, hy - f.ry);
-        const duracion = !this.ambiente || salto > 6 ? 0 : ritmo.enMarcha ? limitar(1000 / ritmo.velocidad, 110, 1050) : 520;
+        const duracion = !this.ambiente || salto > 6 ? 0 : intervalo;
+        const alzarse = duracion ? Math.max(0, (f.seAlzaHasta || 0) - ahora) : 0;
         f.dx = f.rx;
         f.dy = f.ry;
         f.hx = hx;
         f.hy = hy;
-        f.t0 = ahora;
-        f.dur = duracion;
-        if (Math.abs(hx - f.dx) > 0.05) f.mira = hx > f.dx ? 1 : -1;
+        f.t0 = ahora + alzarse;
+        f.dur = Math.max(0, duracion - alzarse);
+        f.vista = Math.abs(vx) > Math.abs(vy) ? "perfil" : vy < 0 ? "espalda" : "frente";
+        if (vx) f.mira = Math.sign(vx);
         if (!duracion) {
           f.rx = hx;
           f.ry = hy;
+          f.seAlzaHasta = 0;
         }
       }
+      if (bebe && (!f.bebe || d.x !== f.d?.x || d.y !== f.d?.y)) {
+        f.ladoAgua = null;
+        const llegada = Math.max(ahora, f.t0 + f.dur);
+        f.seGiraHasta = f.d ? llegada + transicion * 0.4 : ahora;
+        f.seAgachaHasta = f.d ? f.seGiraHasta + transicion : ahora;
+        f.seAlzaHasta = 0;
+      }
+      f.bebe = bebe;
       f.d = d;
     }
     for (const id of [...this.gente.keys()]) if (!vistos.has(id)) this.gente.delete(id);
@@ -2049,6 +2296,16 @@ export class MapaVivo {
   /* Construcciones del motor: se dibujan con las personas, en orden de profundidad. */
   fijarLugares(lista) {
     this.lugares = (lista || []).slice().sort((a, b) => a.y - b.y || a.x - b.x);
+    const geometria = this.lugares.map(e => [e.id, e.tipo, e.x, e.y, e.estado === "ruina", e.comunidad].join(",")).join("|");
+    if (this._geometriaLugares !== geometria) {
+      this._geometriaLugares = geometria;
+      this._detalles = null;
+      this._solaresIlustrados = null;
+      this.suciaGradual = true;
+    }
+    const huellas = this.lugares.map(e => Math.round(this._usoSuelo(e)*2)).join(",");
+    if (this._huellas !== huellas) this.suciaGradual = true;
+    this._huellas = huellas;
     this.recomponer = true;
   }
 
@@ -2071,7 +2328,12 @@ export class MapaVivo {
       const e = this.lugares[i];
       const sx = (e.x + 0.5) * z + ox;
       const sy = (e.y + 0.62) * z + oy;
-      const b = caja(e.tipo, u);
+      let b = caja(e.tipo, u);
+      if (this.ilustrado && e.estado === "lista") {
+        // la pieza ilustrada: su ancho y su alto reales en pantalla
+        const m = this.ilustrado.medidaDeLugar(e, this._tamanoFigura());
+        b = { izq: -m.w * 0.45, der: m.w * 0.45, arr: -m.h * 0.95, aba: z * 0.15 };
+      }
       if (px >= sx + b.izq && px <= sx + b.der && py >= sy + b.arr && py <= sy + b.aba) return e;
     }
     return null;
@@ -2210,9 +2472,12 @@ export class MapaVivo {
         continue;
       }
       const k = f.dur > 0 ? limitar((t - f.t0) / f.dur, 0, 1) : 1;
+      const anteriorX = f.rx;
+      const anteriorY = f.ry;
       f.rx = f.dx + (f.hx - f.dx) * k;
       f.ry = f.dy + (f.hy - f.dy) * k;
-      f.anda = k < 1;
+      f.recorrido += Math.hypot(f.rx - anteriorX, f.ry - anteriorY);
+      f.anda = t >= f.t0 && k < 1;
       if (k >= 1) {
         f.rx = f.hx;
         f.ry = f.hy;
@@ -2245,6 +2510,23 @@ export class MapaVivo {
     return mejor;
   }
 
+  _ladoDelRio(f) {
+    // El primer estado de habitantes puede llegar antes que el mapa.
+    // Al dibujar ya se conocen las ocho celdas que tocan el punto de apoyo.
+    let distancia = Infinity;
+    let lado = f.mira;
+    for (let y = Math.max(0, f.d.y - 1); y <= Math.min(this.N - 1, f.d.y + 1); y++) {
+      for (let x = Math.max(0, f.d.x - 1); x <= Math.min(this.N - 1, f.d.x + 1); x++) {
+        if (this.mapa.biomas[y * this.N + x] !== "R") continue;
+        const alAgua = Math.hypot(x + 0.5 - f.hx, y + 0.5 - f.hy);
+        if (alAgua >= distancia) continue;
+        distancia = alAgua;
+        lado = Math.sign(x + 0.5 - f.hx) || f.mira;
+      }
+    }
+    return lado;
+  }
+
   /* Posición en pantalla de cada persona y qué árboles la tapan. */
   _gentePreparar() {
     const figuras = this.ordenGente;
@@ -2259,6 +2541,7 @@ export class MapaVivo {
     for (const f of figuras) {
       f.mx = 0;
       f.my = 0;
+      if (f.bebe && f.ladoAgua == null) f.ladoAgua = this._ladoDelRio(f);
     }
     // quienes coinciden quietos en la misma celda sin tratar entre sí se reparten el espacio
     const corros = new Map();
@@ -2344,7 +2627,7 @@ export class MapaVivo {
     for (const f of figuras) {
       if (!f.d.vivo || f.d.con == null) continue;
       const otro = this.gente.get(f.d.con);
-      if (!otro || !otro.d.vivo) continue;
+      if (!otro || !otro.d.vivo || f.anda || otro.anda) continue;
       const hacia = otro.rx * z + otro.ox - (f.rx * z + f.ox);
       if (Math.abs(hacia) > 1) {
         f.mira = hacia > 0 ? 1 : -1;
@@ -2352,7 +2635,7 @@ export class MapaVivo {
       }
     }
     for (const f of figuras) {
-      if (!f.d.vivo || f.d.evita == null || f.d.con != null) continue;
+      if (!f.d.vivo || f.anda || f.d.evita == null || f.d.con != null) continue;
       const otro = this.gente.get(f.d.evita);
       if (!otro || !otro.d.vivo || Math.hypot(otro.rx - f.rx, otro.ry - f.ry) > 3) continue;
       if (Math.abs(otro.rx - f.rx) > 0.05) f.mira = otro.rx > f.rx ? -1 : 1;
@@ -2374,17 +2657,458 @@ export class MapaVivo {
       f.fuera = f.sx < -s || f.sy < -s * 0.4 || f.sx > ancho + s || f.sy > alto + s * 1.6;
       // a cubierto en un refugio no se dibuja: lo cuenta el refugio (y su ficha); el elegido sí, en la puerta
       f.oculto = f.d.vivo && f.d.alojado != null && f.id !== this.elegido;
-      f.capa = f.d.vivo && !f.fuera && !f.oculto ? this._bajoCopa(f) || (lugares.length ? MapaVivo.prototype._trasLugar(f, lugares) : 0) : 0;
+      f.capa = f.d.vivo && !f.fuera && !f.oculto ? this._bajoCopa(f) || (lugares.length ? MapaVivo.prototype._trasLugar.call(this, f, lugares) : 0) : 0;
     }
     return { figuras, s, z, ox, oy, lugares, u };
   }
 
+  // -- F4.4: arte ilustrado ------------------------------------------------------------
+
+  // La textura sigue cada brazo del río y deja ver el lecho junto a las orillas.
+  _pintarCauce(c, x0, y0, lado) {
+    if (!this._pinturaRio) {
+      const baldosa = this.ilustrado.i.agua;
+      const l = lienzoNuevo(baldosa.ancho, baldosa.alto);
+      const ctx = l.getContext("2d", {willReadFrequently:true});
+      ctx.drawImage(baldosa.img, 0, 0);
+      const tinta = ctx.getImageData(0, 0, l.width, l.height).data;
+      const muestraTinta = (u, v) => {
+        const x = Math.floor((u-Math.floor(u))*l.width), y = Math.floor((v-Math.floor(v))*l.height);
+        const i = (y*l.width + x)*4;
+        return .25*tinta[i] + .60*tinta[i+1] + .15*tinta[i+2];
+      };
+      const textura = lienzoNuevo(TEX);
+      const pincel = textura.getContext("2d");
+      const im = pincel.createImageData(TEX, TEX), d = im.data;
+      const esc = TEX / this.N;
+      this._hilosRio = [];
+      for (let y = 0; y < TEX; y++) for (const tramo of this.seccionesRio[y]) {
+        const {izq, der, centro} = tramo, v = y / esc;
+        const oleo = ruido(v / 3.1, centro / (esc*4), this.semilla + 615);
+        const eje = limitar(.50 + (oleo-.5)*.85,.22,.78);
+        const remanso = suave(.36,.74,ruido(v/4.8,0,this.semilla+621));
+        for (let x = izq; x < der; x++) {
+          const i = y*TEX+x, j = i*4;
+          const u = (x+.5-izq)/(der-izq), lateral = (x-centro)/esc;
+          // Pinceladas largas siguiendo el giro del cauce. Los reflejos
+          // transversales aparecen principalmente en los remansos.
+          const pincelada = muestraTinta(v/9.5, lateral/4.4 + .054*Math.sin(v*.81+lateral));
+          const reflejo = muestraTinta(lateral/4.6, v/5.5 + .035*Math.sin(v+lateral));
+          const distancia = u < eje ? u/eje : (1-u)/(1-eje);
+          const plataforma = (u < eje ? remanso : 1-remanso)*.36;
+          const profundidad = suave(plataforma-.10,.94,distancia + (pincelada-108)*.006);
+          const lecho = suave(.005,.53,profundidad);
+          const pigmento = (pincelada-108)*(1.25+.58*profundidad) + (reflejo-108)*(.20+.57*remanso);
+          d[j] = mezcla(mezcla(154,85,lecho),40,profundidad) + pigmento;
+          d[j+1] = mezcla(mezcla(157,145,lecho),107,profundidad) + pigmento;
+          d[j+2] = mezcla(mezcla(122,140,lecho),116,profundidad) + pigmento*.92;
+          d[j+3] = suave(.438, .53, this.pxAgua[i]/255)*255;
+        }
+        if (y % 9 === 0 && der-izq > .45*esc) {
+          const r = k => azar(y, izq, this.semilla+k);
+          this._hilosRio.push({y, centro, fraccion:.14+r(616)*.72, largo:.13+r(617)*.37,
+            fase:r(618), ritmo:.16+r(619)*.14, claro:r(620)>.26});
+        }
+      }
+      pincel.putImageData(im, 0, 0);
+      this._pinturaRio = textura;
+    }
+    c.drawImage(this._pinturaRio, x0, y0, lado, lado);
+  }
+
+  _corrientePintada(c, t, x0, y0, z, intensidad) {
+    if (!this._hilosRio) return;
+    const esc = TEX / this.N;
+    c.save();
+    c.translate(x0,y0);
+    c.scale(z,z);
+    c.lineCap = "round";
+    for (const h of this._hilosRio) {
+      const ciclo = (h.fase + t*h.ritmo) % 1;
+      const y = h.y/esc + ciclo*.82;
+      if (y*z+y0 < -z || y*z+y0 > this.alto+z) continue;
+      const punto = v => {
+        const fila = this.seccionesRio[Math.floor(v*esc)];
+        const tramo = fila?.find(a => h.centro >= a.izq-esc*.35 && h.centro <= a.der+esc*.35);
+        return tramo && mezcla(tramo.izq, tramo.der, h.fraccion)/esc;
+      };
+      const a = punto(y), b = punto(y+h.largo*.5), fin = punto(y+h.largo);
+      if (a == null || b == null || fin == null || Math.abs(fin-a) > 1) continue;
+      c.globalAlpha = intensidad*Math.sin(ciclo*Math.PI)*.48;
+      c.strokeStyle = h.claro ? "#b9d4bd" : "#366d72";
+      c.lineWidth = h.claro ? .024 : .039;
+      c.beginPath();
+      c.moveTo(a,y);
+      c.quadraticCurveTo(b+.033,y+h.largo*.47,fin,y+h.largo);
+      c.stroke();
+    }
+    c.restore();
+  }
+
+  // La loseta y su reflejo pintan manchas de hierba menores que una choza.
+  _pradera(c, x0, y0, lado, estacion) {
+    const z = this.cam.z;
+    const { ancho, alto } = this;
+    const capa = this._capaPradera || (this._capaPradera = lienzoNuevo(2));
+    if (capa.width !== ancho || capa.height !== alto) {
+      capa.width = ancho;
+      capa.height = alto;
+    }
+    const ch = capa.getContext("2d");
+    ch.setTransform(1, 0, 0, 1, 0, 0);
+    ch.globalCompositeOperation = "source-over";
+    ch.globalAlpha = 1;
+    ch.clearRect(0, 0, ancho, alto);
+    const loseta = this.ilustrado.losetaPradera();
+    if (!this._patronPradera) this._patronPradera = ch.createPattern(loseta, "repeat");
+    const k = (3.4 * z) / (loseta.width / 2); // media loseta: 3,4 celdas
+    ch.save();
+    ch.translate(x0, y0);
+    ch.scale(k, k);
+    ch.fillStyle = this._patronPradera;
+    ch.fillRect(-x0 / k, -y0 / k, ancho / k, alto / k);
+    ch.restore();
+    // variación de tono a gran escala, estable en el mundo
+    if (!this._tonoPradera) {
+      const t = lienzoNuevo(this.N);
+      const ct = t.getContext("2d");
+      const im = ct.createImageData(this.N, this.N);
+      for (let y = 0; y < this.N; y++) for (let x = 0; x < this.N; x++) {
+        const v = ruido(x / 7, y / 7, this.semilla + 4401) * 0.7 + ruido(x / 2.5, y / 2.5, this.semilla + 4402) * 0.3;
+        const j = (y * this.N + x) * 4;
+        const luz = v > 0.5;
+        im.data[j] = luz ? 255 : 30; im.data[j + 1] = luz ? 246 : 46; im.data[j + 2] = luz ? 200 : 40;
+        im.data[j + 3] = Math.abs(v - 0.5) * 2 * 120;
+      }
+      ct.putImageData(im, 0, 0);
+      this._tonoPradera = t;
+    }
+    ch.imageSmoothingEnabled = true;
+    ch.globalCompositeOperation = "soft-light";
+    ch.drawImage(this._tonoPradera, x0, y0, lado, lado);
+    // estación: la misma pradera, más seca en verano y otoño, apagada en invierno
+    // estación: un ajuste de color, nunca gris. Primavera y verano, verdes y luminosos.
+    const [modo, tinte] = [["color", "rgba(104,170,62,0.3)"], ["color", "rgba(110,160,58,0.26)"],
+                           ["source-atop", "rgba(206,160,72,0.12)"], ["color", "rgba(120,140,128,0.22)"]][estacion];
+    ch.globalCompositeOperation = modo;
+    ch.fillStyle = tinte;
+    ch.fillRect(0, 0, ancho, alto);
+    if (estacion <= 1) {
+      ch.globalCompositeOperation = "screen";
+      ch.fillStyle = "rgba(60,72,30,0.16)";
+      ch.fillRect(0, 0, ancho, alto);
+    }
+    ch.globalCompositeOperation = "source-over";
+    // la máscara: tierra firme, más el solar desbrozado de cada construcción (aunque esté en el bosque)
+    const mascara = this._mascaraSolar || (this._mascaraSolar = lienzoNuevo(2));
+    if (mascara.width !== ancho || mascara.height !== alto) {
+      mascara.width = ancho;
+      mascara.height = alto;
+    }
+    const cm = mascara.getContext("2d");
+    cm.setTransform(1, 0, 0, 1, 0, 0);
+    cm.clearRect(0, 0, ancho, alto);
+    // de lejos la loseta cede al suelo pintado (se notaría la repetición), salvo en los solares
+    const lejos = suave(11 * this.dpr, 26 * this.dpr, z);
+    cm.globalAlpha = lejos;
+    cm.drawImage(this.mascaraPradera, x0, y0, lado, lado);
+    cm.globalAlpha = .34;
+    for (const e of this.lugares || []) {
+      if (e.estado === "ruina") continue;
+      // el mismo hueco en el que no se pintan árboles: unas dos celdas a los lados y tres por detrás
+      const sx = x0 + (e.x + 0.5) * (lado / this.N);
+      const sy = y0 + (e.y - 1.2) * (lado / this.N);
+      const r = z * 3.0;
+      cm.save();
+      cm.translate(sx, sy);
+      cm.scale(0.92, 1);
+      const g = cm.createRadialGradient(0, 0, r * 0.45, 0, 0, r);
+      g.addColorStop(0, "rgba(255,255,255,1)");
+      g.addColorStop(1, "rgba(255,255,255,0)");
+      cm.fillStyle = g;
+      cm.beginPath();
+      cm.arc(0, 0, r, 0, TAU);
+      cm.fill();
+      cm.restore();
+    }
+    cm.globalAlpha = 1;
+    cm.globalCompositeOperation = "destination-out";
+    cm.drawImage(this.mascaraAgua, x0, y0, lado, lado);
+    cm.globalCompositeOperation = "source-over";
+    ch.globalCompositeOperation = "destination-in";
+    ch.drawImage(mascara, 0, 0);
+    // invierno: la nieve del suelo asoma en manchas de borde suave (la tierra nevada de debajo)
+    if (estacion === 3) {
+      ch.globalCompositeOperation = "destination-out";
+      ch.drawImage(this.mascaraNieve, x0, y0, lado, lado);
+    }
+    ch.globalCompositeOperation = "source-over";
+    c.globalAlpha = 0.94;
+    c.drawImage(capa, 0, 0);
+    c.globalAlpha = 1;
+    if (estacion === 3) {
+      // y la nieve es blanca de verdad, algo azulada en la sombra
+      ch.setTransform(1, 0, 0, 1, 0, 0);
+      ch.globalCompositeOperation = "copy";
+      ch.drawImage(this.mascaraNieve, x0, y0, lado, lado);
+      ch.globalCompositeOperation = "source-in";
+      ch.fillStyle = "rgb(240,245,250)";
+      ch.fillRect(0, 0, ancho, alto);
+      ch.globalCompositeOperation = "destination-in";
+      ch.drawImage(mascara, 0, 0);
+      ch.globalCompositeOperation = "source-over";
+      c.globalAlpha = 0.85;
+      c.drawImage(capa, 0, 0);
+      c.globalAlpha = 1;
+    }
+    // orilla húmeda, más oscura y fundida con la hierba
+    ch.setTransform(1, 0, 0, 1, 0, 0);
+    ch.globalCompositeOperation = "copy";
+    ch.drawImage(this.mascaraOrilla, x0, y0, lado, lado);
+    ch.globalCompositeOperation = "source-in";
+    ch.fillStyle = estacion === 3 ? "rgb(120,130,140)" : "rgb(70,84,44)";
+    ch.fillRect(0, 0, ancho, alto);
+    ch.globalCompositeOperation = "source-over";
+    c.globalCompositeOperation = "multiply";
+    c.globalAlpha = 0.37;
+    c.drawImage(capa, 0, 0);
+    c.globalCompositeOperation = "source-over";
+    c.globalAlpha = 1;
+  }
+
+  /* Árboles ilustrados en cada cuadro, de cerca: la copa se mece con el viento, cada uno con
+     su desfase; el pie no se mueve. Mismo orden por profundidad que la capa alta. */
+  _arbolesVivos(c, t) {
+    const A = this.arboles;
+    const z = this.cam.z;
+    const { ancho, alto } = this;
+    const ox = ancho / 2 - this.cam.x * z;
+    const oy = alto / 2 - this.cam.y * z;
+    const vMin = this.cam.y - alto / 2 / z - 0.6;
+    const vMax = this.cam.y + alto / 2 / z + 3.2;
+    const uMin = this.cam.x - ancho / 2 / z - 2.2;
+    const uMax = this.cam.x + ancho / 2 / z + 2.2;
+    let lo = 0;
+    let hi = A.n;
+    while (lo < hi) {
+      const mid = (lo + hi) >> 1;
+      if (A.v[mid] < vMin) lo = mid + 1;
+      else hi = mid;
+    }
+    const solares = this._solares();
+    const est = this._estacionArboles ?? this.estado.estacion;
+    const viento = this.ambiente ? 1 : 0;
+    for (let i = lo; i < A.n && A.v[i] <= vMax; i++) {
+      const u = A.u[i];
+      if (u < uMin || u > uMax || A.tipo[i] === 2 || !this._enPie(i) || this._aclarado(i) || !this._alViento(i)) continue;
+      const copa = A.copas[i];
+      if (solares.length && this._enSolar(solares, u, A.v[i], copa.ancho * .4)) continue;
+      const balanceo = viento * 0.035 * Math.sin(t * 0.9 + u * 0.7 + A.v[i] * 0.33) * (A.borde[i] ? 1 : 0.6);
+      this.ilustrado.arbol(c, u * z + ox, A.v[i] * z + oy, copa, z, est, balanceo);
+    }
+  }
+
+  /* Si el pie de un árbol cae en el solar desbrozado de una construcción: un claro elíptico
+     que deja libre el tejado (que se alza unas tres celdas) sin aristas rectas en el bosque. */
+  _solares() {
+    if (this.ilustrado && this._solaresIlustrados) return this._solaresIlustrados;
+    const lista = this.lugares.filter(e => e.estado !== "ruina")
+      .map(e => [e.x + .5, e.y + .62, (e.tipo === "refugio" ? 1.15 : .85) * (this.ilustrado ? 1.35 : 1)]);
+    if (this.ilustrado) this._solaresIlustrados = lista;
+    return lista;
+  }
+
+  _enSolar(solares, u, v, radio) {
+    const alto = this.ilustrado ? 3.4 : 2.1;
+    for (const [x, y, r] of solares) {
+      const dx = (u - x) / (r + radio * 1.6);
+      const dy = (v - (y - alto * 0.47)) / (alto * 0.55 + 0.2);
+      if (dx * dx + dy * dy < 1) return true;
+    }
+    return false;
+  }
+
+  /* Un tocón: un árbol talado de verdad. Redondo, con su corte claro y sus anillos. */
+  _tocon(c, x, y, z) {
+    const r = z * 0.16;
+    c.fillStyle = "rgba(22,30,62,0.3)";
+    c.beginPath();
+    c.ellipse(x + r * 0.5, y + r * 0.2, r * 1.3, r * 0.45, 0, 0, TAU);
+    c.fill();
+    c.fillStyle = "rgb(104,70,44)";
+    c.beginPath();
+    c.ellipse(x, y - r * 0.2, r, r * 0.5, 0, 0, Math.PI);
+    c.lineTo(x - r, y - r * 0.75);
+    c.ellipse(x, y - r * 0.75, r, r * 0.45, 0, Math.PI, 0);
+    c.closePath();
+    c.fill();
+    c.fillStyle = "rgb(204,168,118)";
+    c.beginPath();
+    c.ellipse(x, y - r * 0.75, r * 0.86, r * 0.36, 0, 0, TAU);
+    c.fill();
+    c.strokeStyle = "rgba(140,104,66,0.8)";
+    c.lineWidth = Math.max(0.6, r * 0.12);
+    c.beginPath();
+    c.ellipse(x, y - r * 0.75, r * 0.45, r * 0.18, 0, 0, TAU);
+    c.stroke();
+  }
+
+  /* Se mecen los árboles con el pie a la vista (prado y borde inferior o lateral del bosque);
+     el interior queda en la capa alta, quieto, sin errores de profundidad ni coste. */
+  _alViento(i) {
+    const A = this.arboles;
+    const N = this.N;
+    const x = A.u[i] | 0;
+    const y = (A.v[i] + 0.6) | 0;
+    const copa = A.copas[i];
+    if (copa.viento !== undefined) return copa.viento;
+    copa.viento = y >= N || this.mapa.biomas[y * N + x] !== "B";
+    // Una copa que se pinta por separado solo puede mecerse delante de
+    // la capa fija cuando ningún árbol más próximo debería taparla.
+    for (let j = i+1; copa.viento && j < A.n && A.v[j]-A.v[i] < 3; j++) {
+      const otra = A.copas[j];
+      if (otra && Math.abs(A.u[j]-A.u[i]) < (otra.ancho+copa.ancho)*.55
+          && A.v[j]-A.v[i] < otra.alto) copa.viento = false;
+    }
+    return copa.viento;
+  }
+
+  /* Vida del suelo: matas, flores, helechos, setas, juncos, piedras y ramas, repartidas una vez
+     por mapa con intención (flores en grupos sueltos en la pradera, helechos y setas junto al
+     bosque, juncos en la orilla) y lejos de construcciones y senderos. Se mecen con el viento. */
+  _listaDetalles() {
+    if (this._detalles) return this._detalles;
+    const N = this.N;
+    const s = this.semilla + 5100;
+    const lista = [];
+    const lugares = (this.lugares || []).filter((e) => e.estado !== "ruina");
+    const tramos = [];
+    const porComunidad = new Map();
+    for (const e of lugares) if (e.comunidad != null) {
+      if (!porComunidad.has(e.comunidad)) porComunidad.set(e.comunidad, []);
+      porComunidad.get(e.comunidad).push(e);
+    }
+    for (const g of porComunidad.values()) for (let i = 1; i < g.length; i++) tramos.push([g[i - 1], g[i]]);
+    const despejado = (u, v) => {
+      for (const e of lugares) if (Math.abs(u - e.x - 0.5) < 1.9 && v > e.y - 0.6 && v < e.y + 1.5) return false;
+      for (const [a, b] of tramos) {
+        const ax = a.x + 0.5, ay = a.y + 0.8, bx = b.x + 0.5, by = b.y + 0.8;
+        const L = (bx - ax) ** 2 + (by - ay) ** 2 || 1;
+        const k = Math.max(0, Math.min(1, ((u - ax) * (bx - ax) + (v - ay) * (by - ay)) / L));
+        if (Math.hypot(u - ax - k * (bx - ax), v - ay - k * (by - ay)) < 0.7) return false;
+      }
+      return true;
+    };
+    const B = this.mapa.biomas;
+    const esBosque = (x, y) => x >= 0 && y >= 0 && x < N && y < N && B[y * N + x] === "B";
+    for (let y = 0; y < N; y++) {
+      for (let x = 0; x < N; x++) {
+        const celda = y * N + x;
+        const b = B[celda];
+        if (b === "R") continue;
+        const r = (k) => azar(celda, k, s);
+        const pon = (nombre, tam, mece, k) => {
+          const u = x + 0.12 + r(k) * 0.76;
+          const v = y + 0.15 + r(k + 1) * 0.75;
+          if (this._aguaEn(u, v) < .27 && despejado(u, v)) lista.push([v, u, nombre, tam * (0.85 + r(k + 2) * 0.3), r(k + 3) < 0.5, r(k + 4) * 6.28, mece]);
+        };
+        const orilla = this.mapa.ribera[celda] === "1";
+        const masa = muestra(this.campos.rodal, this.campos.G, x+.5, y+.5);
+        if (b === "B") {
+          if (r(16) < .09 + .28 * (1 - masa)) pon("hojarasca", .82, 0, 20);
+          if (masa < .55 && r(1) < .19) pon("helecho", .22, .035, 31);
+          if (r(2) < .033) pon("rama", .38, 0, 35);
+          continue;
+        }
+        const linde = esBosque(x - 1, y) || esBosque(x + 1, y) || esBosque(x, y - 1) || esBosque(x, y + 1);
+        if (orilla) {
+          if (masa > .25 && r(16) < .32) pon("hierba_corta", .77, .025, 130);
+          if (r(1) < .07 + masa * .42) pon("juncos", 0.34, 0.07, 10);
+          if (masa > .6 && r(2) < .22) pon("juncos", 0.24, 0.07, 20);
+          if (r(3) < 0.1) pon("guijarros", 0.14, 0, 30);
+          continue;
+        }
+        if (linde) {
+          if (r(4) < 0.4) pon("helecho", 0.32, 0.05, 40);
+          if (r(5) < 0.1) pon("seta", 0.15, 0, 50);
+          if (r(6) < 0.07) pon("rama", 0.5, 0, 60);
+        }
+        const pasto = this._pasto(x + .5, y + .5);
+        if (r(16) < .08 + .40 * pasto) {
+          pon("hierba_corta", .72 + pasto * .35, .025, 130);
+          if (pasto > .55 && r(18) < .59) pon("hierba_alta", .46 + .22 * pasto, .05, 145);
+        }
+        if (r(7) < .44 * pasto * pasto) {
+          pon(["mata_1", "mata_2", "mata_3"][(r(8) * 3) | 0], .28, .06, 70);
+          if (r(15) < .5) pon("mata_2", .18, .055, 74);
+        }
+        // flores en grupos sueltos: solo donde un campo amplio lo permite, y pocas
+        const grupo = ruido(x / 3.2, y / 3.2, s + 1);
+        if (grupo > 0.64 && pasto > .28 && pasto < .85 && r(9) < 0.48) {
+          const color = ruido(x / 6, y / 6, s + 2) > 0.5 ? "flores_amarillas" : "flores_blancas";
+          pon(color, 0.16, 0.08, 80);
+          if (r(11) < 0.35) pon(color, 0.14, 0.08, 90);
+        }
+        if (r(12) < 0.018) pon("piedra_redonda", 0.3, 0, 100);
+        if (r(13) < 0.007) pon("roca_grande", 0.45, 0, 110);
+        if (r(14) < 0.02) pon("guijarros", 0.14, 0, 120);
+      }
+    }
+    lista.sort((a, b) => a[0] - b[0]);
+    return (this._detalles = lista);
+  }
+
+  _detallesVivos(c, t) {
+    const z = this.cam.z;
+    if (z <= 14 * this.dpr) return;
+    const lista = this._listaDetalles();
+    const { ancho, alto } = this;
+    const ox = ancho / 2 - this.cam.x * z;
+    const oy = alto / 2 - this.cam.y * z;
+    const adulto = this._tamanoFigura();
+    const vMin = this.cam.y - alto / 2 / z - 0.5;
+    const vMax = this.cam.y + alto / 2 / z + 1;
+    const uMin = this.cam.x - ancho / 2 / z - 0.5;
+    const uMax = this.cam.x + ancho / 2 / z + 0.5;
+    let lo = 0;
+    let hi = lista.length;
+    while (lo < hi) {
+      const mid = (lo + hi) >> 1;
+      if (lista[mid][0] < vMin) lo = mid + 1;
+      else hi = mid;
+    }
+    const viento = this.ambiente ? 1 : 0;
+    c.globalAlpha = suave(14 * this.dpr, 20 * this.dpr, z);
+    for (let n = lo; n < lista.length && lista[n][0] <= vMax; n++) {
+      const [v, u, nombre, tam, voltea, fase, mece] = lista[n];
+      if (u < uMin || u > uMax) continue;
+      if (this.estado.estacion > 1 && nombre.startsWith("flores_")) continue;
+      if (this.estado.estacion === 3 && (nombre === "helecho" || nombre === "seta"
+          || nombre.startsWith("hierba_") || nombre === "hojarasca")) continue;
+      const balanceo = mece ? viento * mece * Math.sin(t * 1.4 + fase) : 0;
+      this.ilustrado.detalle(c, nombre, u * z + ox, v * z + oy, tam * adulto, voltea, balanceo);
+    }
+    c.globalAlpha = 1;
+  }
+
   /* Tierra pisada: senderos entre los lugares de una misma comunidad y una explanada ante cada
      lugar en uso, mayor cuanto más se usa. Se deriva de lo que el motor dice de cada lugar. */
+  _usoSuelo(e) {
+    if (e.estado === "ruina" || e.estado === "abandonada") return 0;
+    return (e.ocupantes?.length || 0) + Math.min(6,(e.guardado || 0)/6) + (e.comunidad != null ? 1.5 : 0);
+  }
+
   _senderos(c, gente) {
     const { z, ox, oy } = gente;
     if (!this.lugares || !this.lugares.length || z < 6 * this.dpr) return;
-    const pos = (e) => [(e.x + 0.5) * z + ox, (e.y + 0.78) * z + oy];
+    const pos = (e) => {
+      let puerta = 0;
+      if (this.ilustrado && e.tipo === "refugio") {
+        const {nombre, d, k} = this.ilustrado.medidaDeLugar(e,this._tamanoFigura());
+        puerta = ((nombre === "choza_baja" ? .32 : .41)*d.ancho - d.apoyo[0])*k;
+      }
+      return [(e.x+.5)*z + ox + puerta, (e.y+.78)*z + oy];
+    };
     const porComunidad = new Map();
     for (const e of this.lugares) {
       if (e.comunidad == null || e.estado === "ruina") continue;
@@ -2397,23 +3121,42 @@ export class MapaVivo {
     const ancho = this.mapa.ancho;
     const biomas = this.mapa.biomas;
     // el sendero se dibuja a tramos y se interrumpe bajo el arbolado: no pisa las copas
-    const trazo = (x1, y1, x2, y2, curva) => {
+    const trazo = (x1, y1, x2, y2, curva, semilla, uso) => {
       const mx = (x1 + x2) / 2 - (y2 - y1) * curva;
       const my = (y1 + y2) / 2 + (x2 - x1) * curva;
       const pasos = Math.max(4, Math.ceil(Math.hypot(x2 - x1, y2 - y1) / (z * 0.3)));
-      c.beginPath();
-      let dentro = false;
+      const longitud = Math.max(1,Math.hypot(x2-x1,y2-y1));
+      const nx = (y1-y2)/longitud, ny = (x2-x1)/longitud;
+      let banda = [];
+      const pintar = () => {
+        if (banda.length > 1) for (const [ancho,tinta] of [[1,"rgba(136,119,80,.24)"],[.71,"rgba(169,146,99,.30)"],[.38,"rgba(187,160,112,.42)"]]) {
+          c.fillStyle = tinta;
+          c.beginPath();
+          for (const [x,y,w] of banda) c.lineTo(x+nx*w*ancho,y+ny*w*ancho);
+          for (let n=banda.length-1; n>=0; n--) {
+            const [x,y,w] = banda[n];
+            c.lineTo(x-nx*w*ancho,y-ny*w*ancho);
+          }
+          c.closePath();
+          c.fill();
+        }
+        banda = [];
+      };
       for (let i = 0; i <= pasos; i++) {
         const k = i / pasos;
-        const x = (1 - k) * (1 - k) * x1 + 2 * (1 - k) * k * mx + k * k * x2;
-        const y = (1 - k) * (1 - k) * y1 + 2 * (1 - k) * k * my + k * k * y2;
+        const desvio = Math.sin(Math.PI*k) * (ruido(k*6,0,semilla)-.5) * .043;
+        const x = (1 - k) * (1 - k) * x1 + 2 * (1 - k) * k * mx + k * k * x2 - (y2-y1)*desvio;
+        const y = (1 - k) * (1 - k) * y1 + 2 * (1 - k) * k * my + k * k * y2 + (x2-x1)*desvio;
         const cx = Math.floor((x - ox) / z);
-        const cy = Math.floor((y - oy) / z - 0.2);
-        const libre = cx >= 0 && cy >= 0 && cx < ancho && biomas[cy * ancho + cx] !== "B";
-        if (libre && dentro) c.lineTo(x, y);
-        else if (libre) c.moveTo(x, y);
-        dentro = libre;
+        const cy = Math.floor((y - oy) / z);
+        const bioma = biomas[cy*ancho+cx];
+        const solar = Math.min(k,1-k)*longitud < z*1.5;
+        const libre = cx >= 0 && cy >= 0 && cx < ancho && cy < ancho && (bioma === "P" || (solar && bioma === "B"))
+          && this._aguaEn((x-ox)/z,(y-oy)/z) < .21;
+        if (libre) banda.push([x,y,z*(.18+.15*uso)*(.62+.76*ruido(k*9,1,semilla))]);
+        else pintar();
       }
+      pintar();
     };
     for (const grupo of porComunidad.values()) {
       if (grupo.length < 2) continue;
@@ -2433,19 +3176,13 @@ export class MapaVivo {
         const [x1, y1] = pos(a);
         const [x2, y2] = pos(b);
         const curva = (((a.id * 7 + b.id * 13) % 9) - 4) * 0.03;
-        c.strokeStyle = "rgba(92,74,48,0.30)";
-        c.lineWidth = Math.max(2, z * 0.3);
-        trazo(x1, y1, x2, y2, curva);
-        c.stroke();
-        c.strokeStyle = "rgba(170,146,104,0.32)";
-        c.lineWidth = Math.max(1, z * 0.13);
-        trazo(x1, y1, x2, y2, curva);
-        c.stroke();
+        const uso = Math.min(1,(this._usoSuelo(a)+this._usoSuelo(b))/12);
+        trazo(x1,y1,x2,y2,curva,a.id,uso);
       }
     }
     for (const e of this.lugares) {
       if (e.estado === "ruina" || e.estado === "abandonada") continue;
-      const uso = (e.ocupantes ? e.ocupantes.length : 0) + Math.min(6, (e.guardado || 0) / 6) + (e.comunidad != null ? 1.5 : 0);
+      const uso = this._usoSuelo(e);
       if (uso < 0.5) continue;
       const [x, y] = pos(e);
       const r = z * (0.38 + Math.min(0.5, uso * 0.07));
@@ -2457,6 +3194,12 @@ export class MapaVivo {
       c.beginPath();
       c.ellipse(x, y, r * 1.3, r * 0.62, 0, 0, TAU);
       c.fill();
+      if (this.ilustrado && this._aguaEn((x-ox)/z,(y-oy)/z) < .2) {
+        c.save();
+        c.globalAlpha = .74 + .16*Math.min(1,uso/6);
+        this.ilustrado.detalle(c,"umbral",x+r*.19,y+r*.65,r*2.30+z*.44,false,0);
+        c.restore();
+      }
     }
     c.restore();
   }
@@ -2465,7 +3208,9 @@ export class MapaVivo {
   _trasLugar(f, lugares) {
     for (const l of lugares) {
       const e = l.e;
-      if (f.ry + f.ay < l.v && f.ry > e.y - 1.75 && Math.abs(f.rx - (e.x + 0.5)) < 1.0) return 2;
+      const alto = this.ilustrado ? 3.1 : 1.75;
+      const ancho = this.ilustrado ? 1.45 : 1.0;
+      if (f.ry + f.ay < l.v && f.ry > e.y - alto && Math.abs(f.rx - (e.x + 0.5)) < ancho) return 2;
     }
     return 0;
   }
@@ -2483,7 +3228,21 @@ export class MapaVivo {
       else hi = mid;
     }
     let capa = 0;
-    for (let i = lo; i < A.n && A.v[i] <= y + 2.6; i++) {
+    for (let i = lo; i < A.n && A.v[i] <= y + 3.2; i++) {
+      if (this.ilustrado) {
+        const copa = A.copas[i];
+        if (!copa || !this._enPie(i)) continue;
+        if (this._enSolar(this._solares(), A.u[i], A.v[i], copa.ancho * .4)) continue;
+        const d = this.ilustrado.i.arboles[copa.pieza];
+        const dx = x - A.u[i] - (.5 - d.apoyo[0] / d.ancho) * copa.ancho;
+        const dy = A.v[i] - y + .52;
+        const cubre = (dx / (.51 * copa.ancho + .12)) ** 2 + ((dy - copa.alto * .61) / (.46 * copa.alto)) ** 2 < 1;
+        if (cubre || (Math.abs(x - A.u[i]) < .16 && dy >= 0 && dy < .45 * copa.alto)) {
+          if (A.v[i] > y) return 2;
+          capa = 1;
+        }
+        continue;
+      }
       if (A.tipo[i] === 2) {
         // un arbusto justo delante tapa los pies: la persona se redibuja atenuada encima
         const dv = A.v[i] - y;
@@ -2498,7 +3257,7 @@ export class MapaVivo {
       const cubre = altura > r * 1.0 && altura < r * 3.4;
       const tronco = altura > -0.1 && altura <= r * 1.0 && du < 0.16 && du > -0.16;
       if (!cubre && !tronco) continue;
-      if (!this._enPie(i)) continue;
+      if (!this._enPie(i) || this._aclarado(i)) continue;
       if (A.v[i] > y) return 2;
       capa = 1;
     }
@@ -2514,7 +3273,8 @@ export class MapaVivo {
     for (const f of gente.figuras) if (f.d.vivo && f.d.con != null && (f.d.actividad === "dando" || DAR.has(f.d.gesto))) reciben.add(f.d.con);
     const lugares = pasada === 0 ? gente.lugares : [];
     let siguiente = 0;
-    const opciones = { dpr: this.dpr, nieve: this.estado.estacion === 3 ? 1 : this.escarcha * 0.35 };
+    const opciones = { dpr: this.dpr, nieve: this.estado.estacion === 3 ? 1 : this.escarcha * 0.35, ilustrado: this.ilustrado, adulto: this._tamanoFigura(),
+                       invierno: this.estado.estacion === 3 };
     const lugarHasta = (v) => {
       while (siguiente < lugares.length && lugares[siguiente].v <= v) {
         const l = lugares[siguiente++];
@@ -2531,7 +3291,10 @@ export class MapaVivo {
       if (pasada === 1 && !f.capa) continue;
       if (!f.aspecto) f.aspecto = p.aspecto(f.d, paletas);
       c.globalAlpha = pasada === 1 && f.capa === 2 ? 0.52 : 1;
-      (p.dibujarPersonaRapida || p.dibujarPersona)(c, f.sx, f.sy, gente.s * (f.d.etapa === 'infancia' ? .58 : f.d.etapa === 'aprendiz' ? .79 : 1), f.aspecto, p.poseDe(f.d, f.anda && this.ambiente, reciben.has(f.id) && !f.anda), f.mira, tiempo, f.fase);
+      const talla = gente.s * (f.d.etapa === 'infancia' ? .58 : f.d.etapa === 'aprendiz' ? .79 : 1);
+      const pose = p.poseDe(f.d, f.anda && this.ambiente, reciben.has(f.id) && !f.anda);
+      if (this.ilustrado) this.ilustrado.persona(c, f.sx, f.sy, talla, f.aspecto, pose, f, tiempo);
+      else (p.dibujarPersonaRapida || p.dibujarPersona)(c, f.sx, f.sy, talla, f.aspecto, pose, f.mira, tiempo, f.fase);
     }
     c.globalAlpha = 1;
     lugarHasta(Infinity);
@@ -2541,7 +3304,8 @@ export class MapaVivo {
   _lugaresLuz(c, gente, t) {
     if (!gente.lugares.length) return;
     const lum = (this.luz[0] + this.luz[1] + this.luz[2]) / 3;
-    const o = { dpr: this.dpr, t, ambiente: this.ambiente, noche: limitar((0.8 - lum) / 0.42, 0, 1) * (1 - this.velo) };
+    const o = { dpr: this.dpr, t, ambiente: this.ambiente, noche: limitar((0.8 - lum) / 0.42, 0, 1) * (1 - this.velo),
+                ilustrado: this.ilustrado, adulto: this._tamanoFigura() };
     for (const l of gente.lugares) luzDeLugar(c, l.sx, l.sy, gente.u, l.e, o);
   }
 

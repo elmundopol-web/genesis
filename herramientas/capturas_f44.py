@@ -34,7 +34,7 @@ etiqueta = sys.argv[1]
 RAPIDO = "--rapido" in sys.argv  # solo las fotos de la escena, para iterar
 out = ROOT / "docs/f4.4" / etiqueta
 out.mkdir(parents=True, exist_ok=True)
-LISTO = "window.genesis && window.genesis.mundo && window.genesis.mundo.listo"
+LISTO = "window.genesis && window.genesis.mundo && window.genesis.mundo.listo && window.genesis.mundo.ilustrado"
 AVANZA = 'document.querySelector(\'[data-avance="hora"]\').click()'
 CAM = (39.5, 26.5)
 
@@ -55,6 +55,8 @@ def cdp(pasos, carpeta):
     plan = Path(carpeta) / "plan.json"
     plan.write_text(json.dumps({"pasos": pasos}), encoding="utf8")
     r = subprocess.run(["node", str(ROOT / "herramientas/cdp.mjs"), str(plan)], capture_output=True, text=True, timeout=900)
+    if r.returncode:
+        raise RuntimeError(r.stderr[-3000:] or r.stdout[-1500:])
     try:
         return json.loads(r.stdout.strip().splitlines()[-1])
     except Exception:
@@ -72,6 +74,152 @@ def gif(origen, destino):
     if subprocess.run(["ffmpeg", "-loglevel", "error", "-y", "-i", str(destino), "-vf", filtro, str(ligero)]).returncode == 0:
         destino.write_bytes(ligero.read_bytes())
 
+
+if "--paisaje" in sys.argv:
+    resultados = {}
+    medir = """(async () => {
+      const g = genesis.mundo, dibujar = g._componer;
+      const tiempos = [];
+      g._componer = function(...args) { tiempos.push(performance.now()); return dibujar.apply(this,args); };
+      try { await new Promise(ok => setTimeout(ok,3500)); } finally { g._componer = dibujar; }
+      const ms = tiempos.slice(1).map((v,i)=>v-tiempos[i]).sort((a,b)=>a-b);
+      return {fps:+((tiempos.length-1)*1000/(tiempos.at(-1)-tiempos[0])).toFixed(1),
+              p95_ms:+ms[Math.floor(ms.length*.95)].toFixed(1), zoom:g.cam.z/g.dpr,
+              cam:[g.cam.x,g.cam.y], tick:genesis.estado.estado.tick};
+    })()"""
+    for hora, vistas in [(2338, [("claro", *CAM, 40), ("general", *CAM, 14), ("bosque", 50.5, 15.5, 40)]),
+                         (117 * 24 + 8, [("invierno", *CAM, 40)])]:
+        with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as tmp:
+            ses, srv, m = servir(14, 15, hora, tmp)
+            try:
+                url = f"http://127.0.0.1:{srv.server_port}/"
+                pasos = []
+                for nombre, x, y, px in vistas:
+                    pasos += [{"ir": url + f"?{nombre}#vista={x},{y},{px}&sinvelo&limpia"},
+                              {"esperar": LISTO, "limite": 60000}, {"pausa": 1000},
+                              {"js": medir, "guardar": nombre},
+                              {"js": "genesis.mundo.ambiente=false; genesis.mundo._componer(0,0)"},
+                              {"foto": str(out / f"{nombre}.jpg"), "calidad": 93}]
+                if hora == 2338 and "--clip" in sys.argv:
+                    ses.fijar_velocidad(1)
+                    origen = "45,30" if "--ribera" in sys.argv else "39.5,29"
+                    pasos += [{"ir": url + f"?recorrido#vista={origen},40&sinvelo&limpia"},
+                              {"esperar": LISTO}, {"pausa": 1500},
+                              {"js": (ROOT / "herramientas/recorrido_bosque.js").read_text(encoding="utf8"),
+                               "guardar": "recorrido"},
+                              {"blob": "window.clipBosque", "ruta": str(Path(tmp) / "recorrido.webm")}]
+                datos = cdp(pasos, tmp)
+                if datos["errores"]:
+                    raise RuntimeError(datos["errores"])
+                resultados.update(datos)
+                if "recorrido" in datos:
+                    nombre_clip = "prado-ribera-bosque.mp4" if "--ribera" in sys.argv else "del-claro-al-bosque.mp4"
+                    subprocess.run(["ffmpeg", "-loglevel", "error", "-y", "-i", str(Path(tmp) / "recorrido.webm"),
+                                    "-vf", "fps=30", "-c:v", "libx264", "-crf", "17", "-pix_fmt", "yuv420p",
+                                    "-movflags", "+faststart", str(out / nombre_clip)], check=True)
+            finally:
+                srv.shutdown()
+                srv.server_close()
+                ses.cerrar()
+    (out / "medidas.json").write_text(json.dumps(resultados, ensure_ascii=False, indent=1), encoding="utf8")
+    sys.exit(0)
+
+if "--habitantes" in sys.argv:
+    # Nura, id 13: recorrido espontáneo en la pradera de la orilla oeste.
+    with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as tmp:
+        ses, srv, m = servir(14, 15, 107, tmp)
+        try:
+            ses.fijar_velocidad(1)
+            url = f"http://127.0.0.1:{srv.server_port}/#vista=40.5,14,40&sinvelo"
+            grabar = """(async () => {
+              const g = genesis.mundo, f = g.gente.get(13), arte = g.ilustrado;
+              const trazas = [];
+              const calcular = arte.poseIlustrada;
+              const inicio = performance.now();
+              arte.poseIlustrada = function(pose, figura, t) {
+                const nombre = calcular.call(this, pose, figura, t);
+                if (figura === f && nombre !== trazas.at(-1)?.pose)
+                  trazas.push({ms: Math.round(performance.now()-inicio), pose: nombre,
+                    tick: genesis.estado.estado.tick, x: f.d.x, y: f.d.y, actividad: f.d.actividad,
+                    pie: [Math.round(f.sx), Math.round(f.sy)]});
+                return nombre;
+              };
+              // Recorte a tamaño nativo. El codificador solo recibe el encuadre del clip.
+              const cuadro = document.createElement('canvas');
+              cuadro.width = 640;
+              cuadro.height = 360;
+              const ctx = cuadro.getContext('2d');
+              let raf;
+              function copiar() {
+                ctx.drawImage(g.lienzo, (g.lienzo.width-640)/2, (g.lienzo.height-360)/2, 640, 360, 0, 0, 640, 360);
+                raf = requestAnimationFrame(copiar);
+              }
+              copiar();
+              const flujo = cuadro.captureStream(30);
+              const video = new MediaRecorder(flujo, {mimeType:'video/webm;codecs=vp9', videoBitsPerSecond:3500000});
+              const partes = [];
+              video.ondataavailable = e => partes.push(e.data);
+              const terminado = new Promise(ok => video.onstop = ok);
+              video.start();
+              document.querySelector('#marcha').click();
+              // La velocidad efectiva puede variar con la carga del navegador.
+              // Termina cuando los pies alcanzan el destino de la salida real.
+              while (performance.now() - inicio < 30000) {
+                await new Promise(ok => setTimeout(ok, 80));
+                if (f.d.x === 38 && f.d.y === 11 && f.rx === f.hx && f.ry === f.hy) break;
+              }
+              document.querySelector('#marcha').click();
+              await new Promise(ok => setTimeout(ok, 500));
+              video.stop();
+              await terminado;
+              cancelAnimationFrame(raf);
+              flujo.getTracks().forEach(p => p.stop());
+              arte.poseIlustrada = calcular;
+              window.clipHabitante = new Blob(partes);
+              return {trazas, zoom: g.cam.z/g.dpr,
+                fichaCerrada: document.querySelector('#ficha').hidden};
+            })()"""
+            bruto = Path(tmp) / "visor.webm"
+            pasos = [{"ir": url}, {"esperar": LISTO + " && genesis.mundo.gente.has(13)", "limite": 60000}, {"pausa": 1500},
+                     {"js": grabar, "guardar": "clip"}, {"blob": "window.clipHabitante", "ruta": str(bruto)}]
+            resultado = cdp(pasos, tmp)
+            clip = resultado["clip"]
+            if resultado["errores"] or not clip["fichaCerrada"] or clip["zoom"] != 40:
+                raise RuntimeError(resultado)
+            poses = [p["pose"] for p in clip["trazas"]]
+            i = poses.index("bebiendo")
+            if (poses[i-1:i+2] != ["agachado", "bebiendo", "agachado"]
+                    or "espalda" not in poses[i+2:] or "perfil_a" not in poses[:i]):
+                raise RuntimeError(poses)
+            subprocess.run(["ffmpeg", "-loglevel", "error", "-y", "-i", str(bruto),
+                            "-vf", "fps=30", "-c:v", "libx264",
+                            "-crf", "17", "-pix_fmt", "yuv420p", "-movflags", "+faststart",
+                            str(out / "nura-en-el-rio.mp4")], check=True)
+            (out / "recorrido.json").write_text(json.dumps(resultado, ensure_ascii=False, indent=1), encoding="utf8")
+        finally:
+            srv.shutdown()
+            srv.server_close()
+            ses.cerrar()
+    sys.exit(0)
+
+if "--estaciones" in sys.argv:
+    # misma zona y cámara en cuatro momentos del año 3 (y la referencia, día 98 a las 10 h)
+    MOMENTOS = [("primavera-mediodia", 87 * 24 + 12), ("verano-referencia", 97 * 24 + 10),
+                ("verano-mediodia", 97 * 24 + 12), ("otono-atardecer", 104 * 24 + 19), ("invierno-amanecer", 114 * 24 + 7),
+                ("invierno-rio-helado", 117 * 24 + 8)]
+    for nombre, hora in MOMENTOS:
+        with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as tmp:
+            ses, srv, m = servir(14, 15, hora, tmp)
+            url = f"http://127.0.0.1:{srv.server_port}/"
+            pasos = []
+            for vista, px in (("escena", 40), ("general", 14)):
+                pasos += [{"ir": url + f"?{nombre}{vista}#vista={CAM[0]},{CAM[1]},{px}&sinvelo"}, {"esperar": LISTO},
+                          {"pausa": 3500}, {"foto": str(out / f"{nombre}-{vista}.jpg"), "calidad": 92}]
+            print(nombre, cdp(pasos, tmp), flush=True)
+            srv.shutdown()
+            srv.server_close()
+            ses.cerrar()
+    sys.exit(0)
 
 resultado = {}
 with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as tmp:

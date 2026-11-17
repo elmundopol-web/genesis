@@ -1,0 +1,609 @@
+{
+ "clip": {
+  "trazas": [
+   {
+    "ms": 3,
+    "pose": "reposo",
+    "tick": 107,
+    "x": 39,
+    "y": 12,
+    "actividad": "caminando",
+    "pie": [
+     685,
+     384
+    ]
+   },
+   {
+    "ms": 1045,
+    "pose": "perfil_a",
+    "tick": 108,
+    "x": 40,
+    "y": 12,
+    "actividad": "caminando",
+    "pie": [
+     685,
+     384
+    ]
+   },
+   {
+    "ms": 1295,
+    "pose": "perfil",
+    "tick": 108,
+    "x": 40,
+    "y": 12,
+    "actividad": "caminando",
+    "pie": [
+     695,
+     384
+    ]
+   },
+   {
+    "ms": 1542,
+    "pose": "perfil_b",
+    "tick": 108,
+    "x": 40,
+    "y": 12,
+    "actividad": "caminando",
+    "pie": [
+     705,
+     384
+    ]
+   },
+   {
+    "ms": 1792,
+    "pose": "perfil",
+    "tick": 108,
+    "x": 40,
+    "y": 12,
+    "actividad": "caminando",
+    "pie": [
+     715,
+     384
+    ]
+   },
+   {
+    "ms": 2138,
+    "pose": "caminar_a",
+    "tick": 109,
+    "x": 40,
+    "y": 14,
+    "actividad": "caminando",
+    "pie": [
+     725,
+     384
+    ]
+   },
+   {
+    "ms": 2266,
+    "pose": "reposo",
+    "tick": 109,
+    "x": 40,
+    "y": 14,
+    "actividad": "caminando",
+    "pie": [
+     725,
+     395
+    ]
+   },
+   {
+    "ms": 2390,
+    "pose": "caminar_b",
+    "tick": 109,
+    "x": 40,
+    "y": 14,
+    "actividad": "caminando",
+    "pie": [
+     725,
+     404
+    ]
+   },
+   {
+    "ms": 2516,
+    "pose": "reposo",
+    "tick": 109,
+    "x": 40,
+    "y": 14,
+    "actividad": "caminando",
+    "pie": [
+     725,
+     415
+    ]
+   },
+   {
+    "ms": 2643,
+    "pose": "caminar_a",
+    "tick": 109,
+    "x": 40,
+    "y": 14,
+    "actividad": "caminando",
+    "pie": [
+     725,
+     425
+    ]
+   },
+   {
+    "ms": 2771,
+    "pose": "reposo",
+    "tick": 109,
+    "x": 40,
+    "y": 14,
+    "actividad": "caminando",
+    "pie": [
+     725,
+     435
+    ]
+   },
+   {
+    "ms": 2889,
+    "pose": "caminar_b",
+    "tick": 109,
+    "x": 40,
+    "y": 14,
+    "actividad": "caminando",
+    "pie": [
+     725,
+     444
+    ]
+   },
+   {
+    "ms": 3022,
+    "pose": "reposo",
+    "tick": 110,
+    "x": 40,
+    "y": 16,
+    "actividad": "caminando",
+    "pie": [
+     725,
+     454
+    ]
+   },
+   {
+    "ms": 3143,
+    "pose": "caminar_a",
+    "tick": 110,
+    "x": 40,
+    "y": 16,
+    "actividad": "caminando",
+    "pie": [
+     725,
+     465
+    ]
+   },
+   {
+    "ms": 3249,
+    "pose": "reposo",
+    "tick": 110,
+    "x": 40,
+    "y": 16,
+    "actividad": "caminando",
+    "pie": [
+     725,
+     475
+    ]
+   },
+   {
+    "ms": 3360,
+    "pose": "caminar_b",
+    "tick": 110,
+    "x": 40,
+    "y": 16,
+    "actividad": "caminando",
+    "pie": [
+     725,
+     485
+    ]
+   },
+   {
+    "ms": 3471,
+    "pose": "reposo",
+    "tick": 110,
+    "x": 40,
+    "y": 16,
+    "actividad": "caminando",
+    "pie": [
+     725,
+     495
+    ]
+   },
+   {
+    "ms": 3587,
+    "pose": "caminar_a",
+    "tick": 110,
+    "x": 40,
+    "y": 16,
+    "actividad": "caminando",
+    "pie": [
+     725,
+     505
+    ]
+   },
+   {
+    "ms": 3695,
+    "pose": "reposo",
+    "tick": 110,
+    "x": 40,
+    "y": 16,
+    "actividad": "caminando",
+    "pie": [
+     725,
+     515
+    ]
+   },
+   {
+    "ms": 3811,
+    "pose": "caminar_b",
+    "tick": 110,
+    "x": 40,
+    "y": 16,
+    "actividad": "caminando",
+    "pie": [
+     725,
+     525
+    ]
+   },
+   {
+    "ms": 3920,
+    "pose": "reposo",
+    "tick": 110,
+    "x": 40,
+    "y": 16,
+    "actividad": "caminando",
+    "pie": [
+     725,
+     535
+    ]
+   },
+   {
+    "ms": 4103,
+    "pose": "espalda_a",
+    "tick": 111,
+    "x": 40,
+    "y": 14,
+    "actividad": "caminando",
+    "pie": [
+     725,
+     544
+    ]
+   },
+   {
+    "ms": 4233,
+    "pose": "espalda",
+    "tick": 111,
+    "x": 40,
+    "y": 14,
+    "actividad": "caminando",
+    "pie": [
+     725,
+     534
+    ]
+   },
+   {
+    "ms": 4354,
+    "pose": "espalda_b",
+    "tick": 111,
+    "x": 40,
+    "y": 14,
+    "actividad": "caminando",
+    "pie": [
+     725,
+     524
+    ]
+   },
+   {
+    "ms": 4487,
+    "pose": "espalda",
+    "tick": 111,
+    "x": 40,
+    "y": 14,
+    "actividad": "caminando",
+    "pie": [
+     725,
+     514
+    ]
+   },
+   {
+    "ms": 4608,
+    "pose": "espalda_a",
+    "tick": 111,
+    "x": 40,
+    "y": 14,
+    "actividad": "caminando",
+    "pie": [
+     725,
+     504
+    ]
+   },
+   {
+    "ms": 4738,
+    "pose": "espalda",
+    "tick": 111,
+    "x": 40,
+    "y": 14,
+    "actividad": "caminando",
+    "pie": [
+     725,
+     494
+    ]
+   },
+   {
+    "ms": 4859,
+    "pose": "espalda_b",
+    "tick": 111,
+    "x": 40,
+    "y": 14,
+    "actividad": "caminando",
+    "pie": [
+     725,
+     484
+    ]
+   },
+   {
+    "ms": 4984,
+    "pose": "espalda",
+    "tick": 111,
+    "x": 40,
+    "y": 14,
+    "actividad": "caminando",
+    "pie": [
+     725,
+     474
+    ]
+   },
+   {
+    "ms": 5187,
+    "pose": "espalda_a",
+    "tick": 112,
+    "x": 40,
+    "y": 13,
+    "actividad": "caminando",
+    "pie": [
+     725,
+     464
+    ]
+   },
+   {
+    "ms": 5432,
+    "pose": "espalda",
+    "tick": 112,
+    "x": 40,
+    "y": 13,
+    "actividad": "caminando",
+    "pie": [
+     725,
+     454
+    ]
+   },
+   {
+    "ms": 5685,
+    "pose": "espalda_b",
+    "tick": 112,
+    "x": 40,
+    "y": 13,
+    "actividad": "caminando",
+    "pie": [
+     725,
+     444
+    ]
+   },
+   {
+    "ms": 5934,
+    "pose": "espalda",
+    "tick": 112,
+    "x": 40,
+    "y": 13,
+    "actividad": "caminando",
+    "pie": [
+     725,
+     434
+    ]
+   },
+   {
+    "ms": 6187,
+    "pose": "perfil",
+    "tick": 113,
+    "x": 40,
+    "y": 13,
+    "actividad": "bebiendo",
+    "pie": [
+     725,
+     424
+    ]
+   },
+   {
+    "ms": 6277,
+    "pose": "agachado",
+    "tick": 113,
+    "x": 40,
+    "y": 13,
+    "actividad": "bebiendo",
+    "pie": [
+     725,
+     424
+    ]
+   },
+   {
+    "ms": 6493,
+    "pose": "bebiendo",
+    "tick": 113,
+    "x": 40,
+    "y": 13,
+    "actividad": "bebiendo",
+    "pie": [
+     725,
+     424
+    ]
+   },
+   {
+    "ms": 7219,
+    "pose": "agachado",
+    "tick": 114,
+    "x": 38,
+    "y": 11,
+    "actividad": "caminando",
+    "pie": [
+     725,
+     424
+    ]
+   },
+   {
+    "ms": 7443,
+    "pose": "espalda_a",
+    "tick": 114,
+    "x": 38,
+    "y": 11,
+    "actividad": "caminando",
+    "pie": [
+     725,
+     424
+    ]
+   },
+   {
+    "ms": 7512,
+    "pose": "espalda",
+    "tick": 114,
+    "x": 38,
+    "y": 11,
+    "actividad": "caminando",
+    "pie": [
+     718,
+     417
+    ]
+   },
+   {
+    "ms": 7583,
+    "pose": "espalda_b",
+    "tick": 114,
+    "x": 38,
+    "y": 11,
+    "actividad": "caminando",
+    "pie": [
+     710,
+     410
+    ]
+   },
+   {
+    "ms": 7648,
+    "pose": "espalda",
+    "tick": 114,
+    "x": 38,
+    "y": 11,
+    "actividad": "caminando",
+    "pie": [
+     704,
+     403
+    ]
+   },
+   {
+    "ms": 7716,
+    "pose": "espalda_a",
+    "tick": 114,
+    "x": 38,
+    "y": 11,
+    "actividad": "caminando",
+    "pie": [
+     697,
+     396
+    ]
+   },
+   {
+    "ms": 7793,
+    "pose": "espalda",
+    "tick": 114,
+    "x": 38,
+    "y": 11,
+    "actividad": "caminando",
+    "pie": [
+     689,
+     388
+    ]
+   },
+   {
+    "ms": 7856,
+    "pose": "espalda_b",
+    "tick": 114,
+    "x": 38,
+    "y": 11,
+    "actividad": "caminando",
+    "pie": [
+     683,
+     382
+    ]
+   },
+   {
+    "ms": 7921,
+    "pose": "espalda",
+    "tick": 114,
+    "x": 38,
+    "y": 11,
+    "actividad": "caminando",
+    "pie": [
+     676,
+     375
+    ]
+   },
+   {
+    "ms": 7994,
+    "pose": "espalda_a",
+    "tick": 114,
+    "x": 38,
+    "y": 11,
+    "actividad": "caminando",
+    "pie": [
+     668,
+     367
+    ]
+   },
+   {
+    "ms": 8065,
+    "pose": "espalda",
+    "tick": 114,
+    "x": 38,
+    "y": 11,
+    "actividad": "caminando",
+    "pie": [
+     661,
+     360
+    ]
+   },
+   {
+    "ms": 8137,
+    "pose": "espalda_b",
+    "tick": 115,
+    "x": 38,
+    "y": 11,
+    "actividad": "durmiendo",
+    "pie": [
+     654,
+     353
+    ]
+   },
+   {
+    "ms": 8203,
+    "pose": "espalda",
+    "tick": 115,
+    "x": 38,
+    "y": 11,
+    "actividad": "durmiendo",
+    "pie": [
+     647,
+     346
+    ]
+   },
+   {
+    "ms": 8222,
+    "pose": "dormido",
+    "tick": 115,
+    "x": 38,
+    "y": 11,
+    "actividad": "durmiendo",
+    "pie": [
+     645,
+     344
+    ]
+   }
+  ],
+  "zoom": 40,
+  "fichaCerrada": true
+ },
+ "errores": []
+}

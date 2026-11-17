@@ -1,82 +1,83 @@
-# GENESIS F2 — Estado de desarrollo
+# GENESIS · Estado del proyecto
 
-Memoria, aprendizaje y sociedad inicial. **F2 cerrada**, versión 0.2.0-f2.
-Estado de entrega, medidas y límites: [F2-ESTADO.md](F2-ESTADO.md).
+Resumen de todo el proyecto en un solo sitio: qué es, qué hay hecho, por dónde vamos y qué falta.
+Cada fase tiene además su informe detallado en esta carpeta, enlazado abajo.
+Última actualización el 18/11/2026.
 
-## Punto de partida comprobado
+## Qué es
 
-- 192 pruebas Python y 3 JavaScript pasaban antes de tocar nada (F1, 0.1.0-f1).
-- Huellas de F1 fijadas (año completo, semilla 4 abundante y semilla 7 con
-  abundancia 0,3): están en `pruebas/test_sociedad.py::PruebasReglasDeF1`.
-- Copia de F1 previa a los cambios: carpeta `respaldo-f1` del directorio temporal de la sesión.
+GENESIS es un simulador experimental de civilizaciones. Los habitantes tienen memoria, creencias, objetivos y relaciones, y el jugador observa e interviene como experimentador.
 
-## Hito 1 — Motor: experiencia → recuerdo → decisión distinta (TERMINADO)
+Principios fijados desde el inicio:
+- El motor decide todo lo que pasa: nada se inventa para decorar, y cada hecho tiene una causa registrada.
+- Las partidas son reproducibles: la misma semilla da la misma historia.
+- Cada fase conserva las reglas de las anteriores: una partida vieja se reproduce igual y `ejecutar.py ampliar` crea una copia con las reglas nuevas.
+- No se finge conciencia ni exactitud científica.
 
-Archivos nuevos: `genesis/motor/mente.py`, `sociedad.py`, `planes.py`,
-`pruebas/test_sociedad.py`. Modificados: `config.py` (reglas, activación,
-`ConfigMente`), `habitantes.py` (ganchos, percepción ampliada), `decisiones.py`
-(acciones entre personas), `mundo.py`, `motor/__init__.py`.
+**Dónde está:** `C:\Users\elmun\Desktop\Juego\genesis\`
+- Para abrir el juego, `iniciar.bat`. Para las pruebas, `probar.bat`. La guía de uso está en el [README](../README.md).
+- `genesis\motor\` (simulación), `genesis\almacen\` (partidas en SQLite), `genesis\sesion.py` y `genesis\visor\` (visor web en el navegador).
+- `assets\`: el arte ilustrado que aporta el usuario. `partidas\`: las partidas guardadas, que nunca se tocan en las pruebas.
+- Python solo con la biblioteca estándar. Las herramientas de `herramientas\` usan además PIL y numpy, y las capturas usan Chrome sin ventana con `cdp.mjs`.
 
-- Reglas versionadas: `ConfigHabitantes.reglas` (1 = F1, 2 = F2). Con reglas 1 el
-  motor es el de F1, bit a bit (huellas idénticas).
-- Memoria episódica acotada (32), consolidación, olvido determinista, recuperación.
-- Creencias: lugares vistos, indicaciones recibidas (fuente, antigüedad,
-  confianza), lugares vistos vacíos; corrección al observar.
-- Objetivos con planes (`planes.py`), prioridades, interrupción solo por algo
-  más importante y realizable; razones guardadas al decidir (`porque`).
-- Tratos: pedir, dar, negar, contar; entregas atómicas; relaciones dirigidas.
-- Pruebas de comportamiento en `test_sociedad.py`, todas pasan, incluidas
-  las últimas correcciones de continuidad con mal tiempo y memoria causal.
+**Versión actual:** reglas F4.3 (`0.4.3-f43`) con el visor de F4.4. El cierre de F4.4 verifica 30 pruebas de interfaz y 18 de sesión, servidor y comandos.
 
-## Hito 2 — Persistencia y compatibilidad (TERMINADO)
+## Fases terminadas
 
-- El estado de la mente va dentro de cada habitante solo con reglas 2.
-- `almacen.ampliar_partida` + orden `ampliar`: copia una partida F1, deja el
-  original intacto y activa las reglas 2 desde la hora de la copia
-  (`sociedad.activada`). Comprobado: eventos previos idénticos y `verificar`
-  exacto en original y copia.
-- CLI: `nueva --reglas`, `ampliar`, nombres `-sociedad`, `listar` indica reglas.
+| Fase | Qué añadió | Informe |
+|---|---|---|
+| **F0** | Mundo determinista de 64 × 64 celdas: terreno, río, bosque, clima, estaciones y recursos que crecen y se agotan. | [README](../README.md) |
+| **F1** | 25 habitantes con hambre, sed, energía y salud. Exploran, recogen, comen, beben, descansan, envejecen y mueren. Visor con mapa, crónica y fichas. | [F1-ESTADO.md](F1-ESTADO.md) |
+| **F2** | Memoria episódica, creencias que se corrigen, objetivos con planes y tratos entre personas (pedir, dar, negar, indicar lugares) con relaciones dirigidas. | [F2-ESTADO.md](F2-ESTADO.md) |
+| **F2.5** | Salto visual por código: mapa pintado, personas con poses, retratos e interfaz oscura sobre el mapa. | [F2.5-ESTADO.md](F2.5-ESTADO.md) |
+| **F3** | Comunidades: talar madera, construir y reparar refugios y depósitos, compromisos, acuerdos, unirse y marcharse. | [F3-ESTADO.md](F3-ESTADO.md) |
+| **F3.1** | Corrige las cesiones de sitio en los refugios (con razón real y causa fiel). | [F3.1-ESTADO.md](F3.1-ESTADO.md) |
+| **F4** | Vidas y generaciones: parejas, nacimientos, familia, duelo, promesas y favoritos. «Intervenir» abre agujeros y deja ofrendas. «Historias» reúne las consecuencias. | [F4-ESTADO.md](F4-ESTADO.md) |
+| **F4.1** | Crianza estable: un referente para cada menor, encargos de cuidado, relevos y vida cotidiana. | [F4.1-ESTADO.md](F4.1-ESTADO.md) |
+| **F4.2** | Crecer y mantener una familia: aprendices, lecciones que pasan de padres a hijos, provisiones antes del nacimiento. Llegan adultos y nietos. | [F4.2-ESTADO.md](F4.2-ESTADO.md) |
+| **F4.2.1** | Auditoría de 20 mundos. Los conflictos ocurren pero casi no cambian decisiones, y en el mapa no se ven. | [F4.2.1-AUDITORIA.md](F4.2.1-AUDITORIA.md) |
+| **F4.3** | Relaciones coherentes: una entrega a quien la esperaba cumple la promesa, el juicio sale de la perspectiva de cada persona, los antecedentes pesan y el perdón tiene tres desenlaces. En el visor: el receptor real, poses nuevas, señales breves y senderos. | [F4.3-ESTADO.md](F4.3-ESTADO.md) |
+| **F4.4** | Visor ilustrado con habitantes orientados al caminar y beber, construcciones pintadas, claros y bosques más variados, río con corriente y bajíos, y sombras integradas con el terreno. | [F4.4-ESTADO.md](F4.4-ESTADO.md) |
 
-## Hito 3 — Sesión y API (TERMINADO)
+## Base visual aprobada
 
-`genesis/sesion.py` y `genesis/visor/servidor.py`: ficha con recuerdos,
-creencias, objetivo, conocidos y tratos; resumen sobre todo el salto;
-historia de ambos participantes; módulo de mente y filtro social servidos.
-Verificado en `pruebas/test_sociedad_en_sesion.py`.
+El 18/11/2026 el usuario dio por bueno el acabado de **F4.4** para seguir con el desarrollo. Esta entrega corresponde al visor. [Informe de F4.4](F4.4-ESTADO.md).
 
-## Hito 4 — Visor y experiencia de observación (TERMINADO)
+- Escena fija: semilla 14, día 98 a las 10 h, cámara en (39,5; 26,5), a 40 px por celda.
+- Integrado el arte ilustrado de `assets/`, preparado por `herramientas/preparar_arte.py` en `genesis/visor/estatico/arte/` y colocado por `sprites.js`:
+  - **Habitantes.** Marcha frontal, de perfil y de espaldas, con los colores de cada persona. En la ribera giran, se agachan, beben de rodillas y se incorporan. [Clip de Nura](f4.4/habitantes/nura-en-el-rio.mp4).
+  - **Construcciones:** dos chozas y el depósito, lleno o vacío.
+  - **Naturaleza.** Cinco siluetas de árbol, claros con suelo visible, hierbas agrupadas y transiciones de tierra húmeda en la ribera. [Comparar a dos escalas y en invierno](f4.4/paisaje/comparar.html).
+- Corrección posterior, a petición del usuario:
+  - Ya no hay cuadrados alrededor de los árboles.
+  - Cada estación tiene un color vivo y nunca gris; en invierno hay nieve real.
+  - El bosque es más ligero, la orilla es una curva continua con su franja húmeda y el río se hiela cuando el motor lo dice.
+  - Los habitantes llevan un contorno fino.
+- Rendimiento final en la máquina de prueba (RTX 5070, 1440 × 900): 88,9 fps en el claro a escala habitual y 81,1 fps en la vista general.
+- Capturas: [cuatro momentos del año](f4.4/estaciones/cuatro-momentos.jpg) y [todas las de F4.4](f4.4/).
 
-`mente.js`, `habitantes.js`, `app.js`, `mapa.js`, `estilo.css` e `index.html`
-integran los cuatro bloques de la mente, creencias sobre el mapa, indicadores
-de tratos y rutinas agrupadas. Recuerdos y decisiones enlazan con episodios,
-causas, consecuencias y participantes. Entregas etiquetadas con su cantidad
-y hambre en porcentaje; ficha separada del zoom en escritorio compacto.
+**Última pasada visual.** El cauce muestra bajíos y pinceladas de corriente. Los senderos llegan hasta los umbrales y las chozas proyectan una sombra suave sobre el prado. [Comparar las cuatro vistas](f4.4/acabado/comparar.html) · [Recorrer el prado, el río y el bosque](f4.4/acabado/despues/prado-ribera-bosque.mp4).
 
-Revisadas fichas en abundancia y escasez, avance de hora y año, pausa,
-seguimiento, resumen social y cancelación desde el visor. Capturas nuevas
-en `docs/f2-trato.jpg` y `docs/f2-creencias.jpg`. Tamaños de prueba: 1280×720,
-1440×900 y 1920×1080 (redondeo interno inferior a un píxel).
+**Mejoras visuales para futuras pasadas.** Poses específicas para recoger, pescar, construir, cuidar y hablar. Acabado ilustrado de obras, ruinas y edificios abandonados. Variantes de edad y ajustes de la vegetación por estación.
 
-## Hito 5 — Pruebas, medidas y entrega (TERMINADO)
+## Siguiente fase
 
-- **259 pruebas Python y 5 JavaScript pasan**. Python: 246,738 s; cero
-  fallos o errores. Incluyen migración, conservación, determinismo, F1/F0,
-  comportamiento y supervivencia; los umbrales permanecen iguales.
-- Supervivencia F2: 20/20 semillas abundantes con ≥23 vivos; 8/10 a
-  abundancia 0,3 y 1/10 a 0,12. Los datos definitivos sustituyen las medidas
-  preliminares. Comparación detallada en `F2-ESTADO.md`.
-- `herramientas/medir_f2.py`: cinco repeticiones comparables de F1/F2,
-  memoria, seis años de simulación, archivos SQLite y latencias de sesión.
-  Resultado en `f2-medidas.json`.
-- `herramientas/revisar_f2.py`: traza de mundos libres, sin actores
-  colocados ni acontecimientos añadidos. Ejemplos y distinción de pruebas
-  controladas en `F2-CADENAS.md`.
-- README actualizado y enlace de captura reparado. Las partidas originales
-  se conservaron; la revisión usó bases nuevas fuera de `partidas/`.
+**F5 «Mentes autónomas» está planificada.** El primer hito propuesto, F5.0, se centra en un habitante: una experiencia concreta influye en una decisión y su historia permite entender el motivo. La hoja de ruta contempla un modelo de lenguaje local (Qwen vía Ollama) y mantiene el motor como fuente de lo que ocurre. La fase empezará con un encargo específico.
 
-## Continuación
+## Copias de seguridad
 
-No queda implementación pendiente del alcance de F2. Reciprocidad rara,
-geografía conocida, coste adicional del motor y fluidez variable son límites
-documentados. F3 requiere su propio alcance; no se han añadido lenguaje,
-generaciones, grupos ni deliberación con modelos en este cierre.
+Todas en `C:\Users\elmun\Desktop\Juego\`:
+- `genesis-antes-f4-20261114.tar.gz` y `genesis-antes-f41-20261114-215838.tar.gz`: antes de F4 y de F4.1.
+- `genesis-antes-f43-20261115.tar.gz`: antes de F4.3.
+- `genesis-f44-etapa1-20261115.tar.gz`: el estilo dibujado por código, antes del arte ilustrado.
+- `genesis\docs\f4.4\antes-arte\codigo\`: copia local del visor anterior a la integración del arte ilustrado.
+
+## Diarios de desarrollo por fase
+
+Para retomar el trabajo hito a hito:
+- [F2-ESTADO_DESARROLLO.md](F2-ESTADO_DESARROLLO.md)
+- [F2.5-ESTADO_DESARROLLO.md](F2.5-ESTADO_DESARROLLO.md)
+- [F3-ESTADO_DESARROLLO.md](F3-ESTADO_DESARROLLO.md)
+- [F3.1-ESTADO_DESARROLLO.md](F3.1-ESTADO_DESARROLLO.md)
+- [F4-ESTADO_DESARROLLO.md](F4-ESTADO_DESARROLLO.md)
+- [F4.1-ESTADO_DESARROLLO.md](F4.1-ESTADO_DESARROLLO.md)

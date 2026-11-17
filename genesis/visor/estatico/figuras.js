@@ -97,7 +97,7 @@ export function poseDe(d, anda, recibe = false) {
 }
 
 /* Cesto de mimbre al costado con lo que ha recogido. */
-function cesto(c, u, x, y) {
+export function cesto(c, u, x, y) {
   const w = u * 0.095;
   const h = u * 0.075;
   c.fillStyle = "rgb(84,58,34)";
@@ -136,7 +136,7 @@ function cesto(c, u, x, y) {
 }
 
 /* Haz de leña atado, en diagonal sobre la espalda. */
-function haz(c, u, x1, y1, x2, y2) {
+export function haz(c, u, x1, y1, x2, y2) {
   const dx = x2 - x1;
   const dy = y2 - y1;
   const l = Math.hypot(dx, dy) || 1;

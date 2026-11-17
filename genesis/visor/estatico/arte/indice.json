@@ -1,0 +1,421 @@
+{
+ "personas": {
+  "caminar_a": {
+   "archivo": "persona-caminar_a.png",
+   "ancho": 103,
+   "alto": 240,
+   "apoyo": [
+    51.5,
+    237.0
+   ],
+   "mascara": "persona-caminar_a-m.png",
+   "alto_de_pie": 240
+  },
+  "caminar_b": {
+   "archivo": "persona-caminar_b.png",
+   "ancho": 97,
+   "alto": 238,
+   "apoyo": [
+    48.5,
+    235.0
+   ],
+   "mascara": "persona-caminar_b-m.png",
+   "alto_de_pie": 240
+  },
+  "cargar": {
+   "archivo": "persona-cargar.png",
+   "ancho": 95,
+   "alto": 234,
+   "apoyo": [
+    46.5,
+    231.0
+   ],
+   "mascara": "persona-cargar-m.png",
+   "alto_de_pie": 240
+  },
+  "sentado": {
+   "archivo": "persona-sentado.png",
+   "ancho": 104,
+   "alto": 182,
+   "apoyo": [
+    49.0,
+    179.0
+   ],
+   "mascara": "persona-sentado-m.png",
+   "alto_de_pie": 240
+  },
+  "dormido": {
+   "archivo": "persona-dormido.png",
+   "ancho": 165,
+   "alto": 108,
+   "apoyo": [
+    134.0,
+    105.0
+   ],
+   "mascara": "persona-dormido-m.png",
+   "alto_de_pie": 240
+  },
+  "reposo": {
+   "archivo": "persona-reposo.png",
+   "ancho": 119,
+   "alto": 240,
+   "apoyo": [
+    55.0,
+    238.0
+   ],
+   "mascara": "persona-reposo-m.png",
+   "alto_de_pie": 240
+  },
+  "espalda_a": {
+   "archivo": "persona-espalda_a.png",
+   "ancho": 103,
+   "alto": 240,
+   "apoyo": [
+    51.5,
+    237.0
+   ],
+   "mascara": "persona-espalda_a-m.png",
+   "alto_de_pie": 240
+  },
+  "espalda_b": {
+   "archivo": "persona-espalda_b.png",
+   "ancho": 103,
+   "alto": 240,
+   "apoyo": [
+    51.5,
+    236.0
+   ],
+   "mascara": "persona-espalda_b-m.png",
+   "alto_de_pie": 240
+  },
+  "perfil_a": {
+   "archivo": "persona-perfil_a.png",
+   "ancho": 124,
+   "alto": 240,
+   "apoyo": [
+    62.0,
+    237.0
+   ],
+   "mascara": "persona-perfil_a-m.png",
+   "alto_de_pie": 240
+  },
+  "perfil_b": {
+   "archivo": "persona-perfil_b.png",
+   "ancho": 123,
+   "alto": 240,
+   "apoyo": [
+    61.5,
+    236.0
+   ],
+   "mascara": "persona-perfil_b-m.png",
+   "alto_de_pie": 240
+  },
+  "espalda": {
+   "archivo": "persona-espalda.png",
+   "ancho": 101,
+   "alto": 240,
+   "apoyo": [
+    50.5,
+    236.0
+   ],
+   "mascara": "persona-espalda-m.png",
+   "alto_de_pie": 240
+  },
+  "perfil": {
+   "archivo": "persona-perfil.png",
+   "ancho": 93,
+   "alto": 240,
+   "apoyo": [
+    46.5,
+    236.0
+   ],
+   "mascara": "persona-perfil-m.png",
+   "alto_de_pie": 240
+  },
+  "agachado": {
+   "archivo": "persona-agachado.png",
+   "ancho": 124,
+   "alto": 170,
+   "apoyo": [
+    38.4,
+    167.0
+   ],
+   "mascara": "persona-agachado-m.png",
+   "alto_de_pie": 240
+  },
+  "bebiendo": {
+   "archivo": "persona-bebiendo.png",
+   "ancho": 117,
+   "alto": 169,
+   "apoyo": [
+    44.5,
+    166.0
+   ],
+   "mascara": "persona-bebiendo-m.png",
+   "alto_de_pie": 240
+  }
+ },
+ "edificios": {
+  "choza_alta": {
+   "archivo": "edificio-choza_alta.png",
+   "ancho": 420,
+   "alto": 454,
+   "apoyo": [
+    189.5,
+    450.0
+   ],
+   "base": 350.0
+  },
+  "choza_baja": {
+   "archivo": "edificio-choza_baja.png",
+   "ancho": 420,
+   "alto": 273,
+   "apoyo": [
+    220.5,
+    269.0
+   ],
+   "base": 342.0
+  },
+  "deposito_lleno": {
+   "archivo": "edificio-deposito_lleno.png",
+   "ancho": 420,
+   "alto": 446,
+   "apoyo": [
+    261.0,
+    442.0
+   ],
+   "base": 334.0
+  },
+  "deposito_vacio": {
+   "archivo": "edificio-deposito_vacio.png",
+   "ancho": 420,
+   "alto": 448,
+   "apoyo": [
+    260.5,
+    444.0
+   ],
+   "base": 336.0
+  }
+ },
+ "arboles": {
+  "copa_ancha": {
+   "archivo": "arbol-copa_ancha.png",
+   "ancho": 410,
+   "alto": 312,
+   "apoyo": [
+    204.0,
+    308.0
+   ]
+  },
+  "copa_estrecha": {
+   "archivo": "arbol-copa_estrecha.png",
+   "ancho": 226,
+   "alto": 426,
+   "apoyo": [
+    107.5,
+    421.0
+   ]
+  },
+  "roble": {
+   "archivo": "arbol-roble.png",
+   "ancho": 335,
+   "alto": 256,
+   "apoyo": [
+    157.0,
+    252.0
+   ]
+  },
+  "abedul": {
+   "archivo": "arbol-abedul.png",
+   "ancho": 199,
+   "alto": 256,
+   "apoyo": [
+    59.0,
+    252.0
+   ]
+  },
+  "pino": {
+   "archivo": "arbol-pino.png",
+   "ancho": 169,
+   "alto": 256,
+   "apoyo": [
+    80.0,
+    252.0
+   ]
+  }
+ },
+ "detalles": {
+  "mata_1": {
+   "archivo": "detalle-mata_1.png",
+   "ancho": 139,
+   "alto": 175,
+   "apoyo": [
+    67.0,
+    170.0
+   ]
+  },
+  "mata_2": {
+   "archivo": "detalle-mata_2.png",
+   "ancho": 215,
+   "alto": 151,
+   "apoyo": [
+    111.0,
+    145.0
+   ]
+  },
+  "mata_3": {
+   "archivo": "detalle-mata_3.png",
+   "ancho": 159,
+   "alto": 143,
+   "apoyo": [
+    43.5,
+    137.0
+   ]
+  },
+  "flores_blancas": {
+   "archivo": "detalle-flores_blancas.png",
+   "ancho": 154,
+   "alto": 160,
+   "apoyo": [
+    61.5,
+    154.0
+   ]
+  },
+  "flores_amarillas": {
+   "archivo": "detalle-flores_amarillas.png",
+   "ancho": 148,
+   "alto": 159,
+   "apoyo": [
+    58.0,
+    154.0
+   ]
+  },
+  "piedra_redonda": {
+   "archivo": "detalle-piedra_redonda.png",
+   "ancho": 161,
+   "alto": 122,
+   "apoyo": [
+    80.0,
+    117.0
+   ]
+  },
+  "roca_grande": {
+   "archivo": "detalle-roca_grande.png",
+   "ancho": 168,
+   "alto": 147,
+   "apoyo": [
+    73.0,
+    142.0
+   ]
+  },
+  "guijarros": {
+   "archivo": "detalle-guijarros.png",
+   "ancho": 166,
+   "alto": 139,
+   "apoyo": [
+    105.0,
+    134.0
+   ]
+  },
+  "helecho": {
+   "archivo": "detalle-helecho.png",
+   "ancho": 201,
+   "alto": 174,
+   "apoyo": [
+    96.5,
+    168.0
+   ]
+  },
+  "seta": {
+   "archivo": "detalle-seta.png",
+   "ancho": 146,
+   "alto": 149,
+   "apoyo": [
+    71.0,
+    144.0
+   ]
+  },
+  "rama": {
+   "archivo": "detalle-rama.png",
+   "ancho": 201,
+   "alto": 129,
+   "apoyo": [
+    19.0,
+    124.0
+   ]
+  },
+  "juncos": {
+   "archivo": "detalle-juncos.png",
+   "ancho": 161,
+   "alto": 188,
+   "apoyo": [
+    78.5,
+    183.0
+   ]
+  },
+  "hierba_corta": {
+   "archivo": "detalle-hierba_corta.png",
+   "ancho": 200,
+   "alto": 46,
+   "apoyo": [
+    100.0,
+    41.86
+   ]
+  },
+  "hierba_alta": {
+   "archivo": "detalle-hierba_alta.png",
+   "ancho": 200,
+   "alto": 101,
+   "apoyo": [
+    100.0,
+    91.91
+   ]
+  },
+  "hojarasca": {
+   "archivo": "detalle-hojarasca.png",
+   "ancho": 200,
+   "alto": 34,
+   "apoyo": [
+    100.0,
+    30.94
+   ]
+  },
+  "grava": {
+   "archivo": "detalle-grava.png",
+   "ancho": 200,
+   "alto": 86,
+   "apoyo": [
+    100.0,
+    78.26
+   ]
+  },
+  "raices": {
+   "archivo": "detalle-raices.png",
+   "ancho": 200,
+   "alto": 93,
+   "apoyo": [
+    100.0,
+    84.63000000000001
+   ]
+  },
+  "umbral": {
+   "archivo": "detalle-umbral.png",
+   "ancho": 200,
+   "alto": 95,
+   "apoyo": [
+    100.0,
+    86.45
+   ]
+  }
+ },
+ "pradera": {
+  "archivo": "pradera.png",
+  "ancho": 512,
+  "alto": 512
+ },
+ "agua": {
+  "archivo": "agua-rio-v2.png",
+  "ancho": 256,
+  "alto": 256
+ }
+}

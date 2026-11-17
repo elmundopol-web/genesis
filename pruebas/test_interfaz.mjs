@@ -15,7 +15,150 @@ async function cargar(nombre) {
 const source = await readFile(new URL('habitantes.js', ESTATICO), 'utf8');
 const { Poblacion } = await cargar('habitantes.js');
 const mapaSource = await readFile(new URL('mapa.js', ESTATICO), 'utf8');
-const { MapaVivo } = await cargar('mapa.js');
+const { MapaVivo, seccionesDelRio } = await cargar('mapa.js');
+const { ArteIlustrado } = await cargar('sprites.js');
+
+test('el material del cauce conserva islas, filas secas y tramos que llegan al borde', () => {
+  const agua = Uint8Array.from([0,112,255,0,240, 0,0,0,0,0, 255,255,255,255,255,
+    0,0,111,0,0, 0,0,180,111,0]);
+  const tramos = seccionesDelRio(agua,5);
+  assert.deepEqual(tramos[0],[{izq:1,der:3,centro:2},{izq:4,der:5,centro:4.5}]);
+  for (let y=0; y<5; y++) for (let x=0; x<5; x++) {
+    assert.equal(tramos[y].some(t => t.izq<=x && x<t.der),agua[y*5+x]>=112);
+  }
+});
+
+test('el sendero compartido se interrumpe al cruzar agua', () => {
+  const v = Object.assign(Object.create(MapaVivo.prototype), {
+    dpr:1, mapa:{ancho:5,biomas:'PPRPP'+'P'.repeat(20)}, _aguaEn:()=>0,
+    lugares:[{id:1, x:0, y:0, comunidad:1},{id:2, x:4, y:0, comunidad:1}]
+  });
+  const trazos=[];
+  let xs=[];
+  const c={save(){},restore(){},beginPath(){xs=[];},lineTo(x){xs.push(x);},closePath(){},ellipse(){},
+    createRadialGradient(){return {addColorStop(){}};},fill(){if(xs.length) trazos.push(xs);}};
+  v._senderos(c,{z:40,ox:0,oy:0});
+  assert.ok(trazos.some(p=>Math.max(...p)<80) && trazos.some(p=>Math.min(...p)>120));
+  assert.ok(trazos.every(p=>Math.max(...p)<80 || Math.min(...p)>120));
+});
+
+test('los grupos de árboles conservan su pie al cambiar de cámara y responden a la tala', () => {
+  const N = 16;
+  const lado = N*N;
+  const v = Object.assign(Object.create(MapaVivo.prototype), {N, semilla:14, ilustrado:true,
+    mapa:{biomas:'B'.repeat(lado), ribera:'0'.repeat(lado), fertilidad:Array(lado).fill(750)},
+    capacidad:{madera:Array(lado).fill(100)}, existencias:{madera:Array(lado).fill(100)}});
+  v._campos();
+  v._vegetacion();
+  const A = v.arboles;
+  const copas = A.copas.filter(Boolean);
+  assert.ok(copas.length > 1 && copas.length < A.n);
+  assert.ok(new Set(copas.map(c=>c.pieza)).size >= 3);
+  v.cam = {x:4, y:9, z:14};
+  v._vegetacion();
+  assert.deepEqual(v.arboles.copas, A.copas);
+  const i = A.copas.findIndex(Boolean), celda = A.celda[i];
+  assert.equal(v._enPie(i), true);
+  v.existencias.madera[celda] = 0;
+  assert.equal(v._enPie(i), false);
+  assert.ok(A.copas.some((c,j)=>c && A.celda[j] !== celda && v._enPie(j)));
+});
+
+test('el rodal de espigas exige semillas y las flores desaparecen en invierno', () => {
+  const v = Object.assign(Object.create(MapaVivo.prototype), {semilla:14, capacidad:{semillas:[20]},
+    existencias:{semillas:[20]}, _pasto:()=>1, cam:{x:0,y:0,z:40}, ancho:400, alto:400, dpr:1,
+    _tamanoFigura:()=>48, _detalles:[[0,0,'flores_blancas',.2,false,0,0],[0,0,'rama',.2,false,0,0]]});
+  assert.ok(Array.from({length:8},(_,x)=>v._espigas(x,0,0,1)).some(n=>n>0));
+  v.existencias.semillas[0] = 0;
+  assert.equal(v._espigas(1,0,0,1), 0);
+  const dibujados = [];
+  v.ilustrado = {detalle:(_ctx,nombre)=>dibujados.push(nombre)};
+  v.estado = {estacion:0};
+  v._detallesVivos({},0);
+  assert.deepEqual(dibujados,['flores_blancas','rama']);
+  dibujados.length = 0;
+  v.estado.estacion = 3;
+  v._detallesVivos({},0);
+  assert.deepEqual(dibujados,['rama']);
+});
+
+function escenaDeMarcha(t, ambiente = true) {
+  let ahora = 1000;
+  t.mock.method(performance, 'now', () => ahora);
+  const mapa = Object.assign(Object.create(MapaVivo.prototype), {
+    gente: new Map(), N: 4, mapa: { biomas: 'PPPPRPPPPPPPPPPP' }, ambiente,
+  });
+  const dibujar = (x, y, actividad = 'caminando') => {
+    mapa.fijarHabitantes([{id: 7, vivo: true, x, y, actividad}], {enMarcha: true, velocidad: 1});
+  };
+  return {mapa, dibujar, avanzar(ms) { ahora += ms; mapa._moverGente(ahora); },
+    pose() {
+      const f = mapa.gente.get(7);
+      return ArteIlustrado.prototype.poseIlustrada(f.anda ? 'anda+cesto' : 'quieto', f, ambiente ? ahora/1000 : 0);
+    }};
+}
+
+test('la marcha con carga orienta por el tramo real y la pisada depende de la distancia', t => {
+  const s = escenaDeMarcha(t);
+  s.dibujar(2, 2);
+  s.dibujar(1, 2);
+  s.avanzar(530);
+  const f = s.mapa.gente.get(7);
+  assert.equal(f.mira, -1);
+  assert.equal(s.pose(), 'perfil_b');
+  const distancia = f.recorrido;
+  s.avanzar(0);
+  assert.equal(f.recorrido, distancia);
+  s.avanzar(470);
+  assert.equal(s.pose(), 'perfil');
+  s.avanzar(4000);
+  assert.ok(Math.abs(f.recorrido - 1) < 1e-9);
+  s.dibujar(1, 1);
+  s.avanzar(100);
+  assert.equal(s.pose(), 'espalda_a');
+  s.avanzar(900);
+  s.dibujar(1, 2);
+  s.avanzar(100);
+  assert.equal(s.pose(), 'caminar_a');
+});
+
+test('beber gira hacia el río, se agacha una vez y se alza en el mismo apoyo', t => {
+  const s = escenaDeMarcha(t);
+  s.dibujar(1, 2);
+  s.dibujar(1, 1);
+  s.avanzar(1000);
+  const f = s.mapa.gente.get(7);
+  const apoyo = [f.rx, f.ry];
+  s.dibujar(1, 1, 'bebiendo');
+  assert.equal(s.mapa._ladoDelRio(f), -1);
+  assert.equal(s.pose(), 'perfil');
+  s.avanzar(110);
+  assert.equal(s.pose(), 'agachado');
+  s.dibujar(1, 1, 'bebiendo'); // sondeo repetido de la misma hora
+  s.avanzar(220);
+  assert.equal(s.pose(), 'bebiendo');
+  s.dibujar(2, 1);
+  s.avanzar(100);
+  assert.equal(s.pose(), 'agachado');
+  assert.deepEqual([f.rx, f.ry], apoyo);
+  s.avanzar(300);
+  assert.ok(f.anda && f.rx > apoyo[0]);
+  assert.equal(f.mira, 1);
+  s.avanzar(600);
+  assert.deepEqual([f.rx, f.ry], [f.hx, f.hy]);
+});
+
+test('con animación desactivada una llegada se resuelve en la celda y postura reales', t => {
+  const s = escenaDeMarcha(t, false);
+  delete s.mapa.mapa; // al abrir el visor la población puede llegar antes del terreno
+  s.dibujar(2, 1);
+  s.dibujar(1, 1, 'bebiendo');
+  s.avanzar(0);
+  assert.equal(s.pose(), 'bebiendo');
+  const f = s.mapa.gente.get(7);
+  assert.equal(f.recorrido, 0);
+  assert.deepEqual([f.rx, f.ry], [f.hx, f.hy]);
+});
 
 test('la escena reutilizada coincide con las posiciones del mundo al mover y acercar la cámara', () => {
   for (const escala of [.98, 1, 1.02]) for (const dx of [-2, 0, 2]) for (const dy of [-2, 0, 2]) {
