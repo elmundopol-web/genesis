@@ -8,7 +8,7 @@ if %errorlevel%==0 (set "PYTHON=py -3") else (set "PYTHON=python")
 set "GENESIS_TEST_RESULT=%errorlevel%"
 where node >nul 2>nul
 if %errorlevel%==0 (
-  node --test pruebas/test_interfaz.mjs pruebas/test_interfaz_f43.mjs
+  node --test pruebas/test_interfaz.mjs pruebas/test_interfaz_f43.mjs pruebas/test_interfaz_f52.mjs pruebas/test_encuentros_f61.mjs pruebas/test_tratos_f62.mjs pruebas/test_conflictos_f63.mjs
   if errorlevel 1 set "GENESIS_TEST_RESULT=1"
 ) else (
   echo Pruebas de interfaz omitidas: Node.js no esta instalado. No es necesario para jugar.

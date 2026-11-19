@@ -40,6 +40,7 @@ _ARCHIVOS = {
     "/mente.js": ("mente.js", "text/javascript; charset=utf-8"),
     "/arte.js": ("arte.js", "text/javascript; charset=utf-8"),
     "/figuras.js": ("figuras.js", "text/javascript; charset=utf-8"),
+    "/encuentros.js": ("encuentros.js", "text/javascript; charset=utf-8"),
     "/lugares.js": ("lugares.js", "text/javascript; charset=utf-8"),
     "/construcciones.js": ("construcciones.js", "text/javascript; charset=utf-8"),
     "/paleta.js": ("paleta.js", "text/javascript; charset=utf-8"),
@@ -176,6 +177,8 @@ class _Manejador(BaseHTTPRequestHandler):
             if ficha is None:
                 raise _ErrorHttp(404, f"no existe el habitante {id_habitante}")
             self._json(ficha)
+        elif ruta == "/api/observaciones":
+            self._json(self.sesion.observaciones(_entero(parametros, "despues_de", 0), _entero(parametros, "antes_de")))
         elif ruta == "/api/eventos":
             filtro = parametros.get("filtro", ["todos"])[0]
             if filtro not in _FILTROS:
@@ -239,6 +242,8 @@ class _Manejador(BaseHTTPRequestHandler):
         accion = orden.get("accion")
         if accion == 'intervenir':
             self.sesion.intervenir(orden.get('tipo'),orden.get('x'),orden.get('y'),orden.get('cantidad',0))
+        elif accion == 'hablar':
+            self.sesion.hablar(orden.get('id'), orden.get('texto'))
         elif accion == 'favorito':
             self.sesion.favorito(orden.get('id'),orden.get('seguir'))
         elif accion == "reanudar":

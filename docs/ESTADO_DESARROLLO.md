@@ -20,7 +20,7 @@ Principios fijados desde el inicio:
 - `assets\`: el arte ilustrado que aporta el usuario. `partidas\`: las partidas guardadas, que nunca se tocan en las pruebas.
 - Python solo con la biblioteca estándar. Las herramientas de `herramientas\` usan además PIL y numpy, y las capturas usan Chrome sin ventana con `cdp.mjs`.
 
-**Versión actual:** reglas F4.3 (`0.4.3-f43`) con el visor de F4.4. El cierre de F4.4 verifica 30 pruebas de interfaz y 18 de sesión, servidor y comandos.
+**Versión actual:** `0.5.2-f52`: reglas F4.3, visor de F4.4 y F5 opcional (`--mente ID`). El cierre de F4.4 verifica 30 pruebas de interfaz y 18 de sesión, servidor y comandos.
 
 ## Fases terminadas
 
@@ -38,6 +38,9 @@ Principios fijados desde el inicio:
 | **F4.2.1** | Auditoría de 20 mundos. Los conflictos ocurren pero casi no cambian decisiones, y en el mapa no se ven. | [F4.2.1-AUDITORIA.md](F4.2.1-AUDITORIA.md) |
 | **F4.3** | Relaciones coherentes: una entrega a quien la esperaba cumple la promesa, el juicio sale de la perspectiva de cada persona, los antecedentes pesan y el perdón tiene tres desenlaces. En el visor: el receptor real, poses nuevas, señales breves y senderos. | [F4.3-ESTADO.md](F4.3-ESTADO.md) |
 | **F4.4** | Visor ilustrado con habitantes orientados al caminar y beber, construcciones pintadas, claros y bosques más variados, río con corriente y bajíos, y sombras integradas con el terreno. | [F4.4-ESTADO.md](F4.4-ESTADO.md) |
+| **F5.0** | Un habitante decide con un modelo local (Qwen vía Ollama) qué hacer ante un agujero. La ficha muestra qué vio, qué recuerdo influyó, qué hizo y qué pasó después; la partida se repite sin el modelo. Cerrada en F5.1. | [F5.0-ESTADO.md](F5.0-ESTADO.md) |
+| **F5.1** | Lo que uno cuenta cambia lo que otro hace: Unai se lo cuenta a Brisa y ella decide por ese relato. La consulta al modelo no detiene el mundo.  | [F5.1-ESTADO.md](F5.1-ESTADO.md) |
+| **F5.2** | La voz divina: «Hablar a un habitante». Solo esa persona lo oye y lo interpreta según lo que sabe; si toca un agujero que reconoce, decide con el modelo. Pendiente de que el usuario la pruebe. | [F5.2-ESTADO.md](F5.2-ESTADO.md) |
 
 ## Base visual aprobada
 
@@ -62,7 +65,12 @@ El 18/11/2026 el usuario dio por bueno el acabado de **F4.4** para seguir con el
 
 ## Siguiente fase
 
-**F5 «Mentes autónomas» está planificada.** El primer hito propuesto, F5.0, se centra en un habitante: una experiencia concreta influye en una decisión y su historia permite entender el motivo. La hoja de ruta contempla un modelo de lenguaje local (Qwen vía Ollama) y mantiene el motor como fuente de lo que ocurre. La fase empezará con un encargo específico.
+**F5.2, la voz divina, está entregada y pendiente de que la pruebes.**
+- Le hablas a Brisa y ves cómo lo interpreta y qué hace.
+- Demostración: `py -3 herramientas/demo_f52.py` y después `iniciar.bat f52-demo --carpeta partidas/f52`.
+- Resultados: [F5.2-ESTADO.md](F5.2-ESTADO.md).
+
+La pasada de observación permite seguir la reacción en el mapa y abrir la historia desde el encuentro. [Antes y después](f5.2/observar/comparar.html) · [Recorrido de Brisa](f5.2/observar/brisa-y-unai.mp4).
 
 ## Copias de seguridad
 

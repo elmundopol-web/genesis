@@ -153,6 +153,118 @@
    ],
    "mascara": "persona-bebiendo-m.png",
    "alto_de_pie": 240
+  },
+  "pide": {
+   "archivo": "persona-pide.png",
+   "ancho": 101,
+   "alto": 237,
+   "apoyo": [
+    34.5,
+    234.0
+   ],
+   "mascara": "persona-pide-m.png",
+   "alto_de_pie": 240,
+   "mano": [
+    76.4,
+    139.3
+   ],
+   "origen": "derivada de persona-perfil (herramientas/poses_f61.py)"
+  },
+  "recibe": {
+   "archivo": "persona-recibe.png",
+   "ancho": 108,
+   "alto": 236,
+   "apoyo": [
+    44.5,
+    234.0
+   ],
+   "mascara": "persona-recibe-m.png",
+   "alto_de_pie": 240,
+   "mano": [
+    93.7,
+    126.0
+   ],
+   "origen": "derivada de persona-perfil (herramientas/poses_f61.py)"
+  },
+  "ofrece": {
+   "archivo": "persona-ofrece.png",
+   "ancho": 103,
+   "alto": 237,
+   "apoyo": [
+    38.5,
+    234.0
+   ],
+   "mascara": "persona-ofrece-m.png",
+   "alto_de_pie": 240,
+   "mano": [
+    94.2,
+    108.4
+   ],
+   "origen": "derivada de persona-perfil (herramientas/poses_f61.py)"
+  },
+  "niega": {
+   "archivo": "persona-niega.png",
+   "ancho": 103,
+   "alto": 237,
+   "apoyo": [
+    47.5,
+    234.0
+   ],
+   "mascara": "persona-niega-m.png",
+   "alto_de_pie": 240,
+   "mano": [
+    -0.8,
+    143.8
+   ],
+   "origen": "derivada de persona-perfil (herramientas/poses_f61.py)"
+  },
+  "cabizbajo": {
+   "archivo": "persona-cabizbajo.png",
+   "ancho": 90,
+   "alto": 236,
+   "apoyo": [
+    29.5,
+    234.0
+   ],
+   "mascara": "persona-cabizbajo-m.png",
+   "alto_de_pie": 240,
+   "mano": [
+    43.0,
+    166.0
+   ],
+   "origen": "derivada de persona-perfil (herramientas/poses_f61.py)"
+  },
+  "increpa": {
+   "archivo": "persona-increpa.png",
+   "ancho": 94,
+   "alto": 237,
+   "apoyo": [
+    21.5,
+    233.0
+   ],
+   "mascara": "persona-increpa-m.png",
+   "alto_de_pie": 240,
+   "mano": [
+    71.2,
+    79.1
+   ],
+   "origen": "derivada de persona-perfil (herramientas/poses_f63.py)"
+  },
+  "forcejea": {
+   "archivo": "persona-forcejea.png",
+   "ancho": 112,
+   "alto": 234,
+   "apoyo": [
+    13.5,
+    230.0
+   ],
+   "mascara": "persona-forcejea-m.png",
+   "alto_de_pie": 240,
+   "mano": [
+    69.5,
+    92.6
+   ],
+   "origen": "derivada de persona-perfil (herramientas/poses_f63.py)"
   }
  },
  "edificios": {

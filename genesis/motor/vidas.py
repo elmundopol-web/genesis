@@ -11,6 +11,15 @@ CARA_A_CARA = frozenset((
     "entrega", "alimenta", "da_agua", "protege", "corresponde", "repara", "promete", "rechaza_promesa",
     "convive", "descanso_compartido", "acompaña_trayecto", "enseña", "enseña_pesca", "enseña_a_recoger",
     "deja_racion", "relata", "pide_compania", "cuidado_cumplido", "cuidado_pendiente",
+    "familia_aviso",  # F6.0.1: aviso cara a cara sobre el estado de un menor de la familia
+    "trato_propone", "trato_acepta", "trato_rechaza", "trato_entrega", "trato_explica",  # F6.2: tratos entre familias
+    # F6.3: avisos, margen, reclamaciones, discusiones, forcejeos y disculpas
+    "trato_avisa", "trato_prorroga", "trato_mantiene", "trato_reclama_adelanto", "trato_devuelve", "trato_no_devuelve",
+    "conflicto_reclama", "conflicto_responde", "conflicto_acuerdo", "conflicto_acepta_disculpa",
+    "conflicto_mantiene_distancia", "conflicto_se_calma", "conflicto_se_aparta", "conflicto_sube_tono",
+    "conflicto_media", "conflicto_defiende", "conflicto_forcejeo", "conflicto_separa", "conflicto_cierra",
+    "conflicto_perdona", "conflicto_evita", "conflicto_disculpa", "conflicto_cuenta", "conflicto_rectifica",
+    "trato_ve_tarde",
 ))
 
 
@@ -19,6 +28,16 @@ class Vidas:
         self.s = sistema
         self.personas = {}
         self.familias = []
+        # F6.0: hogares y sus objetivos de preparación para el invierno. Solo se
+        # guardan cuando la partida tiene activados los planes familiares.
+        self.hogares = []
+        self.hogares_dia = -1
+        # F6.2: tratos entre dos hogares (comida hoy por ayuda para reparar mañana).
+        self.tratos_familia = []
+        self.siguiente_trato = 1
+        # F6.3: discusiones entre dos personas (abiertas y las últimas cerradas).
+        self.conflictos = []
+        self.siguiente_conflicto = 1
         self.agua = dict(llenada=0, bebida=0)
         self.presencia = Presencia(self)
         # Con quién hace cada uno lo que hace en esta hora (solo para dibujarlo; no se guarda).
@@ -42,13 +61,13 @@ class Vidas:
             )
         return self.personas[k]
 
-    def evento(self, m, tipo, h, historia, causa, **datos):
-        if tipo in CARA_A_CARA and isinstance(datos.get("a"), int):
-            self.gestos[h.id] = (datos["a"], tipo, m.tick)
+    def evento(self, m, suceso, h, historia, causa_id, **datos):
+        if suceso in CARA_A_CARA and isinstance(datos.get("a"), int):
+            self.gestos[h.id] = (datos["a"], suceso, m.tick)
         return m.emitir(
-            "vidas." + tipo,
+            "vidas." + suceso,
             dict(id=h.id, nombre=h.nombre, historia=historia, **datos),
-            causa,
+            causa_id,
         )
 
     def caminar(self, p, destino, motivo, b):
@@ -86,8 +105,26 @@ class Vidas:
 
     def turno(self, p, dormido):
         f = self.ficha(p.h)
+        if self.s.cfg.mentes and not dormido and self.presencia.mente_estado.get("voces"):
+            self.presencia.oir(p, f)  # F5.2: la voz llega solo a quien va dirigida, despierta
+        if self.s.cfg.mentes and self.presencia.mente_estado.get("pendientes"):
+            from . import deliberacion
+
+            deliberacion.resolver(self, p, f)  # F5.1: la respuesta del modelo llega sin parar el mundo
         if not dormido:
             self.presencia.observar(p, f)
+            # F6.0.1: primero consta lo que cada uno ve o le cuentan de su hogar;
+            # después vendrán las obligaciones de cuidado y el reparto de tareas.
+            from . import familias, tratos_familia
+
+            familias.aprender(self, p, f)
+            tratos_familia.observar(self, p, f)
+            # F6.3: una discusión abierta ocupa a los dos antes que cualquier otra tarea.
+            if self.s.cfg.conflictos:
+                from . import conflictos
+
+                if conflictos.activo(self, p._mundo) and conflictos.ocupa(self, p, f):
+                    return True
         if self.estable(p._mundo):
             from . import cuidados, costumbres
 
@@ -132,6 +169,16 @@ class Vidas:
                     return True
             if f.get("plan_cuidado") and (cuidados.urgente(p) or dormido):
                 return False
+            # F6.0 / F6.2: cuando las obligaciones de cuidado están cubiertas,
+            # primero se atienden los tratos entre familias y después el reparto
+            # de tareas del hogar. La persona hace una sola cosa por hora.
+            if not dormido and not cuidados.urgente(p):
+                from . import familias, tratos_familia
+
+                if tratos_familia.turno(self, p, f):
+                    return True
+                if familias.turno(self, p, f):
+                    return True
         elif f.get("etapa", "adulto") != "adulto":
             return crianza.menor(self, p, f, dormido)
         if not self.estable(p._mundo) and not dormido and crianza.cuidar(self, p, f):
@@ -165,18 +212,26 @@ class Vidas:
 
     def exportar(self):
         a = self.presencia
-        return deepcopy(
-            dict(
-                version=1,
-                familias=self.familias,
-                agua=self.agua,
-                personas=self.personas,
-                sitios=a.sitios,
-                entrada=a.entrada,
-                recogida=a.recogida,
-                orden=a.orden,
-            )
+        datos = dict(
+            version=1,
+            familias=self.familias,
+            agua=self.agua,
+            personas=self.personas,
+            sitios=a.sitios,
+            entrada=a.entrada,
+            recogida=a.recogida,
+            orden=a.orden,
         )
+        if self.s.cfg.mentes:  # F5.0; las partidas anteriores guardan exactamente lo mismo que antes
+            datos["mente"] = a.mente_estado
+        if self.s.cfg.planes_familia:  # F6.0; sin el criterio, el estado guardado no cambia
+            datos["hogares"] = self.hogares
+            datos["hogares_dia"] = self.hogares_dia
+        if self.s.cfg.tratos_familia:  # F6.2; sin el criterio, el estado guardado no cambia
+            datos["tratos_familia"] = dict(siguiente=self.siguiente_trato, lista=self.tratos_familia)
+        if getattr(self.s.cfg, "conflictos", 0):  # F6.3; sin el criterio, el estado guardado no cambia
+            datos["conflictos"] = dict(siguiente=self.siguiente_conflicto, lista=self.conflictos)
+        return deepcopy(datos)
 
     def importar(self, datos):
         d = deepcopy(datos)
@@ -184,6 +239,22 @@ class Vidas:
             raise ValueError("Versión desconocida de las vidas")
         self.personas = d["personas"]
         self.familias, self.agua = d["familias"], d["agua"]
+        self.hogares = d.get("hogares", [])
+        self.hogares_dia = d.get("hogares_dia", -1)
+        tf = d.get("tratos_familia")
+        if isinstance(tf, dict):
+            self.siguiente_trato = int(tf.get("siguiente", 1))
+            self.tratos_familia = tf.get("lista", [])
+        else:
+            self.siguiente_trato = 1
+            self.tratos_familia = []
+        cf = d.get("conflictos")
+        if isinstance(cf, dict):
+            self.siguiente_conflicto = int(cf.get("siguiente", 1))
+            self.conflictos = cf.get("lista", [])
+        else:
+            self.siguiente_conflicto = 1
+            self.conflictos = []
         a = self.presencia
         a.sitios, a.entrada, a.recogida, a.orden = (
             d["sitios"],
@@ -191,6 +262,8 @@ class Vidas:
             d["recogida"],
             d["orden"],
         )
+        a.mente_estado = d.get("mente", dict(llamadas=0, decisiones=0))
+        a.mente_estado.setdefault("pendientes", {})
         if a.sitios:
             self.s.rutas = a.rutas()
 

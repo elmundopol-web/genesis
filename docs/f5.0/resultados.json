@@ -1,0 +1,291 @@
+{
+ "modelo": "qwen2.5:7b",
+ "fecha": "2026-11-18 00:33",
+ "carga_s": 0.0,
+ "escenas": {
+  "4": {
+   "nombre": null,
+   "con": {
+    "eleccion": "acercarse",
+    "fuente": "modelo",
+    "motivo": null,
+    "politica": "acercarse",
+    "recuerdo": 275,
+    "recuerdos": [
+     "Hace 17 horas te acercaste a mirar un hueco en el suelo, que antes no estaba; concluiste «hendidura estable» y no te pasó nada malo."
+    ],
+    "razon": "hendidura similar, pero no me pasó nada",
+    "ms": 340,
+    "vio": "Un hueco en el suelo que antes no estaba, a 3 pasos, en un sitio por el que ya habías pasado. Tu primera impresión: «cambio sin explicar» (duda).",
+    "despues": [
+     "investigar",
+     "inspecciona «hendidura estable»",
+     "inicia_costumbre",
+     "fin_costumbre"
+    ],
+    "agujero": [
+     32,
+     38
+    ]
+   },
+   "sin": {
+    "eleccion": "evitar",
+    "fuente": "modelo",
+    "motivo": null,
+    "politica": "acercarse",
+    "recuerdo": null,
+    "recuerdos": [],
+    "razon": "cambio sin explicar, mejor evitar",
+    "ms": 310,
+    "vio": "Un hueco en el suelo que antes no estaba, a 3 pasos, en un sitio por el que ya habías pasado. Tu primera impresión: «cambio sin explicar» (duda).",
+    "despues": [
+     "rodear",
+     "inicia_costumbre",
+     "fin_costumbre"
+    ],
+    "agujero": [
+     32,
+     38
+    ]
+   },
+   "cambia": true
+  },
+  "1": {
+   "nombre": null,
+   "con": {
+    "eleccion": "evitar",
+    "fuente": "modelo",
+    "motivo": null,
+    "politica": "acercarse",
+    "recuerdo": 258,
+    "recuerdos": [
+     "Ayer te acercaste a mirar un hueco en el suelo, que antes no estaba; concluiste «hendidura estable» y no te pasó nada malo."
+    ],
+    "razon": "Recuerdo la hendidura, pero prefiero evitarlo",
+    "ms": 366,
+    "vio": "Un hueco en el suelo que antes no estaba, a 5 pasos, en un sitio por el que ya habías pasado. Tu primera impresión: «cambio sin explicar» (duda).",
+    "despues": [
+     "rodear"
+    ],
+    "agujero": [
+     30,
+     1
+    ]
+   },
+   "sin": {
+    "eleccion": "evitar",
+    "fuente": "modelo",
+    "motivo": null,
+    "politica": "acercarse",
+    "recuerdo": null,
+    "recuerdos": [],
+    "razon": "Es mejor no arriesgarse sin saber qué es",
+    "ms": 317,
+    "vio": "Un hueco en el suelo que antes no estaba, a 5 pasos, en un sitio por el que ya habías pasado. Tu primera impresión: «cambio sin explicar» (duda).",
+    "despues": [
+     "rodear"
+    ],
+    "agujero": [
+     30,
+     1
+    ]
+   },
+   "cambia": false
+  },
+  "11": {
+   "nombre": null,
+   "con": {
+    "eleccion": "acercarse",
+    "fuente": "modelo",
+    "motivo": null,
+    "politica": "acercarse",
+    "recuerdo": 260,
+    "recuerdos": [
+     "Ayer te acercaste a mirar un hueco en el suelo, que antes no estaba; concluiste «hendidura estable» y no te pasó nada malo."
+    ],
+    "razon": "hendidura similar antes, pero ahora duda",
+    "ms": 335,
+    "vio": "Un hueco en el suelo que antes no estaba, a 4 pasos, en un sitio por el que ya habías pasado. Tu primera impresión: «cambio sin explicar» (duda).",
+    "despues": [
+     "investigar",
+     "investigar",
+     "inspecciona «hendidura estable»",
+     "convive"
+    ],
+    "agujero": [
+     42,
+     43
+    ]
+   },
+   "sin": {
+    "eleccion": "acercarse",
+    "fuente": "modelo",
+    "motivo": null,
+    "politica": "acercarse",
+    "recuerdo": null,
+    "recuerdos": [],
+    "razon": "hay algo nuevo, mejor investigar",
+    "ms": 331,
+    "vio": "Un hueco en el suelo que antes no estaba, a 4 pasos, en un sitio por el que ya habías pasado. Tu primera impresión: «cambio sin explicar» (duda).",
+    "despues": [
+     "investigar",
+     "observa",
+     "interpreta «posible hueco natural»",
+     "decide"
+    ],
+    "agujero": [
+     42,
+     43
+    ]
+   },
+   "cambia": false
+  },
+  "15": {
+   "nombre": null,
+   "con": {
+    "eleccion": "evitar",
+    "fuente": "modelo",
+    "motivo": null,
+    "politica": "acercarse",
+    "recuerdo": 260,
+    "recuerdos": [
+     "Ayer te acercaste a mirar un hueco en el suelo, que antes no estaba; concluiste «hendidura estable» y no te pasó nada malo."
+    ],
+    "razon": "Recuerdo la hendidura, pero prefiero evitarlo",
+    "ms": 360,
+    "vio": "Un hueco en el suelo que antes no estaba, a 2 pasos, en un sitio por el que ya habías pasado. Tu primera impresión: «cambio sin explicar» (duda).",
+    "despues": [
+     "rodear",
+     "relata «cambio sin explicar»",
+     "inicia_costumbre",
+     "fin_costumbre"
+    ],
+    "agujero": [
+     45,
+     47
+    ]
+   },
+   "sin": {
+    "eleccion": "acercarse",
+    "fuente": "modelo",
+    "motivo": null,
+    "politica": "acercarse",
+    "recuerdo": null,
+    "recuerdos": [],
+    "razon": "acercarse despacio y mirarlo de cerca, curiosidad",
+    "ms": 382,
+    "vio": "Un hueco en el suelo que antes no estaba, a 2 pasos, en un sitio por el que ya habías pasado. Tu primera impresión: «cambio sin explicar» (duda).",
+    "despues": [
+     "investigar",
+     "rodear",
+     "investigar",
+     "inspecciona «hendidura estable»"
+    ],
+    "agujero": [
+     45,
+     47
+    ]
+   },
+   "cambia": true
+  }
+ },
+ "repeticiones": [
+  [
+   "acercarse",
+   "hendidura similar, pero no me pasó nada",
+   358
+  ],
+  [
+   "acercarse",
+   "hendidura similar, pero no me pasó nada",
+   338
+  ],
+  [
+   "acercarse",
+   "hendidura similar, pero no me pasó nada",
+   331
+  ],
+  [
+   "acercarse",
+   "hendidura similar, pero no me pasó nada",
+   320
+  ],
+  [
+   "acercarse",
+   "hendidura similar, pero no me pasó nada",
+   342
+  ]
+ ],
+ "fallos": {
+  "puerto_cerrado": {
+   "fuente": "politica",
+   "motivo": "sin_respuesta",
+   "eleccion": "acercarse",
+   "politica": "acercarse",
+   "despues": [
+    "investigar",
+    "inspecciona «hendidura estable»",
+    "inicia_costumbre",
+    "fin_costumbre"
+   ],
+   "segundos_tramo": 2.12
+  },
+  "espera_50ms": {
+   "fuente": "politica",
+   "motivo": "tarde",
+   "eleccion": "acercarse",
+   "politica": "acercarse",
+   "despues": [
+    "investigar",
+    "inspecciona «hendidura estable»",
+    "inicia_costumbre",
+    "fin_costumbre"
+   ],
+   "segundos_tramo": 0.14
+  },
+  "modelo_inexistente": {
+   "fuente": "politica",
+   "motivo": "sin_respuesta",
+   "eleccion": "acercarse",
+   "politica": "acercarse",
+   "despues": [
+    "investigar",
+    "inspecciona «hendidura estable»",
+    "inicia_costumbre",
+    "fin_costumbre"
+   ],
+   "segundos_tramo": 0.08
+  }
+ },
+ "reproduccion": {
+  "decisiones": [
+   [
+    "evitar",
+    "modelo",
+    330
+   ]
+  ],
+  "verificacion": {
+   "correcto": true,
+   "comprobaciones": {
+    "mapa": true,
+    "registro_integro": true,
+    "eventos": true,
+    "estado": true
+   },
+   "tick": 82,
+   "eventos": 355,
+   "ordenes_repetidas": 1,
+   "decisiones_repetidas": 1
+  },
+  "segundos": 0.51,
+  "llamadas_durante_repeticion": 0
+ },
+ "coste": {
+  "llamadas": 15,
+  "correctas": 15,
+  "ms_medio": 338,
+  "ms_max": 382,
+  "tokens_medio": 291
+ }
+}

@@ -214,6 +214,31 @@ class ConfigHabitantes:
     # confiar, aceptar otra promesa o perdonar. 0 en las partidas anteriores (se reproducen igual).
     relaciones: int = 0
     activacion_relaciones: int = 0
+    # F5.0: un habitante (mente_de) decide con un modelo local qué hacer ante un agujero.
+    # 0 en las partidas anteriores. Cada decisión queda registrada y la partida se repite sin
+    # el modelo. mente_llamadas limita las llamadas de toda la partida.
+    mentes: int = 0
+    activacion_mentes: int = 0
+    mente_de: int = 0
+    mente_llamadas: int = 8
+    # F6.0: objetivos familiares persistentes de preparación para el invierno. 0 en las
+    # partidas anteriores. Requiere crianza y crecimiento para que existan hogares con menores.
+    planes_familia: int = 0
+    activacion_planes_familia: int = 0
+    # F6.0.1: un hogar solo se entera del estado de un menor cuando alguien lo ve
+    # o recibe un aviso de otra persona. 0 en las partidas F6.0 guardadas: se
+    # reproducen con el criterio anterior, que leía el estado oculto del menor.
+    percepcion_familiar: int = 0
+    activacion_percepcion_familiar: int = 0
+    # F6.2: tratos entre dos hogares (comida hoy a cambio de ayuda para reparar
+    # un refugio mañana). 0 en las partidas anteriores: se reproducen igual.
+    tratos_familia: int = 0
+    activacion_tratos_familia: int = 0
+    # F6.3: el carácter, los intereses del momento y la historia con cada persona deciden
+    # avisos, prórrogas, reclamaciones, discusiones, forcejeos y reconciliaciones alrededor
+    # de los tratos F6.2. 0 en las partidas anteriores: se reproducen con su criterio.
+    conflictos: int = 0
+    activacion_conflictos: int = 0
 
     def __post_init__(self) -> None:
         if not isinstance(self.cantidad, int) or isinstance(self.cantidad, bool) or not 0 <= self.cantidad <= 200:
@@ -226,8 +251,58 @@ class ConfigHabitantes:
             raise ValueError('criterio de crecimiento no válido')
         if self.relaciones not in (0, 1) or self.activacion_relaciones < 0 or (self.relaciones and (not self.crecimiento or self.activacion_relaciones < self.activacion_crecimiento)):
             raise ValueError('criterio de relaciones no válido')
+        if self.mentes not in (0, 1) or self.activacion_mentes < 0 or not 0 <= self.mente_llamadas <= 64 or (self.mentes and (self.reglas != 4 or self.mente_de < 1)):
+            raise ValueError('criterio de mentes F5.0 no válido')
         if self.cuidados not in (0, 1) or self.activacion_cuidados < 0 or (self.cuidados and self.reglas != 4):
             raise ValueError('criterio de crianza no válido')
+        if (
+            self.planes_familia not in (0, 1)
+            or self.activacion_planes_familia < 0
+            or (
+                self.planes_familia
+                and (
+                    self.reglas != 4
+                    or not self.cuidados
+                    or not self.crecimiento
+                    or self.activacion_planes_familia < self.activacion_crecimiento
+                )
+            )
+        ):
+            raise ValueError('criterio de planes familiares F6.0 no válido')
+        if (
+            self.percepcion_familiar not in (0, 1)
+            or self.activacion_percepcion_familiar < 0
+            or (
+                self.percepcion_familiar
+                and (
+                    not self.planes_familia
+                    or self.activacion_percepcion_familiar < self.activacion_planes_familia
+                )
+            )
+        ):
+            raise ValueError('criterio de percepción familiar F6.0.1 no válido')
+        if (
+            self.tratos_familia not in (0, 1)
+            or self.activacion_tratos_familia < 0
+            or (
+                self.tratos_familia
+                and (
+                    not self.planes_familia
+                    or not self.percepcion_familiar
+                    or self.activacion_tratos_familia < self.activacion_percepcion_familiar
+                )
+            )
+        ):
+            raise ValueError('criterio de tratos entre familias F6.2 no válido')
+        if (
+            self.conflictos not in (0, 1)
+            or self.activacion_conflictos < 0
+            or (
+                self.conflictos
+                and (not self.tratos_familia or self.activacion_conflictos < self.activacion_tratos_familia)
+            )
+        ):
+            raise ValueError('criterio de conflictos F6.3 no válido')
         if self.activacion_vidas < 0 or self.limite_poblacion < 1 or not 0 < self.infancia_anios < self.juventud_anios:
             raise ValueError('parámetros de generaciones no válidos')
         if self.reglas not in REGLAS_CONOCIDAS:
@@ -343,6 +418,15 @@ class ConfigMundo:
         habitantes = dict(datos.get("habitantes") or {})
         # Las partidas anteriores a F3.1 no llevan "correccion": siguen con el criterio de F3.
         habitantes.setdefault("correccion", 0)
+        # Las partidas F6.0 no llevan el criterio de percepción: siguen leyendo el estado real.
+        habitantes.setdefault("percepcion_familiar", 0)
+        habitantes.setdefault("activacion_percepcion_familiar", 0)
+        # Las partidas anteriores a F6.2 no llevan tratos entre familias.
+        habitantes.setdefault("tratos_familia", 0)
+        habitantes.setdefault("activacion_tratos_familia", 0)
+        # Las partidas anteriores a F6.3 no llevan conflictos ni carácter en los tratos.
+        habitantes.setdefault("conflictos", 0)
+        habitantes.setdefault("activacion_conflictos", 0)
         if "saciedad" in habitantes:
             habitantes["saciedad"] = tuple((nombre, valor) for nombre, valor in habitantes["saciedad"])
         return cls(

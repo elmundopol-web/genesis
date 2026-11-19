@@ -1,6 +1,10 @@
 """Intervenciones, percepción situada y reflexión local sustituible de F4."""
 
 from .rutas import Rutas
+from . import deliberacion, voz
+
+# Lo que una persona decidió, vivió u oyó por su cuenta no pasa a quien escucha su relato.
+PRIVADO = frozenset(("oido", "vivido", "decidida", "decision", "consulta", "voz_nueva", "companero"))
 
 
 def reflexionar(h, tipo, familiar, inspeccion=False):
@@ -40,6 +44,10 @@ class Presencia:
         self.entrada = 0
         self.recogida = 0
         self.orden = 0
+        # F5.0: proveedor externo de decisiones (no se guarda) y registro para repetir la partida.
+        self.mente = None
+        self.registro = None
+        self.mente_estado = dict(llamadas=0, decisiones=0, pendientes={})
 
     def rutas(self, extra=None):
         bloqueadas = {
@@ -117,6 +125,28 @@ class Presencia:
                     h.destino = None
         return e
 
+    def hablar(self, m, persona, texto):
+        """F5.2: el jugador habla a una sola persona. Lo oirá la primera hora en que esté despierta."""
+        s = self.v.s
+        if not s.cfg.mentes:
+            raise ValueError("La voz necesita una partida con F5 (ejecutar.py ampliar PARTIDA --mente ID).")
+        h = s.por_id(persona) if type(persona) is int else None
+        if h is None or not h.vivo:
+            raise ValueError("Elige un habitante con vida.")
+        texto = voz.limpiar(texto)
+        self.orden += 1
+        e = m.emitir("presencia.voz", dict(id=h.id, nombre=h.nombre, texto=texto, orden=self.orden))
+        self.mente_estado.setdefault("voces", []).append(dict(id=h.id, texto=texto, hora=m.tick, orden_evento=e.id))
+        return e
+
+    def oir(self, p, f):
+        """Entrega las voces pendientes de esta persona (solo despierta)."""
+        cola = self.mente_estado.get("voces") or []
+        mias = [v for v in cola if v["id"] == p.h.id]
+        for v in mias:
+            cola.remove(v)
+            voz.recibir(self.v, p, f, v)
+
     def observar(self, p, f):
         h, m = p.h, p._mundo
         # Huellas de lugares vistos desde posiciones reales, guardadas tras observar.
@@ -152,6 +182,9 @@ class Presencia:
                 objeto=sitio["tipo"],
             )
             hip, emocion = self.reflexion(h, sitio["tipo"], familiar)
+            relato = b if b and not b["directa"] and deliberacion.activa(self.v, m, h) else None
+            # F5.2: lo ya decidido sobre un sitio conocido de oídas sigue en pie al verlo.
+            sigue = {c: b[c] for c in ("decidida", "decision", "consulta", "voz_nueva", "compania", "companero") if c in b} if relato else {}
             revision = self.v.evento(
                 m,
                 "interpreta",
@@ -183,6 +216,9 @@ class Presencia:
                 ),
                 16,
             )
+            if relato:
+                deliberacion.oido(f["teorias"][k], relato)
+                f["teorias"][k].update(sigue)
         for k, b in sorted(f["teorias"].items(), key=lambda par: int(par[0])):
             if (
                 k not in self.sitios
@@ -260,12 +296,34 @@ class Presencia:
             # Un relato puede guiar una expedición aun sin visión directa.
             if not b["atendida"]:
                 sitio = self.sitios.get(k)
-                evitar = b["presencia"] in ("temor", "cautela")
+                if "consulta" in b and "decidida" not in b:
+                    continue  # F5.1: decisión abierta; el lugar espera la respuesta
+                if (
+                    sitio
+                    and sitio["tipo"] == "agujero"
+                    and ((b["directa"] and "decidida" not in b) or b.get("voz_nueva"))
+                    and deliberacion.activa(self.v, m, h)
+                ):
+                    deliberacion.abrir(self.v, p, f, k, b)
+                    if "decidida" not in b:
+                        continue
+                decision = b.get("decision")
+                evitar = (
+                    b["presencia"] in ("temor", "cautela")
+                    if decision is None
+                    # F5.2: con compañía pedida, va a verlo; si no, «evitar» y «pedir compañía» se apartan.
+                    else decision != "acercarse" and not (decision == "pedir_compania" and b.get("compania"))
+                )
                 if evitar:
-                    if h.sociabilidad >= 65 and not b.get("compania"):
+                    if (
+                        (h.sociabilidad >= 65 if decision is None else decision == "pedir_compania")
+                        and not b.get("compania")
+                    ):
                         for distancia, persona, *_ in p.cerca:
-                            if distancia > 1:
+                            if distancia > (deliberacion.RADIO_COMPANIA if decision else 1):
                                 break
+                            if decision and persona != b.get("companero"):
+                                continue  # F5: a quien eligió, no a cualquiera
                             o = self.v.s.por_id(persona)
                             rel = h.mente.conocidos.get(persona, {})
                             if (
@@ -299,9 +357,15 @@ class Presencia:
                         for i in self.v.s.rutas.vecinos[p.celda]
                         if p.entre(i, j) > p.distancia(j)
                     ]
+                    if not destinos and decision == "evitar":
+                        b["atendida"] = True  # F5: ya está lejos; decide no acercarse
+                        self.v.evento(m, "mantiene_distancia", h, int(k), b["evento"], x=h.x, y=h.y)
+                        continue
                     if destinos:
                         self.v.caminar(p, min(destinos), "rodear", b)
                         b["atendida"] = True
+                        if sitio and deliberacion.activa(self.v, m, h):
+                            deliberacion.vivido(b, m, sitio["tipo"], "rodear", m.bitacora.ultimo_id)
                         return True
                 elif p.distancia(j) > 1:
                     metas = [
@@ -347,6 +411,8 @@ class Presencia:
                         apoyos=(b["apoyos"] + [e.id])[-3:],
                         atendida=True,
                     )
+                    if deliberacion.activa(self.v, m, h):
+                        deliberacion.vivido(b, m, sitio["tipo"], "inspeccionar", e.id, hip, n)
                     self.v.ocupar(h, "inspeccionando", hip)
                     return True
             for d, otro, *_ in p.cerca:
@@ -379,7 +445,7 @@ class Presencia:
                     alumno,
                     k,
                     {
-                        **b,
+                        **{c: v for c, v in b.items() if c not in PRIVADO},
                         "directa": False,
                         "fuente": h.id,
                         "hora": m.tick,

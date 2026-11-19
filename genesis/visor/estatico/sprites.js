@@ -8,6 +8,7 @@
    código. */
 
 import { cesto, haz } from "./figuras.js";
+import { racion } from "./encuentros.js";
 
 const SOMBRA = "rgba(22,30,62,0.36)";
 // Contacto, paso por debajo del cuerpo, contacto con el otro pie, paso.
@@ -17,6 +18,11 @@ const MARCHA = {
   espalda: ["espalda_a", "espalda", "espalda_b", "espalda"],
 };
 const TAU = Math.PI * 2;
+// F6.1: pose ilustrada de cada papel en un encuentro (poses derivadas con herramientas/poses_f61.py)
+const POSE_DE_PAPEL = { pide: "pide", recibe: "recibe", ofrece: "ofrece", niega: "niega", cabizbajo: "cabizbajo", escucha: "perfil",
+  // F6.3: reclamar o subir el tono, y el forcejeo (poses derivadas con herramientas/poses_f63.py)
+  increpa: "increpa", forcejea: "forcejea" };
+const GIRO_MS = 150; // al volverse hacia el otro lado, un instante de frente
 // colores de referencia de la túnica y el pelo pintados (de su máscara)
 const REF_ROPA = [171, 128, 65];
 const REF_PELO = [97, 64, 48];
@@ -99,6 +105,11 @@ export class ArteIlustrado {
 
   poseIlustrada(pose, f, t) {
     const [base] = pose.split("+");
+    if (!f.anda && f.enGiro) return "reposo";
+    if (!f.anda && f.papel) {
+      const nombre = POSE_DE_PAPEL[f.papel.pose];
+      if (nombre && this.i.personas[nombre]) return nombre;
+    }
     if (f.anda) {
       // Una zancada completa por celda. La pausa y el refresco no adelantan los pies.
       return MARCHA[f.vista][Math.floor(f.recorrido * 4) % 4];
@@ -111,6 +122,7 @@ export class ArteIlustrado {
     if (base === "duerme") return "dormido";
     if (base === "sienta") return "sentado";
     if (base === "da" || base === "recibe") return "cargar";
+    if (f.miraSocial || (f.gestoBreve?.tipo === "voz" && t*1000 < f.gestoBreve.hasta)) return "perfil";
     return base === "quieto" && f.d.con == null && f.d.evita == null ? MARCHA[f.vista][1] : "reposo";
   }
 
@@ -203,9 +215,19 @@ export class ArteIlustrado {
 
   /* Dibuja a una persona con los pies en (x, y); `s` es la altura de un adulto de pie. */
   persona(c, x, y, s, a, pose, f, t) {
-    const nombre = this.poseIlustrada(pose, f, t);
-    const juntoAlAgua = !f.anda && (f.bebe || nombre === "agachado");
-    const mira = juntoAlAgua ? f.ladoAgua : f.mira;
+    let nombre = this.poseIlustrada(pose, f, t);
+    const juntoAlAgua = !f.anda && !f.papel && !f.enGiro && (f.bebe || nombre === "agachado");
+    let mira = juntoAlAgua ? f.ladoAgua : f.miraSocial || f.mira;
+    // F6.1: volverse no es instantáneo. Al cambiar de lado estando quieto, un instante de frente.
+    const ahora = performance.now();
+    if (t && !f.anda && f.miraPintada != null && mira !== f.miraPintada && !juntoAlAgua) f.giroHasta = ahora + GIRO_MS;
+    f.miraPintada = mira;
+    if (t && !f.anda && ahora < (f.giroHasta || 0) && this.i.personas.reposo) {
+      nombre = "reposo";
+      mira = 1;
+    }
+    // al andar, el cuerpo sube un poco en cada paso por debajo (fotogramas de paso, no de apoyo)
+    const bote = t && f.anda ? Math.sin((Math.PI / 2) * f.recorrido * 4) ** 2 * s * 0.018 : 0;
     const d = this.i.personas[nombre];
     const escala = (s / d.alto_de_pie) * (a.mayor ? 0.95 : 1);
     let w = d.ancho * escala;
@@ -214,6 +236,10 @@ export class ArteIlustrado {
     c.fillStyle = SOMBRA;
     c.beginPath();
     c.ellipse(x + s * 0.07, y + s * 0.012, nombre === "dormido" ? w * 0.5 : s * 0.2, s * 0.06, 0, 0, TAU);
+    c.fill();
+    c.fillStyle = "rgba(38,30,20,.28)";
+    c.beginPath();
+    c.ellipse(x,y,s*(f.anda ? .12 : .15),s*.032,0,0,TAU);
     c.fill();
     if (t && !f.anda && !juntoAlAgua) {
       const r = Math.sin((t + f.fase) * 1.6) * 0.012;
@@ -225,10 +251,26 @@ export class ArteIlustrado {
     const ax = d.apoyo[0] * (w / d.ancho);
     const ay = d.apoyo[1] * (h / d.alto);
     c.save();
-    c.translate(x, y);
+    c.translate(x, y - bote);
     if (mira < 0) c.scale(-1, 1);
+    if (!f.anda && nombre === "perfil" && f.gestoBreve && t*1000 < f.gestoBreve.hasta) {
+      const pulso = Math.sin(Math.PI * Math.min(1,(f.gestoBreve.hasta-t*1000)/2000));
+      c.rotate((f.gestoBreve.tipo === "voz" ? -.072 : .065)*pulso);
+    }
+    // F6.1: negar con la cabeza antes de volverse (todo el cuerpo oscila un poco desde los pies)
+    if (t && f.papel && f.papel.agita) c.rotate(Math.sin(ahora / 35) * 0.085);
+    // F6.3: al increpar, el cuerpo empuja hacia el otro a golpes; en el forcejeo, tirones cortos
+    if (t && f.papel && f.papel.sacude) c.rotate(Math.max(0, Math.sin(ahora / 110)) * 0.07);
+    if (t && f.papel && f.papel.tiembla) c.rotate(Math.sin(ahora / 38 + f.id) * 0.06);
     // el arte mira al frente con la luz arriba a la izquierda: al voltear, la luz se mantiene
     c.drawImage(sprite, -ax, -ay, w, h);
+    // dónde tiene las manos (para la comida que da o recibe), en coordenadas de pantalla
+    f.mano = null;
+    if (d.mano) {
+      const mx = (d.mano[0] - d.apoyo[0]) * (w / d.ancho), my = (d.mano[1] - d.apoyo[1]) * (h / d.alto);
+      f.mano = [x + (mira < 0 ? -mx : mx), y + my];
+      if (f.papel && f.papel.objeto) racion(c, mx, my - s * 0.04, s * 0.1, f.papel.objeto);
+    }
     if (f.anda && pose.endsWith("+cesto")) cesto(c, s * 0.86, s * 0.17, -s * 0.27);
     if (f.anda && pose.endsWith("+haz")) haz(c, s * 0.85, -s * 0.19, -s * 0.58, s * 0.06, -s * 0.22);
     c.restore();

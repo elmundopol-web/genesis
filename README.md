@@ -1,6 +1,14 @@
-# GENESIS 0.4 · Vidas y generaciones
+# GENESIS 0.6 · Vidas y generaciones
+
+**Preparación familiar para el invierno.** Las nuevas partidas con familias pueden repartir tareas y retomar un objetivo tras un contratiempo. Para jugar la escena de Olin y Lena, ejecuta `py -3 -B herramientas/demo_f60.py` y abre `iniciar.bat f60-demo --carpeta partidas/f60`. [Guía y resultados de F6.0](docs/F6.0-ESTADO.md).
 
 Abre **iniciar.bat** y usa **Intervenir** para elegir una celda, revisar el efecto y confirmar. **Historias** reúne las consecuencias de cada intervención, promesa y crianza. En la ficha de un habitante, **Familia y vínculos** muestra sus razones, sus maestros y el botón para añadirlo a favoritos.
+
+**F5.0 (opcional):** un habitante decide con un modelo local (Qwen vía Ollama) qué hacer ante un agujero, y su ficha muestra en «Decisiones» qué vio, qué recuerdo influyó, qué hizo y qué pasó después. Se activa solo a petición (`ejecutar.py nueva --semilla N --mente ID` o `ejecutar.py ampliar PARTIDA --mente ID`); sin Ollama se usa la regla habitual y la partida se reproduce igual. Demostración: `py -3 herramientas/demo_f50.py` y después `iniciar.bat f50-demo --carpeta partidas/f50`. [Informe de F5.0](docs/F5.0-ESTADO.md).
+
+**F5.1:** lo que un habitante cuenta cambia lo que otro hace. Unai inspecciona el agujero y se lo cuenta a Brisa, que después decide con el modelo teniendo en cuenta el relato y su confianza en Unai. La consulta no detiene el mundo. Demostración: `py -3 herramientas/demo_f51.py` y después `iniciar.bat f51-demo --carpeta partidas/f51`; abre un agujero en (33, 34) y avanza hasta el día 8. [Informe de F5.1](docs/F5.1-ESTADO.md).
+
+**F5.2, la voz divina:** en «Intervenir → Hablar a un habitante» eliges a una persona, escribes un mensaje breve y confirmas (o cancelas, y no queda nada). Solo esa persona lo oye, como una voz de origen desconocido, y lo interpreta según lo que sabe; si habla de un agujero que reconoce, decide con el modelo qué hacer. Demostración: `py -3 herramientas/demo_f52.py` y después `iniciar.bat f52-demo --carpeta partidas/f52`. [Informe de F5.2](docs/F5.2-ESTADO.md).
 
 Las partidas nuevas utilizan F4. Para llevar una partida anterior a esta fase en una copia, ejecuta `py -3 ejecutar.py ampliar NOMBRE` y abre `iniciar.bat NOMBRE-f4`. Las vidas nuevas comienzan en la primera hora posterior a la copia. [Guía de F4, pruebas, capturas y resultados](docs/F4-ESTADO.md).
 
@@ -464,8 +472,9 @@ con un modelo de lenguaje, cuando llegue, entrará por aquí.
 - Otras construcciones (solo refugio y depósito), herramientas, fuego, ropa o
   agricultura. Religión, normas inventadas o líderes: no se generan.
 - Nacimientos ni nuevas generaciones: los fallecidos no se reemplazan.
-- Modelos de lenguaje. Los tiempos de inferencia del documento de arquitectura
-  son estimaciones sin medir; se medirán cuando se integre la deliberación.
+- Modelos de lenguaje, salvo F5.0: un solo habitante y una sola clase de decisión
+  (qué hacer ante un agujero), activada a petición. Tiempos medidos en
+  [F5.0-ESTADO.md](docs/F5.0-ESTADO.md).
 - Fauna, enfermedades, agricultura, materiales no renovables.
 - Intervenciones del experimentador y bifurcación de historias (F6). Se
   conservan instantáneas al inicio de cada estación, pero todavía no hay

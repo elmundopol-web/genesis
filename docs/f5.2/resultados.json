@@ -1,0 +1,893 @@
+{
+ "modelo": "qwen2.5:7b",
+ "fecha": "2026-11-18 01:57",
+ "mensaje": "Ten cuidado cerca de ese agujero",
+ "casos": {
+  "sin": {
+   "filas": [
+    {
+     "eleccion": "acercarse",
+     "fuente": "modelo",
+     "motivo": null,
+     "pedida": null,
+     "razon": "Unai me contó sobre el hueco, fío un poco de él",
+     "ms": 411,
+     "voz_causa": false,
+     "voz_contexto": false,
+     "relato_causa": true,
+     "despues": [
+      "investigar",
+      "investigar",
+      "investigar",
+      "inspecciona"
+     ],
+     "abierta": 177,
+     "aplicada": 178,
+     "peticion": "Eres Brisa. Vives con otros en un mundo primitivo.\nAhora percibes: Un hueco en el suelo que antes no estaba, a 8 pasos. Tu primera impresión: «posible hueco natural» (duda). Cerca de ti: Unai. Además, es de día.\nTus recuerdos pertinentes:\n1. Unai te contó hace 21 horas que en este mismo sitio hay un hueco: «hendidura estable»; dijo que lo había mirado de cerca y no le pasó nada. Tú no lo habías visto. Te fías algo de Unai.\nOpciones:\n- acercarse: acercarte despacio y mirarlo de cerca\n- evitar: rodearlo de lejos y seguir con lo tuyo"
+    },
+    {
+     "eleccion": "acercarse",
+     "fuente": "modelo",
+     "motivo": null,
+     "pedida": null,
+     "razon": "Unai me contó sobre el hueco, fío un poco de él",
+     "ms": 379,
+     "voz_causa": false,
+     "voz_contexto": false,
+     "relato_causa": true,
+     "despues": [
+      "investigar",
+      "investigar",
+      "investigar",
+      "inspecciona"
+     ],
+     "abierta": 177,
+     "aplicada": 178,
+     "peticion": "Eres Brisa. Vives con otros en un mundo primitivo.\nAhora percibes: Un hueco en el suelo que antes no estaba, a 8 pasos. Tu primera impresión: «posible hueco natural» (duda). Cerca de ti: Unai. Además, es de día.\nTus recuerdos pertinentes:\n1. Unai te contó hace 21 horas que en este mismo sitio hay un hueco: «hendidura estable»; dijo que lo había mirado de cerca y no le pasó nada. Tú no lo habías visto. Te fías algo de Unai.\nOpciones:\n- acercarse: acercarte despacio y mirarlo de cerca\n- evitar: rodearlo de lejos y seguir con lo tuyo"
+    },
+    {
+     "eleccion": "acercarse",
+     "fuente": "modelo",
+     "motivo": null,
+     "pedida": null,
+     "razon": "Unai me contó sobre el hueco, fío un poco de él",
+     "ms": 393,
+     "voz_causa": false,
+     "voz_contexto": false,
+     "relato_causa": true,
+     "despues": [
+      "investigar",
+      "investigar",
+      "investigar",
+      "inspecciona"
+     ],
+     "abierta": 177,
+     "aplicada": 178,
+     "peticion": "Eres Brisa. Vives con otros en un mundo primitivo.\nAhora percibes: Un hueco en el suelo que antes no estaba, a 8 pasos. Tu primera impresión: «posible hueco natural» (duda). Cerca de ti: Unai. Además, es de día.\nTus recuerdos pertinentes:\n1. Unai te contó hace 21 horas que en este mismo sitio hay un hueco: «hendidura estable»; dijo que lo había mirado de cerca y no le pasó nada. Tú no lo habías visto. Te fías algo de Unai.\nOpciones:\n- acercarse: acercarte despacio y mirarlo de cerca\n- evitar: rodearlo de lejos y seguir con lo tuyo"
+    },
+    {
+     "eleccion": "acercarse",
+     "fuente": "modelo",
+     "motivo": null,
+     "pedida": null,
+     "razon": "Unai me contó sobre el hueco, fío un poco de él",
+     "ms": 373,
+     "voz_causa": false,
+     "voz_contexto": false,
+     "relato_causa": true,
+     "despues": [
+      "investigar",
+      "investigar",
+      "investigar",
+      "inspecciona"
+     ],
+     "abierta": 177,
+     "aplicada": 178,
+     "peticion": "Eres Brisa. Vives con otros en un mundo primitivo.\nAhora percibes: Un hueco en el suelo que antes no estaba, a 8 pasos. Tu primera impresión: «posible hueco natural» (duda). Cerca de ti: Unai. Además, es de día.\nTus recuerdos pertinentes:\n1. Unai te contó hace 21 horas que en este mismo sitio hay un hueco: «hendidura estable»; dijo que lo había mirado de cerca y no le pasó nada. Tú no lo habías visto. Te fías algo de Unai.\nOpciones:\n- acercarse: acercarte despacio y mirarlo de cerca\n- evitar: rodearlo de lejos y seguir con lo tuyo"
+    },
+    {
+     "eleccion": "acercarse",
+     "fuente": "modelo",
+     "motivo": null,
+     "pedida": null,
+     "razon": "Unai me contó sobre el hueco, fío un poco de él",
+     "ms": 376,
+     "voz_causa": false,
+     "voz_contexto": false,
+     "relato_causa": true,
+     "despues": [
+      "investigar",
+      "investigar",
+      "investigar",
+      "inspecciona"
+     ],
+     "abierta": 177,
+     "aplicada": 178,
+     "peticion": "Eres Brisa. Vives con otros en un mundo primitivo.\nAhora percibes: Un hueco en el suelo que antes no estaba, a 8 pasos. Tu primera impresión: «posible hueco natural» (duda). Cerca de ti: Unai. Además, es de día.\nTus recuerdos pertinentes:\n1. Unai te contó hace 21 horas que en este mismo sitio hay un hueco: «hendidura estable»; dijo que lo había mirado de cerca y no le pasó nada. Tú no lo habías visto. Te fías algo de Unai.\nOpciones:\n- acercarse: acercarte despacio y mirarlo de cerca\n- evitar: rodearlo de lejos y seguir con lo tuyo"
+    },
+    {
+     "eleccion": "acercarse",
+     "fuente": "modelo",
+     "motivo": null,
+     "pedida": null,
+     "razon": "Unai me contó sobre el hueco, fío un poco de él",
+     "ms": 393,
+     "voz_causa": false,
+     "voz_contexto": false,
+     "relato_causa": true,
+     "despues": [
+      "investigar",
+      "investigar",
+      "investigar",
+      "inspecciona"
+     ],
+     "abierta": 177,
+     "aplicada": 178,
+     "peticion": "Eres Brisa. Vives con otros en un mundo primitivo.\nAhora percibes: Un hueco en el suelo que antes no estaba, a 8 pasos. Tu primera impresión: «posible hueco natural» (duda). Cerca de ti: Unai. Además, es de día.\nTus recuerdos pertinentes:\n1. Unai te contó hace 21 horas que en este mismo sitio hay un hueco: «hendidura estable»; dijo que lo había mirado de cerca y no le pasó nada. Tú no lo habías visto. Te fías algo de Unai.\nOpciones:\n- acercarse: acercarte despacio y mirarlo de cerca\n- evitar: rodearlo de lejos y seguir con lo tuyo"
+    },
+    {
+     "eleccion": "acercarse",
+     "fuente": "modelo",
+     "motivo": null,
+     "pedida": null,
+     "razon": "Unai me contó sobre el hueco, fío un poco de él",
+     "ms": 400,
+     "voz_causa": false,
+     "voz_contexto": false,
+     "relato_causa": true,
+     "despues": [
+      "investigar",
+      "investigar",
+      "investigar",
+      "inspecciona"
+     ],
+     "abierta": 177,
+     "aplicada": 178,
+     "peticion": "Eres Brisa. Vives con otros en un mundo primitivo.\nAhora percibes: Un hueco en el suelo que antes no estaba, a 8 pasos. Tu primera impresión: «posible hueco natural» (duda). Cerca de ti: Unai. Además, es de día.\nTus recuerdos pertinentes:\n1. Unai te contó hace 21 horas que en este mismo sitio hay un hueco: «hendidura estable»; dijo que lo había mirado de cerca y no le pasó nada. Tú no lo habías visto. Te fías algo de Unai.\nOpciones:\n- acercarse: acercarte despacio y mirarlo de cerca\n- evitar: rodearlo de lejos y seguir con lo tuyo"
+    },
+    {
+     "eleccion": "acercarse",
+     "fuente": "modelo",
+     "motivo": null,
+     "pedida": null,
+     "razon": "Unai me contó sobre el hueco, fío un poco de él",
+     "ms": 338,
+     "voz_causa": false,
+     "voz_contexto": false,
+     "relato_causa": true,
+     "despues": [
+      "investigar",
+      "investigar",
+      "investigar",
+      "inspecciona"
+     ],
+     "abierta": 177,
+     "aplicada": 178,
+     "peticion": "Eres Brisa. Vives con otros en un mundo primitivo.\nAhora percibes: Un hueco en el suelo que antes no estaba, a 8 pasos. Tu primera impresión: «posible hueco natural» (duda). Cerca de ti: Unai. Además, es de día.\nTus recuerdos pertinentes:\n1. Unai te contó hace 21 horas que en este mismo sitio hay un hueco: «hendidura estable»; dijo que lo había mirado de cerca y no le pasó nada. Tú no lo habías visto. Te fías algo de Unai.\nOpciones:\n- acercarse: acercarte despacio y mirarlo de cerca\n- evitar: rodearlo de lejos y seguir con lo tuyo"
+    },
+    {
+     "eleccion": "acercarse",
+     "fuente": "modelo",
+     "motivo": null,
+     "pedida": null,
+     "razon": "Unai me contó sobre el hueco, fío un poco de él",
+     "ms": 336,
+     "voz_causa": false,
+     "voz_contexto": false,
+     "relato_causa": true,
+     "despues": [
+      "investigar",
+      "investigar",
+      "investigar",
+      "inspecciona"
+     ],
+     "abierta": 177,
+     "aplicada": 178,
+     "peticion": "Eres Brisa. Vives con otros en un mundo primitivo.\nAhora percibes: Un hueco en el suelo que antes no estaba, a 8 pasos. Tu primera impresión: «posible hueco natural» (duda). Cerca de ti: Unai. Además, es de día.\nTus recuerdos pertinentes:\n1. Unai te contó hace 21 horas que en este mismo sitio hay un hueco: «hendidura estable»; dijo que lo había mirado de cerca y no le pasó nada. Tú no lo habías visto. Te fías algo de Unai.\nOpciones:\n- acercarse: acercarte despacio y mirarlo de cerca\n- evitar: rodearlo de lejos y seguir con lo tuyo"
+    },
+    {
+     "eleccion": "acercarse",
+     "fuente": "modelo",
+     "motivo": null,
+     "pedida": null,
+     "razon": "Unai me contó sobre el hueco, fío un poco de él",
+     "ms": 355,
+     "voz_causa": false,
+     "voz_contexto": false,
+     "relato_causa": true,
+     "despues": [
+      "investigar",
+      "investigar",
+      "investigar",
+      "inspecciona"
+     ],
+     "abierta": 177,
+     "aplicada": 178,
+     "peticion": "Eres Brisa. Vives con otros en un mundo primitivo.\nAhora percibes: Un hueco en el suelo que antes no estaba, a 8 pasos. Tu primera impresión: «posible hueco natural» (duda). Cerca de ti: Unai. Además, es de día.\nTus recuerdos pertinentes:\n1. Unai te contó hace 21 horas que en este mismo sitio hay un hueco: «hendidura estable»; dijo que lo había mirado de cerca y no le pasó nada. Tú no lo habías visto. Te fías algo de Unai.\nOpciones:\n- acercarse: acercarte despacio y mirarlo de cerca\n- evitar: rodearlo de lejos y seguir con lo tuyo"
+    }
+   ],
+   "resumen": {
+    "elecciones": {
+     "acercarse": 10
+    },
+    "voz_causa": 0,
+    "voz_contexto": 0
+   }
+  },
+  "antes": {
+   "filas": [
+    {
+     "eleccion": "acercarse",
+     "fuente": "modelo",
+     "motivo": null,
+     "pedida": null,
+     "razon": "Unai me contó sobre el hueco, fío algo de él",
+     "ms": 415,
+     "voz_causa": false,
+     "voz_contexto": true,
+     "relato_causa": true,
+     "despues": [
+      "investigar",
+      "investigar",
+      "investigar",
+      "inspecciona"
+     ],
+     "abierta": 177,
+     "aplicada": 178,
+     "peticion": "Eres Brisa. Vives con otros en un mundo primitivo.\nAhora percibes: Un hueco en el suelo que antes no estaba, a 8 pasos. Tu primera impresión: «posible hueco natural» (duda). Cerca de ti: Unai. Además, es de día.\nTus recuerdos pertinentes:\n1. Unai te contó hace 21 horas que en este mismo sitio hay un hueco: «hendidura estable»; dijo que lo había mirado de cerca y no le pasó nada. Tú no lo habías visto. Te fías algo de Unai.\n2. Hace 3 días oíste una voz, sin saber de dónde venía, que te dijo: «Ten cuidado cerca de ese agujero». La tomaste como advertencia; entonces no conocías ningún hueco, así que no sabes si hablaba de este. No has comprobado nada de lo que dijo.\nOpciones:\n- acercarse: acercarte despacio y mirarlo de cerca\n- evitar: rodearlo de lejos y seguir con lo tuyo"
+    },
+    {
+     "eleccion": "acercarse",
+     "fuente": "modelo",
+     "motivo": null,
+     "pedida": null,
+     "razon": "Unai me contó sobre el hueco, fío algo de él",
+     "ms": 390,
+     "voz_causa": false,
+     "voz_contexto": true,
+     "relato_causa": true,
+     "despues": [
+      "investigar",
+      "investigar",
+      "investigar",
+      "inspecciona"
+     ],
+     "abierta": 177,
+     "aplicada": 178,
+     "peticion": "Eres Brisa. Vives con otros en un mundo primitivo.\nAhora percibes: Un hueco en el suelo que antes no estaba, a 8 pasos. Tu primera impresión: «posible hueco natural» (duda). Cerca de ti: Unai. Además, es de día.\nTus recuerdos pertinentes:\n1. Unai te contó hace 21 horas que en este mismo sitio hay un hueco: «hendidura estable»; dijo que lo había mirado de cerca y no le pasó nada. Tú no lo habías visto. Te fías algo de Unai.\n2. Hace 3 días oíste una voz, sin saber de dónde venía, que te dijo: «Ten cuidado cerca de ese agujero». La tomaste como advertencia; entonces no conocías ningún hueco, así que no sabes si hablaba de este. No has comprobado nada de lo que dijo.\nOpciones:\n- acercarse: acercarte despacio y mirarlo de cerca\n- evitar: rodearlo de lejos y seguir con lo tuyo"
+    },
+    {
+     "eleccion": "acercarse",
+     "fuente": "modelo",
+     "motivo": null,
+     "pedida": null,
+     "razon": "Unai me contó sobre el hueco, fío algo de él",
+     "ms": 374,
+     "voz_causa": false,
+     "voz_contexto": true,
+     "relato_causa": true,
+     "despues": [
+      "investigar",
+      "investigar",
+      "investigar",
+      "inspecciona"
+     ],
+     "abierta": 177,
+     "aplicada": 178,
+     "peticion": "Eres Brisa. Vives con otros en un mundo primitivo.\nAhora percibes: Un hueco en el suelo que antes no estaba, a 8 pasos. Tu primera impresión: «posible hueco natural» (duda). Cerca de ti: Unai. Además, es de día.\nTus recuerdos pertinentes:\n1. Unai te contó hace 21 horas que en este mismo sitio hay un hueco: «hendidura estable»; dijo que lo había mirado de cerca y no le pasó nada. Tú no lo habías visto. Te fías algo de Unai.\n2. Hace 3 días oíste una voz, sin saber de dónde venía, que te dijo: «Ten cuidado cerca de ese agujero». La tomaste como advertencia; entonces no conocías ningún hueco, así que no sabes si hablaba de este. No has comprobado nada de lo que dijo.\nOpciones:\n- acercarse: acercarte despacio y mirarlo de cerca\n- evitar: rodearlo de lejos y seguir con lo tuyo"
+    },
+    {
+     "eleccion": "acercarse",
+     "fuente": "modelo",
+     "motivo": null,
+     "pedida": null,
+     "razon": "Unai me contó sobre el hueco, fío algo de él",
+     "ms": 375,
+     "voz_causa": false,
+     "voz_contexto": true,
+     "relato_causa": true,
+     "despues": [
+      "investigar",
+      "investigar",
+      "investigar",
+      "inspecciona"
+     ],
+     "abierta": 177,
+     "aplicada": 178,
+     "peticion": "Eres Brisa. Vives con otros en un mundo primitivo.\nAhora percibes: Un hueco en el suelo que antes no estaba, a 8 pasos. Tu primera impresión: «posible hueco natural» (duda). Cerca de ti: Unai. Además, es de día.\nTus recuerdos pertinentes:\n1. Unai te contó hace 21 horas que en este mismo sitio hay un hueco: «hendidura estable»; dijo que lo había mirado de cerca y no le pasó nada. Tú no lo habías visto. Te fías algo de Unai.\n2. Hace 3 días oíste una voz, sin saber de dónde venía, que te dijo: «Ten cuidado cerca de ese agujero». La tomaste como advertencia; entonces no conocías ningún hueco, así que no sabes si hablaba de este. No has comprobado nada de lo que dijo.\nOpciones:\n- acercarse: acercarte despacio y mirarlo de cerca\n- evitar: rodearlo de lejos y seguir con lo tuyo"
+    },
+    {
+     "eleccion": "acercarse",
+     "fuente": "modelo",
+     "motivo": null,
+     "pedida": null,
+     "razon": "Unai me contó sobre el hueco, fío algo de él",
+     "ms": 380,
+     "voz_causa": false,
+     "voz_contexto": true,
+     "relato_causa": true,
+     "despues": [
+      "investigar",
+      "investigar",
+      "investigar",
+      "inspecciona"
+     ],
+     "abierta": 177,
+     "aplicada": 178,
+     "peticion": "Eres Brisa. Vives con otros en un mundo primitivo.\nAhora percibes: Un hueco en el suelo que antes no estaba, a 8 pasos. Tu primera impresión: «posible hueco natural» (duda). Cerca de ti: Unai. Además, es de día.\nTus recuerdos pertinentes:\n1. Unai te contó hace 21 horas que en este mismo sitio hay un hueco: «hendidura estable»; dijo que lo había mirado de cerca y no le pasó nada. Tú no lo habías visto. Te fías algo de Unai.\n2. Hace 3 días oíste una voz, sin saber de dónde venía, que te dijo: «Ten cuidado cerca de ese agujero». La tomaste como advertencia; entonces no conocías ningún hueco, así que no sabes si hablaba de este. No has comprobado nada de lo que dijo.\nOpciones:\n- acercarse: acercarte despacio y mirarlo de cerca\n- evitar: rodearlo de lejos y seguir con lo tuyo"
+    },
+    {
+     "eleccion": "acercarse",
+     "fuente": "modelo",
+     "motivo": null,
+     "pedida": null,
+     "razon": "Unai me contó sobre el hueco, fío algo de él",
+     "ms": 352,
+     "voz_causa": false,
+     "voz_contexto": true,
+     "relato_causa": true,
+     "despues": [
+      "investigar",
+      "investigar",
+      "investigar",
+      "inspecciona"
+     ],
+     "abierta": 177,
+     "aplicada": 178,
+     "peticion": "Eres Brisa. Vives con otros en un mundo primitivo.\nAhora percibes: Un hueco en el suelo que antes no estaba, a 8 pasos. Tu primera impresión: «posible hueco natural» (duda). Cerca de ti: Unai. Además, es de día.\nTus recuerdos pertinentes:\n1. Unai te contó hace 21 horas que en este mismo sitio hay un hueco: «hendidura estable»; dijo que lo había mirado de cerca y no le pasó nada. Tú no lo habías visto. Te fías algo de Unai.\n2. Hace 3 días oíste una voz, sin saber de dónde venía, que te dijo: «Ten cuidado cerca de ese agujero». La tomaste como advertencia; entonces no conocías ningún hueco, así que no sabes si hablaba de este. No has comprobado nada de lo que dijo.\nOpciones:\n- acercarse: acercarte despacio y mirarlo de cerca\n- evitar: rodearlo de lejos y seguir con lo tuyo"
+    },
+    {
+     "eleccion": "acercarse",
+     "fuente": "modelo",
+     "motivo": null,
+     "pedida": null,
+     "razon": "Unai me contó sobre el hueco, fío algo de él",
+     "ms": 353,
+     "voz_causa": false,
+     "voz_contexto": true,
+     "relato_causa": true,
+     "despues": [
+      "investigar",
+      "investigar",
+      "investigar",
+      "inspecciona"
+     ],
+     "abierta": 177,
+     "aplicada": 178,
+     "peticion": "Eres Brisa. Vives con otros en un mundo primitivo.\nAhora percibes: Un hueco en el suelo que antes no estaba, a 8 pasos. Tu primera impresión: «posible hueco natural» (duda). Cerca de ti: Unai. Además, es de día.\nTus recuerdos pertinentes:\n1. Unai te contó hace 21 horas que en este mismo sitio hay un hueco: «hendidura estable»; dijo que lo había mirado de cerca y no le pasó nada. Tú no lo habías visto. Te fías algo de Unai.\n2. Hace 3 días oíste una voz, sin saber de dónde venía, que te dijo: «Ten cuidado cerca de ese agujero». La tomaste como advertencia; entonces no conocías ningún hueco, así que no sabes si hablaba de este. No has comprobado nada de lo que dijo.\nOpciones:\n- acercarse: acercarte despacio y mirarlo de cerca\n- evitar: rodearlo de lejos y seguir con lo tuyo"
+    },
+    {
+     "eleccion": "acercarse",
+     "fuente": "modelo",
+     "motivo": null,
+     "pedida": null,
+     "razon": "Unai me contó sobre el hueco, fío algo de él",
+     "ms": 366,
+     "voz_causa": false,
+     "voz_contexto": true,
+     "relato_causa": true,
+     "despues": [
+      "investigar",
+      "investigar",
+      "investigar",
+      "inspecciona"
+     ],
+     "abierta": 177,
+     "aplicada": 178,
+     "peticion": "Eres Brisa. Vives con otros en un mundo primitivo.\nAhora percibes: Un hueco en el suelo que antes no estaba, a 8 pasos. Tu primera impresión: «posible hueco natural» (duda). Cerca de ti: Unai. Además, es de día.\nTus recuerdos pertinentes:\n1. Unai te contó hace 21 horas que en este mismo sitio hay un hueco: «hendidura estable»; dijo que lo había mirado de cerca y no le pasó nada. Tú no lo habías visto. Te fías algo de Unai.\n2. Hace 3 días oíste una voz, sin saber de dónde venía, que te dijo: «Ten cuidado cerca de ese agujero». La tomaste como advertencia; entonces no conocías ningún hueco, así que no sabes si hablaba de este. No has comprobado nada de lo que dijo.\nOpciones:\n- acercarse: acercarte despacio y mirarlo de cerca\n- evitar: rodearlo de lejos y seguir con lo tuyo"
+    },
+    {
+     "eleccion": "acercarse",
+     "fuente": "modelo",
+     "motivo": null,
+     "pedida": null,
+     "razon": "Unai me contó sobre el hueco, fío algo de él",
+     "ms": 349,
+     "voz_causa": false,
+     "voz_contexto": true,
+     "relato_causa": true,
+     "despues": [
+      "investigar",
+      "investigar",
+      "investigar",
+      "inspecciona"
+     ],
+     "abierta": 177,
+     "aplicada": 178,
+     "peticion": "Eres Brisa. Vives con otros en un mundo primitivo.\nAhora percibes: Un hueco en el suelo que antes no estaba, a 8 pasos. Tu primera impresión: «posible hueco natural» (duda). Cerca de ti: Unai. Además, es de día.\nTus recuerdos pertinentes:\n1. Unai te contó hace 21 horas que en este mismo sitio hay un hueco: «hendidura estable»; dijo que lo había mirado de cerca y no le pasó nada. Tú no lo habías visto. Te fías algo de Unai.\n2. Hace 3 días oíste una voz, sin saber de dónde venía, que te dijo: «Ten cuidado cerca de ese agujero». La tomaste como advertencia; entonces no conocías ningún hueco, así que no sabes si hablaba de este. No has comprobado nada de lo que dijo.\nOpciones:\n- acercarse: acercarte despacio y mirarlo de cerca\n- evitar: rodearlo de lejos y seguir con lo tuyo"
+    },
+    {
+     "eleccion": "acercarse",
+     "fuente": "modelo",
+     "motivo": null,
+     "pedida": null,
+     "razon": "Unai me contó sobre el hueco, fío algo de él",
+     "ms": 358,
+     "voz_causa": false,
+     "voz_contexto": true,
+     "relato_causa": true,
+     "despues": [
+      "investigar",
+      "investigar",
+      "investigar",
+      "inspecciona"
+     ],
+     "abierta": 177,
+     "aplicada": 178,
+     "peticion": "Eres Brisa. Vives con otros en un mundo primitivo.\nAhora percibes: Un hueco en el suelo que antes no estaba, a 8 pasos. Tu primera impresión: «posible hueco natural» (duda). Cerca de ti: Unai. Además, es de día.\nTus recuerdos pertinentes:\n1. Unai te contó hace 21 horas que en este mismo sitio hay un hueco: «hendidura estable»; dijo que lo había mirado de cerca y no le pasó nada. Tú no lo habías visto. Te fías algo de Unai.\n2. Hace 3 días oíste una voz, sin saber de dónde venía, que te dijo: «Ten cuidado cerca de ese agujero». La tomaste como advertencia; entonces no conocías ningún hueco, así que no sabes si hablaba de este. No has comprobado nada de lo que dijo.\nOpciones:\n- acercarse: acercarte despacio y mirarlo de cerca\n- evitar: rodearlo de lejos y seguir con lo tuyo"
+    }
+   ],
+   "resumen": {
+    "elecciones": {
+     "acercarse": 10
+    },
+    "voz_causa": 0,
+    "voz_contexto": 10
+   }
+  },
+  "despues": {
+   "filas": [
+    {
+     "eleccion": "pedir_compania",
+     "fuente": "modelo",
+     "motivo": null,
+     "pedida": null,
+     "razon": "Recuerdo la advertencia y confío en Unai.",
+     "ms": 350,
+     "voz_causa": false,
+     "voz_contexto": true,
+     "relato_causa": true,
+     "despues": [
+      "pide_compania",
+      "investigar",
+      "observa",
+      "interpreta"
+     ],
+     "abierta": 161,
+     "aplicada": 162,
+     "peticion": "Eres Brisa. Vives con otros en un mundo primitivo.\nAhora percibes: No has visto ese hueco: sabes de él por lo que te contaron. Está a unos 8 pasos de donde estás. Cerca de ti: Unai. Además, es de día.\nTus recuerdos pertinentes:\n1. Unai te contó hace 5 horas que en este mismo sitio hay un hueco: «hendidura estable»; dijo que lo había mirado de cerca y no le pasó nada. Tú no lo has visto. Te fías algo de Unai.\n2. Hace un momento oíste una voz, sin saber de dónde venía, que te dijo: «Ten cuidado cerca de ese agujero». La tomaste como advertencia; pensaste que hablaba de este mismo hueco. No has comprobado nada de lo que dijo.\nOpciones:\n- acercarse: ir hasta allí a verlo de cerca\n- evitar: mantenerte lejos de ese sitio\n- pedir_compania: pedir a Unai que se acerque contigo",
+     "interpretacion": "advertencia"
+    },
+    {
+     "eleccion": "pedir_compania",
+     "fuente": "modelo",
+     "motivo": null,
+     "pedida": null,
+     "razon": "Recuerdo la advertencia y confío en Unai.",
+     "ms": 329,
+     "voz_causa": false,
+     "voz_contexto": true,
+     "relato_causa": true,
+     "despues": [
+      "pide_compania",
+      "investigar",
+      "observa",
+      "interpreta"
+     ],
+     "abierta": 161,
+     "aplicada": 162,
+     "peticion": "Eres Brisa. Vives con otros en un mundo primitivo.\nAhora percibes: No has visto ese hueco: sabes de él por lo que te contaron. Está a unos 8 pasos de donde estás. Cerca de ti: Unai. Además, es de día.\nTus recuerdos pertinentes:\n1. Unai te contó hace 5 horas que en este mismo sitio hay un hueco: «hendidura estable»; dijo que lo había mirado de cerca y no le pasó nada. Tú no lo has visto. Te fías algo de Unai.\n2. Hace un momento oíste una voz, sin saber de dónde venía, que te dijo: «Ten cuidado cerca de ese agujero». La tomaste como advertencia; pensaste que hablaba de este mismo hueco. No has comprobado nada de lo que dijo.\nOpciones:\n- acercarse: ir hasta allí a verlo de cerca\n- evitar: mantenerte lejos de ese sitio\n- pedir_compania: pedir a Unai que se acerque contigo",
+     "interpretacion": "advertencia"
+    },
+    {
+     "eleccion": "pedir_compania",
+     "fuente": "modelo",
+     "motivo": null,
+     "pedida": null,
+     "razon": "Recuerdo la advertencia y confío en Unai.",
+     "ms": 328,
+     "voz_causa": false,
+     "voz_contexto": true,
+     "relato_causa": true,
+     "despues": [
+      "pide_compania",
+      "investigar",
+      "observa",
+      "interpreta"
+     ],
+     "abierta": 161,
+     "aplicada": 162,
+     "peticion": "Eres Brisa. Vives con otros en un mundo primitivo.\nAhora percibes: No has visto ese hueco: sabes de él por lo que te contaron. Está a unos 8 pasos de donde estás. Cerca de ti: Unai. Además, es de día.\nTus recuerdos pertinentes:\n1. Unai te contó hace 5 horas que en este mismo sitio hay un hueco: «hendidura estable»; dijo que lo había mirado de cerca y no le pasó nada. Tú no lo has visto. Te fías algo de Unai.\n2. Hace un momento oíste una voz, sin saber de dónde venía, que te dijo: «Ten cuidado cerca de ese agujero». La tomaste como advertencia; pensaste que hablaba de este mismo hueco. No has comprobado nada de lo que dijo.\nOpciones:\n- acercarse: ir hasta allí a verlo de cerca\n- evitar: mantenerte lejos de ese sitio\n- pedir_compania: pedir a Unai que se acerque contigo",
+     "interpretacion": "advertencia"
+    },
+    {
+     "eleccion": "pedir_compania",
+     "fuente": "modelo",
+     "motivo": null,
+     "pedida": null,
+     "razon": "Recuerdo la advertencia y confío en Unai.",
+     "ms": 344,
+     "voz_causa": false,
+     "voz_contexto": true,
+     "relato_causa": true,
+     "despues": [
+      "pide_compania",
+      "investigar",
+      "observa",
+      "interpreta"
+     ],
+     "abierta": 161,
+     "aplicada": 162,
+     "peticion": "Eres Brisa. Vives con otros en un mundo primitivo.\nAhora percibes: No has visto ese hueco: sabes de él por lo que te contaron. Está a unos 8 pasos de donde estás. Cerca de ti: Unai. Además, es de día.\nTus recuerdos pertinentes:\n1. Unai te contó hace 5 horas que en este mismo sitio hay un hueco: «hendidura estable»; dijo que lo había mirado de cerca y no le pasó nada. Tú no lo has visto. Te fías algo de Unai.\n2. Hace un momento oíste una voz, sin saber de dónde venía, que te dijo: «Ten cuidado cerca de ese agujero». La tomaste como advertencia; pensaste que hablaba de este mismo hueco. No has comprobado nada de lo que dijo.\nOpciones:\n- acercarse: ir hasta allí a verlo de cerca\n- evitar: mantenerte lejos de ese sitio\n- pedir_compania: pedir a Unai que se acerque contigo",
+     "interpretacion": "advertencia"
+    },
+    {
+     "eleccion": "pedir_compania",
+     "fuente": "modelo",
+     "motivo": null,
+     "pedida": null,
+     "razon": "Recuerdo la advertencia y confío en Unai.",
+     "ms": 352,
+     "voz_causa": false,
+     "voz_contexto": true,
+     "relato_causa": true,
+     "despues": [
+      "pide_compania",
+      "investigar",
+      "observa",
+      "interpreta"
+     ],
+     "abierta": 161,
+     "aplicada": 162,
+     "peticion": "Eres Brisa. Vives con otros en un mundo primitivo.\nAhora percibes: No has visto ese hueco: sabes de él por lo que te contaron. Está a unos 8 pasos de donde estás. Cerca de ti: Unai. Además, es de día.\nTus recuerdos pertinentes:\n1. Unai te contó hace 5 horas que en este mismo sitio hay un hueco: «hendidura estable»; dijo que lo había mirado de cerca y no le pasó nada. Tú no lo has visto. Te fías algo de Unai.\n2. Hace un momento oíste una voz, sin saber de dónde venía, que te dijo: «Ten cuidado cerca de ese agujero». La tomaste como advertencia; pensaste que hablaba de este mismo hueco. No has comprobado nada de lo que dijo.\nOpciones:\n- acercarse: ir hasta allí a verlo de cerca\n- evitar: mantenerte lejos de ese sitio\n- pedir_compania: pedir a Unai que se acerque contigo",
+     "interpretacion": "advertencia"
+    },
+    {
+     "eleccion": "pedir_compania",
+     "fuente": "modelo",
+     "motivo": null,
+     "pedida": null,
+     "razon": "Recuerdo la advertencia y confío en Unai.",
+     "ms": 326,
+     "voz_causa": false,
+     "voz_contexto": true,
+     "relato_causa": true,
+     "despues": [
+      "pide_compania",
+      "investigar",
+      "observa",
+      "interpreta"
+     ],
+     "abierta": 161,
+     "aplicada": 162,
+     "peticion": "Eres Brisa. Vives con otros en un mundo primitivo.\nAhora percibes: No has visto ese hueco: sabes de él por lo que te contaron. Está a unos 8 pasos de donde estás. Cerca de ti: Unai. Además, es de día.\nTus recuerdos pertinentes:\n1. Unai te contó hace 5 horas que en este mismo sitio hay un hueco: «hendidura estable»; dijo que lo había mirado de cerca y no le pasó nada. Tú no lo has visto. Te fías algo de Unai.\n2. Hace un momento oíste una voz, sin saber de dónde venía, que te dijo: «Ten cuidado cerca de ese agujero». La tomaste como advertencia; pensaste que hablaba de este mismo hueco. No has comprobado nada de lo que dijo.\nOpciones:\n- acercarse: ir hasta allí a verlo de cerca\n- evitar: mantenerte lejos de ese sitio\n- pedir_compania: pedir a Unai que se acerque contigo",
+     "interpretacion": "advertencia"
+    },
+    {
+     "eleccion": "pedir_compania",
+     "fuente": "modelo",
+     "motivo": null,
+     "pedida": null,
+     "razon": "Recuerdo la advertencia y confío en Unai.",
+     "ms": 336,
+     "voz_causa": false,
+     "voz_contexto": true,
+     "relato_causa": true,
+     "despues": [
+      "pide_compania",
+      "investigar",
+      "observa",
+      "interpreta"
+     ],
+     "abierta": 161,
+     "aplicada": 162,
+     "peticion": "Eres Brisa. Vives con otros en un mundo primitivo.\nAhora percibes: No has visto ese hueco: sabes de él por lo que te contaron. Está a unos 8 pasos de donde estás. Cerca de ti: Unai. Además, es de día.\nTus recuerdos pertinentes:\n1. Unai te contó hace 5 horas que en este mismo sitio hay un hueco: «hendidura estable»; dijo que lo había mirado de cerca y no le pasó nada. Tú no lo has visto. Te fías algo de Unai.\n2. Hace un momento oíste una voz, sin saber de dónde venía, que te dijo: «Ten cuidado cerca de ese agujero». La tomaste como advertencia; pensaste que hablaba de este mismo hueco. No has comprobado nada de lo que dijo.\nOpciones:\n- acercarse: ir hasta allí a verlo de cerca\n- evitar: mantenerte lejos de ese sitio\n- pedir_compania: pedir a Unai que se acerque contigo",
+     "interpretacion": "advertencia"
+    },
+    {
+     "eleccion": "pedir_compania",
+     "fuente": "modelo",
+     "motivo": null,
+     "pedida": null,
+     "razon": "Recuerdo la advertencia y confío en Unai.",
+     "ms": 341,
+     "voz_causa": false,
+     "voz_contexto": true,
+     "relato_causa": true,
+     "despues": [
+      "pide_compania",
+      "investigar",
+      "observa",
+      "interpreta"
+     ],
+     "abierta": 161,
+     "aplicada": 162,
+     "peticion": "Eres Brisa. Vives con otros en un mundo primitivo.\nAhora percibes: No has visto ese hueco: sabes de él por lo que te contaron. Está a unos 8 pasos de donde estás. Cerca de ti: Unai. Además, es de día.\nTus recuerdos pertinentes:\n1. Unai te contó hace 5 horas que en este mismo sitio hay un hueco: «hendidura estable»; dijo que lo había mirado de cerca y no le pasó nada. Tú no lo has visto. Te fías algo de Unai.\n2. Hace un momento oíste una voz, sin saber de dónde venía, que te dijo: «Ten cuidado cerca de ese agujero». La tomaste como advertencia; pensaste que hablaba de este mismo hueco. No has comprobado nada de lo que dijo.\nOpciones:\n- acercarse: ir hasta allí a verlo de cerca\n- evitar: mantenerte lejos de ese sitio\n- pedir_compania: pedir a Unai que se acerque contigo",
+     "interpretacion": "advertencia"
+    },
+    {
+     "eleccion": "pedir_compania",
+     "fuente": "modelo",
+     "motivo": null,
+     "pedida": null,
+     "razon": "Recuerdo la advertencia y confío en Unai.",
+     "ms": 360,
+     "voz_causa": false,
+     "voz_contexto": true,
+     "relato_causa": true,
+     "despues": [
+      "pide_compania",
+      "investigar",
+      "observa",
+      "interpreta"
+     ],
+     "abierta": 161,
+     "aplicada": 162,
+     "peticion": "Eres Brisa. Vives con otros en un mundo primitivo.\nAhora percibes: No has visto ese hueco: sabes de él por lo que te contaron. Está a unos 8 pasos de donde estás. Cerca de ti: Unai. Además, es de día.\nTus recuerdos pertinentes:\n1. Unai te contó hace 5 horas que en este mismo sitio hay un hueco: «hendidura estable»; dijo que lo había mirado de cerca y no le pasó nada. Tú no lo has visto. Te fías algo de Unai.\n2. Hace un momento oíste una voz, sin saber de dónde venía, que te dijo: «Ten cuidado cerca de ese agujero». La tomaste como advertencia; pensaste que hablaba de este mismo hueco. No has comprobado nada de lo que dijo.\nOpciones:\n- acercarse: ir hasta allí a verlo de cerca\n- evitar: mantenerte lejos de ese sitio\n- pedir_compania: pedir a Unai que se acerque contigo",
+     "interpretacion": "advertencia"
+    },
+    {
+     "eleccion": "pedir_compania",
+     "fuente": "modelo",
+     "motivo": null,
+     "pedida": null,
+     "razon": "Recuerdo la advertencia y confío en Unai.",
+     "ms": 356,
+     "voz_causa": false,
+     "voz_contexto": true,
+     "relato_causa": true,
+     "despues": [
+      "pide_compania",
+      "investigar",
+      "observa",
+      "interpreta"
+     ],
+     "abierta": 161,
+     "aplicada": 162,
+     "peticion": "Eres Brisa. Vives con otros en un mundo primitivo.\nAhora percibes: No has visto ese hueco: sabes de él por lo que te contaron. Está a unos 8 pasos de donde estás. Cerca de ti: Unai. Además, es de día.\nTus recuerdos pertinentes:\n1. Unai te contó hace 5 horas que en este mismo sitio hay un hueco: «hendidura estable»; dijo que lo había mirado de cerca y no le pasó nada. Tú no lo has visto. Te fías algo de Unai.\n2. Hace un momento oíste una voz, sin saber de dónde venía, que te dijo: «Ten cuidado cerca de ese agujero». La tomaste como advertencia; pensaste que hablaba de este mismo hueco. No has comprobado nada de lo que dijo.\nOpciones:\n- acercarse: ir hasta allí a verlo de cerca\n- evitar: mantenerte lejos de ese sitio\n- pedir_compania: pedir a Unai que se acerque contigo",
+     "interpretacion": "advertencia"
+    }
+   ],
+   "resumen": {
+    "elecciones": {
+     "pedir_compania": 10
+    },
+    "voz_causa": 0,
+    "voz_contexto": 10
+   },
+   "texto": "Ten cuidado cerca de ese agujero"
+  },
+  "despues_consejo": {
+   "filas": [
+    {
+     "eleccion": "pedir_compania",
+     "fuente": "modelo",
+     "motivo": null,
+     "pedida": null,
+     "razon": "creo que Unai sabe algo sobre el hueco",
+     "ms": 376,
+     "voz_causa": false,
+     "voz_contexto": true,
+     "relato_causa": true,
+     "despues": [
+      "pide_compania",
+      "investigar",
+      "observa",
+      "interpreta"
+     ],
+     "abierta": 161,
+     "aplicada": 162,
+     "peticion": "Eres Brisa. Vives con otros en un mundo primitivo.\nAhora percibes: No has visto ese hueco: sabes de él por lo que te contaron. Está a unos 8 pasos de donde estás. Cerca de ti: Unai. Además, es de día.\nTus recuerdos pertinentes:\n1. Unai te contó hace 5 horas que en este mismo sitio hay un hueco: «hendidura estable»; dijo que lo había mirado de cerca y no le pasó nada. Tú no lo has visto. Te fías algo de Unai.\n2. Hace un momento oíste una voz, sin saber de dónde venía, que te dijo: «Acércate a ver ese agujero». La tomaste como consejo; pensaste que hablaba de este mismo hueco. No has comprobado nada de lo que dijo.\nOpciones:\n- acercarse: ir hasta allí a verlo de cerca\n- evitar: mantenerte lejos de ese sitio\n- pedir_compania: pedir a Unai que se acerque contigo",
+     "interpretacion": "consejo"
+    },
+    {
+     "eleccion": "pedir_compania",
+     "fuente": "modelo",
+     "motivo": null,
+     "pedida": null,
+     "razon": "creo que Unai sabe algo sobre el hueco",
+     "ms": 357,
+     "voz_causa": false,
+     "voz_contexto": true,
+     "relato_causa": true,
+     "despues": [
+      "pide_compania",
+      "investigar",
+      "observa",
+      "interpreta"
+     ],
+     "abierta": 161,
+     "aplicada": 162,
+     "peticion": "Eres Brisa. Vives con otros en un mundo primitivo.\nAhora percibes: No has visto ese hueco: sabes de él por lo que te contaron. Está a unos 8 pasos de donde estás. Cerca de ti: Unai. Además, es de día.\nTus recuerdos pertinentes:\n1. Unai te contó hace 5 horas que en este mismo sitio hay un hueco: «hendidura estable»; dijo que lo había mirado de cerca y no le pasó nada. Tú no lo has visto. Te fías algo de Unai.\n2. Hace un momento oíste una voz, sin saber de dónde venía, que te dijo: «Acércate a ver ese agujero». La tomaste como consejo; pensaste que hablaba de este mismo hueco. No has comprobado nada de lo que dijo.\nOpciones:\n- acercarse: ir hasta allí a verlo de cerca\n- evitar: mantenerte lejos de ese sitio\n- pedir_compania: pedir a Unai que se acerque contigo",
+     "interpretacion": "consejo"
+    },
+    {
+     "eleccion": "pedir_compania",
+     "fuente": "modelo",
+     "motivo": null,
+     "pedida": null,
+     "razon": "creo que Unai sabe algo sobre el hueco",
+     "ms": 354,
+     "voz_causa": false,
+     "voz_contexto": true,
+     "relato_causa": true,
+     "despues": [
+      "pide_compania",
+      "investigar",
+      "observa",
+      "interpreta"
+     ],
+     "abierta": 161,
+     "aplicada": 162,
+     "peticion": "Eres Brisa. Vives con otros en un mundo primitivo.\nAhora percibes: No has visto ese hueco: sabes de él por lo que te contaron. Está a unos 8 pasos de donde estás. Cerca de ti: Unai. Además, es de día.\nTus recuerdos pertinentes:\n1. Unai te contó hace 5 horas que en este mismo sitio hay un hueco: «hendidura estable»; dijo que lo había mirado de cerca y no le pasó nada. Tú no lo has visto. Te fías algo de Unai.\n2. Hace un momento oíste una voz, sin saber de dónde venía, que te dijo: «Acércate a ver ese agujero». La tomaste como consejo; pensaste que hablaba de este mismo hueco. No has comprobado nada de lo que dijo.\nOpciones:\n- acercarse: ir hasta allí a verlo de cerca\n- evitar: mantenerte lejos de ese sitio\n- pedir_compania: pedir a Unai que se acerque contigo",
+     "interpretacion": "consejo"
+    },
+    {
+     "eleccion": "pedir_compania",
+     "fuente": "modelo",
+     "motivo": null,
+     "pedida": null,
+     "razon": "creo que Unai sabe algo sobre el hueco",
+     "ms": 387,
+     "voz_causa": false,
+     "voz_contexto": true,
+     "relato_causa": true,
+     "despues": [
+      "pide_compania",
+      "investigar",
+      "observa",
+      "interpreta"
+     ],
+     "abierta": 161,
+     "aplicada": 162,
+     "peticion": "Eres Brisa. Vives con otros en un mundo primitivo.\nAhora percibes: No has visto ese hueco: sabes de él por lo que te contaron. Está a unos 8 pasos de donde estás. Cerca de ti: Unai. Además, es de día.\nTus recuerdos pertinentes:\n1. Unai te contó hace 5 horas que en este mismo sitio hay un hueco: «hendidura estable»; dijo que lo había mirado de cerca y no le pasó nada. Tú no lo has visto. Te fías algo de Unai.\n2. Hace un momento oíste una voz, sin saber de dónde venía, que te dijo: «Acércate a ver ese agujero». La tomaste como consejo; pensaste que hablaba de este mismo hueco. No has comprobado nada de lo que dijo.\nOpciones:\n- acercarse: ir hasta allí a verlo de cerca\n- evitar: mantenerte lejos de ese sitio\n- pedir_compania: pedir a Unai que se acerque contigo",
+     "interpretacion": "consejo"
+    },
+    {
+     "eleccion": "pedir_compania",
+     "fuente": "modelo",
+     "motivo": null,
+     "pedida": null,
+     "razon": "creo que Unai sabe algo sobre el hueco",
+     "ms": 332,
+     "voz_causa": false,
+     "voz_contexto": true,
+     "relato_causa": true,
+     "despues": [
+      "pide_compania",
+      "investigar",
+      "observa",
+      "interpreta"
+     ],
+     "abierta": 161,
+     "aplicada": 162,
+     "peticion": "Eres Brisa. Vives con otros en un mundo primitivo.\nAhora percibes: No has visto ese hueco: sabes de él por lo que te contaron. Está a unos 8 pasos de donde estás. Cerca de ti: Unai. Además, es de día.\nTus recuerdos pertinentes:\n1. Unai te contó hace 5 horas que en este mismo sitio hay un hueco: «hendidura estable»; dijo que lo había mirado de cerca y no le pasó nada. Tú no lo has visto. Te fías algo de Unai.\n2. Hace un momento oíste una voz, sin saber de dónde venía, que te dijo: «Acércate a ver ese agujero». La tomaste como consejo; pensaste que hablaba de este mismo hueco. No has comprobado nada de lo que dijo.\nOpciones:\n- acercarse: ir hasta allí a verlo de cerca\n- evitar: mantenerte lejos de ese sitio\n- pedir_compania: pedir a Unai que se acerque contigo",
+     "interpretacion": "consejo"
+    },
+    {
+     "eleccion": "pedir_compania",
+     "fuente": "modelo",
+     "motivo": null,
+     "pedida": null,
+     "razon": "creo que Unai sabe algo sobre el hueco",
+     "ms": 352,
+     "voz_causa": false,
+     "voz_contexto": true,
+     "relato_causa": true,
+     "despues": [
+      "pide_compania",
+      "investigar",
+      "observa",
+      "interpreta"
+     ],
+     "abierta": 161,
+     "aplicada": 162,
+     "peticion": "Eres Brisa. Vives con otros en un mundo primitivo.\nAhora percibes: No has visto ese hueco: sabes de él por lo que te contaron. Está a unos 8 pasos de donde estás. Cerca de ti: Unai. Además, es de día.\nTus recuerdos pertinentes:\n1. Unai te contó hace 5 horas que en este mismo sitio hay un hueco: «hendidura estable»; dijo que lo había mirado de cerca y no le pasó nada. Tú no lo has visto. Te fías algo de Unai.\n2. Hace un momento oíste una voz, sin saber de dónde venía, que te dijo: «Acércate a ver ese agujero». La tomaste como consejo; pensaste que hablaba de este mismo hueco. No has comprobado nada de lo que dijo.\nOpciones:\n- acercarse: ir hasta allí a verlo de cerca\n- evitar: mantenerte lejos de ese sitio\n- pedir_compania: pedir a Unai que se acerque contigo",
+     "interpretacion": "consejo"
+    },
+    {
+     "eleccion": "pedir_compania",
+     "fuente": "modelo",
+     "motivo": null,
+     "pedida": null,
+     "razon": "creo que Unai sabe algo sobre el hueco",
+     "ms": 363,
+     "voz_causa": false,
+     "voz_contexto": true,
+     "relato_causa": true,
+     "despues": [
+      "pide_compania",
+      "investigar",
+      "observa",
+      "interpreta"
+     ],
+     "abierta": 161,
+     "aplicada": 162,
+     "peticion": "Eres Brisa. Vives con otros en un mundo primitivo.\nAhora percibes: No has visto ese hueco: sabes de él por lo que te contaron. Está a unos 8 pasos de donde estás. Cerca de ti: Unai. Además, es de día.\nTus recuerdos pertinentes:\n1. Unai te contó hace 5 horas que en este mismo sitio hay un hueco: «hendidura estable»; dijo que lo había mirado de cerca y no le pasó nada. Tú no lo has visto. Te fías algo de Unai.\n2. Hace un momento oíste una voz, sin saber de dónde venía, que te dijo: «Acércate a ver ese agujero». La tomaste como consejo; pensaste que hablaba de este mismo hueco. No has comprobado nada de lo que dijo.\nOpciones:\n- acercarse: ir hasta allí a verlo de cerca\n- evitar: mantenerte lejos de ese sitio\n- pedir_compania: pedir a Unai que se acerque contigo",
+     "interpretacion": "consejo"
+    },
+    {
+     "eleccion": "pedir_compania",
+     "fuente": "modelo",
+     "motivo": null,
+     "pedida": null,
+     "razon": "creo que Unai sabe algo sobre el hueco",
+     "ms": 344,
+     "voz_causa": false,
+     "voz_contexto": true,
+     "relato_causa": true,
+     "despues": [
+      "pide_compania",
+      "investigar",
+      "observa",
+      "interpreta"
+     ],
+     "abierta": 161,
+     "aplicada": 162,
+     "peticion": "Eres Brisa. Vives con otros en un mundo primitivo.\nAhora percibes: No has visto ese hueco: sabes de él por lo que te contaron. Está a unos 8 pasos de donde estás. Cerca de ti: Unai. Además, es de día.\nTus recuerdos pertinentes:\n1. Unai te contó hace 5 horas que en este mismo sitio hay un hueco: «hendidura estable»; dijo que lo había mirado de cerca y no le pasó nada. Tú no lo has visto. Te fías algo de Unai.\n2. Hace un momento oíste una voz, sin saber de dónde venía, que te dijo: «Acércate a ver ese agujero». La tomaste como consejo; pensaste que hablaba de este mismo hueco. No has comprobado nada de lo que dijo.\nOpciones:\n- acercarse: ir hasta allí a verlo de cerca\n- evitar: mantenerte lejos de ese sitio\n- pedir_compania: pedir a Unai que se acerque contigo",
+     "interpretacion": "consejo"
+    },
+    {
+     "eleccion": "pedir_compania",
+     "fuente": "modelo",
+     "motivo": null,
+     "pedida": null,
+     "razon": "creo que Unai sabe algo sobre el hueco",
+     "ms": 359,
+     "voz_causa": false,
+     "voz_contexto": true,
+     "relato_causa": true,
+     "despues": [
+      "pide_compania",
+      "investigar",
+      "observa",
+      "interpreta"
+     ],
+     "abierta": 161,
+     "aplicada": 162,
+     "peticion": "Eres Brisa. Vives con otros en un mundo primitivo.\nAhora percibes: No has visto ese hueco: sabes de él por lo que te contaron. Está a unos 8 pasos de donde estás. Cerca de ti: Unai. Además, es de día.\nTus recuerdos pertinentes:\n1. Unai te contó hace 5 horas que en este mismo sitio hay un hueco: «hendidura estable»; dijo que lo había mirado de cerca y no le pasó nada. Tú no lo has visto. Te fías algo de Unai.\n2. Hace un momento oíste una voz, sin saber de dónde venía, que te dijo: «Acércate a ver ese agujero». La tomaste como consejo; pensaste que hablaba de este mismo hueco. No has comprobado nada de lo que dijo.\nOpciones:\n- acercarse: ir hasta allí a verlo de cerca\n- evitar: mantenerte lejos de ese sitio\n- pedir_compania: pedir a Unai que se acerque contigo",
+     "interpretacion": "consejo"
+    },
+    {
+     "eleccion": "pedir_compania",
+     "fuente": "modelo",
+     "motivo": null,
+     "pedida": null,
+     "razon": "creo que Unai sabe algo sobre el hueco",
+     "ms": 346,
+     "voz_causa": false,
+     "voz_contexto": true,
+     "relato_causa": true,
+     "despues": [
+      "pide_compania",
+      "investigar",
+      "observa",
+      "interpreta"
+     ],
+     "abierta": 161,
+     "aplicada": 162,
+     "peticion": "Eres Brisa. Vives con otros en un mundo primitivo.\nAhora percibes: No has visto ese hueco: sabes de él por lo que te contaron. Está a unos 8 pasos de donde estás. Cerca de ti: Unai. Además, es de día.\nTus recuerdos pertinentes:\n1. Unai te contó hace 5 horas que en este mismo sitio hay un hueco: «hendidura estable»; dijo que lo había mirado de cerca y no le pasó nada. Tú no lo has visto. Te fías algo de Unai.\n2. Hace un momento oíste una voz, sin saber de dónde venía, que te dijo: «Acércate a ver ese agujero». La tomaste como consejo; pensaste que hablaba de este mismo hueco. No has comprobado nada de lo que dijo.\nOpciones:\n- acercarse: ir hasta allí a verlo de cerca\n- evitar: mantenerte lejos de ese sitio\n- pedir_compania: pedir a Unai que se acerque contigo",
+     "interpretacion": "consejo"
+    }
+   ],
+   "resumen": {
+    "elecciones": {
+     "pedir_compania": 10
+    },
+    "voz_causa": 0,
+    "voz_contexto": 10
+   },
+   "texto": "Acércate a ver ese agujero"
+  }
+ },
+ "coste": {
+  "llamadas": 40,
+  "correctas": 40,
+  "ms_medio": 361,
+  "ms_max": 415,
+  "tokens_medio": 369
+ },
+ "reproduccion": {
+  "correcto": true,
+  "comprobaciones": {
+   "mapa": true,
+   "registro_integro": true,
+   "eventos": true,
+   "estado": true
+  },
+  "tick": 184,
+  "eventos": 595,
+  "ordenes_repetidas": 2,
+  "decisiones_repetidas": 1
+ }
+}

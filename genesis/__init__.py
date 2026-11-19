@@ -13,4 +13,4 @@ Capas, de dentro hacia fuera (cada una solo conoce a las anteriores):
     genesis.visor     servidor HTTP local e interfaz web
 """
 
-VERSION = "0.4.3-f43"
+VERSION = "0.6.3-f63"

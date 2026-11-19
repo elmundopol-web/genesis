@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Encuentros F6.1</title>
+<style>
+  :root { --fondo: #12140f; --tinta: #f0ede3; --tinta-2: #b9bcb2; --oro: #e4ba64; }
+  body { margin: 0; background: var(--fondo); color: var(--tinta); font: 15px/1.5 "Segoe UI", system-ui, sans-serif; }
+  main { max-width: 1480px; margin: 0 auto; padding: 24px 16px 48px; }
+  h1 { font: 400 30px/1.2 "Sitka Display", Georgia, serif; color: #f6e6bd; margin: 0 0 6px; }
+  h2 { font: 600 13px/1.4 "Segoe UI", sans-serif; letter-spacing: .12em; text-transform: uppercase; color: var(--oro); margin: 32px 0 10px; }
+  p { color: var(--tinta-2); max-width: 900px; }
+  video, img { width: 100%; height: auto; border-radius: 10px; display: block; background: #000; }
+  .par { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .par figure { margin: 0; }
+  figcaption { color: var(--tinta-2); font-size: 13px; margin-top: 6px; }
+  button { font: inherit; color: #20170a; background: var(--oro); border: 0; border-radius: 16px; padding: 6px 16px; cursor: pointer; }
+  @media (max-width: 800px) { .par { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<main>
+  <h1>Pedir comida: antes y después</h1>
+  <p>Semilla 13, reglas habituales con planes familiares, sin modelo local, sin intervenir. Partida guardada en la hora 849
+  (día 36, 9:00) y vista a 1 hora por segundo, siguiendo a Unai, con la ficha cerrada y el mismo zoom (44 px por celda),
+  en 1440 × 900. Lo que se ve son sucesos reales del motor: Unai pide a Kora y Kora le da 6; va junto a Hesk, le pide y
+  Hesk se niega («no quiere»); pide a Gala y Gala le da 6. Los preparativos solo fijan la hora de guardado, no los desenlaces.</p>
+
+  <h2>Escena completa, mismo instante</h2>
+  <p><button type="button" id="juntos">Reproducir los dos a la vez</button></p>
+  <div class="par">
+    <figure><video id="va" src="antes.mp4" controls muted playsinline preload="metadata"></video><figcaption>Antes</figcaption></figure>
+    <figure><video id="vd" src="despues.mp4" controls muted playsinline preload="metadata"></video><figcaption>Después</figcaption></figure>
+  </div>
+  <h2>A escala real, recortado alrededor de Unai</h2>
+  <video src="comparar-escala-real.mp4" controls muted playsinline preload="metadata"></video>
+
+  <h2>Entrega, con la ficha cerrada</h2>
+  <div class="par">
+    <figure><img src="antes-entrega.png" alt="Antes: Kora da comida a Unai"><figcaption>Antes · la hora en que Kora da comida a Unai</figcaption></figure>
+    <figure><img src="despues-entrega.png" alt="Después: Kora tiende el hatillo y Unai las manos"><figcaption>Después · Kora tiende la ración; Unai la recoge</figcaption></figure>
+  </div>
+  <h2>Negativa, con la ficha cerrada</h2>
+  <div class="par">
+    <figure><img src="antes-negativa.png" alt="Antes: Hesk se niega"><figcaption>Antes · la hora en que Hesk se niega</figcaption></figure>
+    <figure><img src="despues-negativa.png" alt="Después: Hesk se da la vuelta y Unai baja la cabeza"><figcaption>Después · Hesk se da la vuelta y le aparta con la mano; Unai baja la cabeza</figcaption></figure>
+  </div>
+  <figure style="margin:12px 0 0"><img src="despues-entrega-gala.png" alt="Después: Gala da comida a Unai"><figcaption>Después · enseguida, Gala le da comida</figcaption></figure>
+
+  <h2>Ficha del habitante, misma hora (16:00)</h2>
+  <div class="par">
+    <figure><img src="ficha-antes.png" alt="Ficha anterior"><figcaption>Antes</figcaption></figure>
+    <figure><img src="ficha-despues.png" alt="Ficha renovada"><figcaption>Después</figcaption></figure>
+  </div>
+
+  <h2>Poses</h2>
+  <figure style="margin:0"><img src="poses-nuevas.png" alt="Perfil original y poses derivadas" style="max-width:820px"><figcaption>Perfil original y las cinco poses derivadas de él: pide, recibe, ofrece, niega (se dibuja de espaldas a quien pide) y cabizbajo</figcaption></figure>
+</main>
+<script>
+  document.getElementById("juntos").onclick = () => {
+    const v = [document.getElementById("va"), document.getElementById("vd")];
+    v.forEach((x) => { x.currentTime = 0; x.play(); });
+  };
+</script>
+</body>
+</html>

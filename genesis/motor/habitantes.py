@@ -590,6 +590,15 @@ class Habitantes:
             mundo.emitir('vidas.criterio_crecimiento', {'desde_tick': mundo.tick})
         if self.vidas and c.relaciones and c.activacion_relaciones and mundo.tick == c.activacion_relaciones + 1:
             mundo.emitir('vidas.criterio_relaciones', {'desde_tick': mundo.tick})
+        if self.vidas and c.planes_familia and mundo.tick == c.activacion_planes_familia + 1:
+            from . import familias
+            familias.reconciliar(self.vidas, mundo)
+            mundo.emitir(
+                'vidas.criterio_familias',
+                {'desde_tick': mundo.tick, 'hogares': len(self.vidas.hogares)},
+            )
+        if self.vidas and c.tratos_familia and c.activacion_tratos_familia and mundo.tick == c.activacion_tratos_familia + 1:
+            mundo.emitir('vidas.criterio_tratos_familia', {'desde_tick': mundo.tick})
         soc = self.soc
         com = self.com
         cal = mundo.calendario
@@ -1047,6 +1056,9 @@ class Habitantes:
             promesa=self.vidas.ficha(h).pop('promesa',None)
             if promesa:
                 self.vidas.ficha(self.por_id(promesa['a'])).pop('expectativa',None)
+            if self.cfg.tratos_familia:
+                from . import tratos_familia
+                tratos_familia.al_morir(self.vidas, mundo, h)
         h.vivo = False
         h.actividad = "muerto"
         h.motivo = causa

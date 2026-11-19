@@ -1,0 +1,542 @@
+{
+ "combinaciones": [
+  {
+   "ofrece": "Término medio",
+   "ayuda": "Término medio",
+   "cruce": true,
+   "pasos": [
+    "513 trato_observa Unai→Brisa cuidado_menor",
+    "525 trato_falta Unai→Brisa",
+    "525 trato_cambia_plan Unai→Brisa la ayuda no llegó; el hogar reparará el refugio por su cuenta",
+    "562 conflicto_reclama Unai→Brisa ausencia",
+    "562 conflicto_responde Brisa→Unai explica",
+    "563 conflicto_acuerdo Unai→Brisa perdona",
+    "563 conflicto_cierra Unai→Brisa acuerdo",
+    "609 trato_propone Unai→Brisa",
+    "609 trato_acepta Brisa→Unai"
+   ],
+   "decision_posterior": {
+    "tipo": "trato_propone",
+    "quien": "Unai",
+    "a": "Brisa",
+    "modalidad": "adelanto",
+    "razon": "dio_otra_oportunidad",
+    "causa": 194
+   },
+   "salud": {
+    "Unai": 956,
+    "Brisa": 956
+   },
+   "trato": {
+    "estado": "falta",
+    "plazo": 524,
+    "prorrogas": 0,
+    "reparado": false,
+    "devuelto": null
+   },
+   "caracter": {
+    "Unai": [],
+    "Brisa": []
+   }
+  },
+  {
+   "ofrece": "Término medio",
+   "ayuda": "Protectora y paciente",
+   "cruce": true,
+   "pasos": [
+    "513 trato_observa Unai→Brisa cuidado_menor",
+    "513 trato_avisa Brisa→Unai cuidado_menor",
+    "513 trato_mantiene Unai→Brisa cuidado_menor",
+    "525 trato_falta Unai→Brisa",
+    "525 trato_cambia_plan Unai→Brisa la ayuda no llegó; el hogar reparará el refugio por su cuenta",
+    "540 conflicto_reclama Unai→Brisa ausencia_avisada",
+    "540 conflicto_responde Brisa→Unai disculpa",
+    "541 conflicto_acepta_disculpa Unai→Brisa",
+    "541 conflicto_cierra Unai→Brisa disculpa_aceptada",
+    "543 trato_cumple Brisa→Unai",
+    "544 trato_ve_tarde Unai→Brisa",
+    "590 trato_propone Unai→Brisa",
+    "590 trato_acepta Brisa→Unai"
+   ],
+   "decision_posterior": {
+    "tipo": "trato_propone",
+    "quien": "Unai",
+    "a": "Brisa",
+    "modalidad": "adelanto",
+    "razon": "cumplio_con_retraso",
+    "causa": 196
+   },
+   "salud": {
+    "Unai": 956,
+    "Brisa": 956
+   },
+   "trato": {
+    "estado": "cumplido",
+    "plazo": 524,
+    "prorrogas": 0,
+    "reparado": true,
+    "devuelto": null
+   },
+   "caracter": {
+    "Unai": [],
+    "Brisa": [
+     "se contiene",
+     "no se ofende",
+     "protege a los suyos",
+     "actúa con prudencia"
+    ]
+   }
+  },
+  {
+   "ofrece": "Término medio",
+   "ayuda": "Protectora e impulsiva",
+   "cruce": true,
+   "pasos": [
+    "513 trato_observa Unai→Brisa cuidado_menor",
+    "525 trato_falta Unai→Brisa",
+    "525 trato_cambia_plan Unai→Brisa la ayuda no llegó; el hogar reparará el refugio por su cuenta",
+    "562 conflicto_reclama Unai→Brisa ausencia",
+    "562 conflicto_responde Brisa→Unai se_defiende",
+    "563 conflicto_sube_tono Unai→Brisa responde_mal",
+    "564 conflicto_forcejeo Brisa→Unai",
+    "565 conflicto_separa Unai→Brisa",
+    "565 conflicto_cierra Unai→Brisa forcejeo",
+    "579 conflicto_evita Unai→Brisa mantiene_distancia",
+    "609 trato_propone Unai→Olin",
+    "609 trato_acepta Olin→Unai",
+    "609 conflicto_disculpa Brisa→Unai",
+    "609 conflicto_mantiene_distancia Unai→Brisa"
+   ],
+   "decision_posterior": {
+    "tipo": "trato_propone",
+    "quien": "Unai",
+    "a": "Olin",
+    "modalidad": "adelanto",
+    "razon": null,
+    "causa": null
+   },
+   "salud": {
+    "Unai": 956,
+    "Brisa": 956
+   },
+   "trato": {
+    "estado": "falta",
+    "plazo": 524,
+    "prorrogas": 0,
+    "reparado": false,
+    "devuelto": null
+   },
+   "caracter": {
+    "Unai": [],
+    "Brisa": [
+     "suele perdonar",
+     "reacciona por impulso",
+     "comparte lo que tiene",
+     "se impacienta"
+    ]
+   }
+  },
+  {
+   "ofrece": "Término medio",
+   "ayuda": "Responsable y orgullosa",
+   "cruce": true,
+   "pasos": [
+    "513 trato_observa Unai→Brisa cuidado_menor",
+    "525 trato_falta Unai→Brisa",
+    "525 trato_cambia_plan Unai→Brisa la ayuda no llegó; el hogar reparará el refugio por su cuenta",
+    "537 trato_cumple Brisa→Unai",
+    "538 trato_ve_tarde Unai→Brisa",
+    "538 trato_propone Unai→Brisa",
+    "538 trato_acepta Brisa→Unai",
+    "573 trato_falta Unai→Brisa",
+    "573 trato_cambia_plan Unai→Brisa la ayuda no llegó; el hogar reparará el refugio por su cuenta",
+    "585 conflicto_reclama Unai→Brisa ausencia",
+    "585 conflicto_responde Brisa→Unai disculpa",
+    "585 trato_propone Unai→Olin",
+    "585 trato_acepta Olin→Unai",
+    "586 conflicto_acepta_disculpa Unai→Brisa",
+    "586 conflicto_cierra Unai→Brisa disculpa_aceptada"
+   ],
+   "decision_posterior": {
+    "tipo": "trato_propone",
+    "quien": "Unai",
+    "a": "Olin",
+    "modalidad": "adelanto",
+    "razon": null,
+    "causa": null
+   },
+   "salud": {
+    "Unai": 956,
+    "Brisa": 956
+   },
+   "trato": {
+    "estado": "cumplido",
+    "plazo": 524,
+    "prorrogas": 0,
+    "reparado": true,
+    "devuelto": null
+   },
+   "caracter": {
+    "Unai": [],
+    "Brisa": [
+     "cumple su palabra",
+     "guarda rencor",
+     "defiende su orgullo",
+     "actúa con prudencia"
+    ]
+   }
+  },
+  {
+   "ofrece": "Protectora y paciente",
+   "ayuda": "Protectora y paciente",
+   "cruce": true,
+   "pasos": [
+    "513 trato_observa Unai→Brisa cuidado_menor",
+    "513 trato_avisa Brisa→Unai cuidado_menor",
+    "513 trato_prorroga Unai→Brisa cuidado_menor",
+    "542 trato_cumple Brisa→Unai",
+    "589 trato_propone Unai→Brisa",
+    "589 trato_acepta Brisa→Unai"
+   ],
+   "decision_posterior": {
+    "tipo": "trato_propone",
+    "quien": "Unai",
+    "a": "Brisa",
+    "modalidad": "adelanto",
+    "razon": "cumplio_con_retraso",
+    "causa": 236
+   },
+   "salud": {
+    "Unai": 956,
+    "Brisa": 956
+   },
+   "trato": {
+    "estado": "cumplido",
+    "plazo": 548,
+    "prorrogas": 1,
+    "reparado": true,
+    "devuelto": null
+   },
+   "caracter": {
+    "Unai": [
+     "se contiene",
+     "no se ofende",
+     "protege a los suyos",
+     "actúa con prudencia"
+    ],
+    "Brisa": [
+     "se contiene",
+     "no se ofende",
+     "protege a los suyos",
+     "actúa con prudencia"
+    ]
+   }
+  },
+  {
+   "ofrece": "Rencorosa y contenida",
+   "ayuda": "Término medio",
+   "cruce": false,
+   "pasos": [
+    "561 trato_falta Unai→Brisa",
+    "561 trato_cambia_plan Unai→Brisa la ayuda no llegó; el hogar reparará el refugio por su cuenta",
+    "562 conflicto_evita Unai→Brisa se_ahorra_la_discusion",
+    "572 trato_observa Unai→Brisa cuidado_menor",
+    "572 conflicto_juzga_motivo Unai→Brisa cuidado_menor",
+    "573 conflicto_evita Unai→Brisa mantiene_distancia",
+    "609 trato_propone Unai→Olin",
+    "609 trato_acepta Olin→Unai"
+   ],
+   "decision_posterior": {
+    "tipo": "trato_propone",
+    "quien": "Unai",
+    "a": "Olin",
+    "modalidad": "garantia",
+    "razon": "sin_conocerle",
+    "causa": null
+   },
+   "salud": {
+    "Unai": 956,
+    "Brisa": 956
+   },
+   "trato": {
+    "estado": "falta",
+    "plazo": 524,
+    "prorrogas": 0,
+    "reparado": false,
+    "devuelto": null
+   },
+   "caracter": {
+    "Unai": [
+     "cumple su palabra",
+     "guarda rencor",
+     "tiene paciencia",
+     "se contiene"
+    ],
+    "Brisa": []
+   }
+  },
+  {
+   "ofrece": "Directa y conciliadora",
+   "ayuda": "Término medio",
+   "cruce": false,
+   "pasos": [
+    "535 trato_explica Brisa→Unai cuidado_menor",
+    "535 trato_falta Unai→Brisa",
+    "535 trato_cambia_plan Unai→Brisa la ayuda no llegó; el hogar reparará el refugio por su cuenta",
+    "562 conflicto_reclama Unai→Brisa ausencia",
+    "562 conflicto_responde Brisa→Unai explica",
+    "563 conflicto_acuerdo Unai→Brisa perdona",
+    "563 conflicto_cierra Unai→Brisa acuerdo",
+    "609 trato_propone Unai→Brisa",
+    "609 trato_acepta Brisa→Unai"
+   ],
+   "decision_posterior": {
+    "tipo": "trato_propone",
+    "quien": "Unai",
+    "a": "Brisa",
+    "modalidad": "adelanto",
+    "razon": "dio_otra_oportunidad",
+    "causa": 211
+   },
+   "salud": {
+    "Unai": 956,
+    "Brisa": 956
+   },
+   "trato": {
+    "estado": "falta",
+    "plazo": 524,
+    "prorrogas": 0,
+    "reparado": false,
+    "devuelto": null
+   },
+   "caracter": {
+    "Unai": [],
+    "Brisa": []
+   }
+  },
+  {
+   "ofrece": "Reservada y práctica",
+   "ayuda": "Término medio",
+   "cruce": false,
+   "pasos": [
+    "561 trato_falta Unai→Brisa",
+    "561 trato_cambia_plan Unai→Brisa la ayuda no llegó; el hogar reparará el refugio por su cuenta",
+    "562 conflicto_evita Unai→Brisa lo_resuelve_por_su_cuenta",
+    "572 trato_observa Unai→Brisa cuidado_menor",
+    "573 conflicto_evita Unai→Brisa mantiene_distancia",
+    "609 trato_propone Unai→Brisa",
+    "609 trato_acepta Brisa→Unai",
+    "610 trato_observa Unai→Brisa cuidado_menor"
+   ],
+   "decision_posterior": {
+    "tipo": "trato_propone",
+    "quien": "Unai",
+    "a": "Brisa",
+    "modalidad": "garantia",
+    "razon": "cuidado_previo",
+    "causa": 286
+   },
+   "salud": {
+    "Unai": 956,
+    "Brisa": 956
+   },
+   "trato": {
+    "estado": "falta",
+    "plazo": 524,
+    "prorrogas": 0,
+    "reparado": false,
+    "devuelto": null
+   },
+   "caracter": {
+    "Unai": [
+     "actúa con prudencia",
+     "guarda lo suyo",
+     "se contiene"
+    ],
+    "Brisa": []
+   }
+  },
+  {
+   "ofrece": "Generosa y prudente",
+   "ayuda": "Término medio",
+   "cruce": false,
+   "pasos": [
+    "561 trato_falta Unai→Brisa",
+    "561 trato_cambia_plan Unai→Brisa la ayuda no llegó; el hogar reparará el refugio por su cuenta",
+    "562 conflicto_perdona Unai→Brisa ausencia",
+    "562 trato_explica Brisa→Unai cuidado_menor",
+    "609 trato_propone Unai→Brisa",
+    "609 trato_acepta Brisa→Unai",
+    "610 trato_observa Unai→Brisa cuidado_menor"
+   ],
+   "decision_posterior": {
+    "tipo": "trato_propone",
+    "quien": "Unai",
+    "a": "Brisa",
+    "modalidad": "garantia",
+    "razon": "cuidado_previo",
+    "causa": 281
+   },
+   "salud": {
+    "Unai": 956,
+    "Brisa": 956
+   },
+   "trato": {
+    "estado": "falta",
+    "plazo": 524,
+    "prorrogas": 0,
+    "reparado": false,
+    "devuelto": null
+   },
+   "caracter": {
+    "Unai": [
+     "actúa con prudencia",
+     "protege a los suyos",
+     "comparte lo que tiene",
+     "se contiene"
+    ],
+    "Brisa": []
+   }
+  },
+  {
+   "ofrece": "Protectora y paciente",
+   "ayuda": "Término medio",
+   "cruce": false,
+   "pasos": [
+    "561 trato_falta Unai→Brisa",
+    "561 trato_cambia_plan Unai→Brisa la ayuda no llegó; el hogar reparará el refugio por su cuenta",
+    "562 conflicto_perdona Unai→Brisa ausencia",
+    "562 trato_explica Brisa→Unai cuidado_menor",
+    "609 trato_propone Unai→Brisa",
+    "609 trato_acepta Brisa→Unai",
+    "610 trato_observa Unai→Brisa cuidado_menor"
+   ],
+   "decision_posterior": {
+    "tipo": "trato_propone",
+    "quien": "Unai",
+    "a": "Brisa",
+    "modalidad": "garantia",
+    "razon": "cuidado_previo",
+    "causa": 281
+   },
+   "salud": {
+    "Unai": 956,
+    "Brisa": 956
+   },
+   "trato": {
+    "estado": "falta",
+    "plazo": 524,
+    "prorrogas": 0,
+    "reparado": false,
+    "devuelto": null
+   },
+   "caracter": {
+    "Unai": [
+     "se contiene",
+     "no se ofende",
+     "protege a los suyos",
+     "actúa con prudencia"
+    ],
+    "Brisa": []
+   }
+  }
+ ],
+ "recuerdo": [
+  {
+   "olvidar": false,
+   "pasos": [
+    "513 trato_observa Unai→Brisa cuidado_menor",
+    "525 trato_falta Unai→Brisa",
+    "525 trato_cambia_plan Unai→Brisa la ayuda no llegó; el hogar reparará el refugio por su cuenta",
+    "562 conflicto_reclama Unai→Brisa ausencia",
+    "562 conflicto_responde Brisa→Unai se_defiende",
+    "563 conflicto_sube_tono Unai→Brisa responde_mal",
+    "564 conflicto_forcejeo Brisa→Unai",
+    "565 conflicto_separa Unai→Brisa",
+    "565 conflicto_cierra Unai→Brisa forcejeo",
+    "579 conflicto_evita Unai→Brisa mantiene_distancia",
+    "609 trato_propone Unai→Olin",
+    "609 trato_acepta Olin→Unai",
+    "609 conflicto_disculpa Brisa→Unai",
+    "609 conflicto_mantiene_distancia Unai→Brisa"
+   ],
+   "decision_posterior": {
+    "tipo": "trato_propone",
+    "quien": "Unai",
+    "a": "Olin",
+    "modalidad": "adelanto",
+    "razon": null,
+    "causa": null
+   },
+   "salud": {
+    "Unai": 956,
+    "Brisa": 956
+   },
+   "trato": {
+    "estado": "falta",
+    "plazo": 524,
+    "prorrogas": 0,
+    "reparado": false,
+    "devuelto": null
+   },
+   "caracter": {
+    "Unai": [],
+    "Brisa": [
+     "suele perdonar",
+     "reacciona por impulso",
+     "comparte lo que tiene",
+     "se impacienta"
+    ]
+   }
+  },
+  {
+   "olvidar": true,
+   "pasos": [
+    "513 trato_observa Unai→Brisa cuidado_menor",
+    "525 trato_falta Unai→Brisa",
+    "525 trato_cambia_plan Unai→Brisa la ayuda no llegó; el hogar reparará el refugio por su cuenta",
+    "562 conflicto_reclama Unai→Brisa ausencia",
+    "562 conflicto_responde Brisa→Unai se_defiende",
+    "563 conflicto_sube_tono Unai→Brisa responde_mal",
+    "564 conflicto_forcejeo Brisa→Unai",
+    "565 conflicto_separa Unai→Brisa",
+    "565 conflicto_cierra Unai→Brisa forcejeo",
+    "579 conflicto_evita Unai→Brisa mantiene_distancia",
+    "609 trato_propone Unai→Brisa",
+    "609 trato_rechaza Brisa→Unai desconfianza",
+    "609 conflicto_disculpa Brisa→Unai",
+    "609 conflicto_acepta_disculpa Unai→Brisa",
+    "609 trato_propone Unai→Olin",
+    "609 trato_acepta Olin→Unai"
+   ],
+   "decision_posterior": {
+    "tipo": "trato_propone",
+    "quien": "Unai",
+    "a": "Brisa",
+    "modalidad": "adelanto",
+    "razon": null,
+    "causa": null
+   },
+   "salud": {
+    "Unai": 956,
+    "Brisa": 956
+   },
+   "trato": {
+    "estado": "falta",
+    "plazo": 524,
+    "prorrogas": 0,
+    "reparado": false,
+    "devuelto": null
+   },
+   "caracter": {
+    "Unai": [],
+    "Brisa": [
+     "suele perdonar",
+     "reacciona por impulso",
+     "comparte lo que tiene",
+     "se impacienta"
+    ]
+   }
+  }
+ ]
+}

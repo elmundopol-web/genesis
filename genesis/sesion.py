@@ -49,14 +49,39 @@ TIPOS_TENSION = ("proyecto.compromiso_dejado", "refugio.sin_sitio", "deposito.va
 GRUPOS_COMUNIDAD = ("obra", "proyecto", "refugio", "deposito", "lugar", "comunidad", "acuerdo", "estructura")
 TRATOS = ("pide", "da", "niega", "cuenta", "comprueba", "rehusa")
 _ACTIVIDADES_DE_TRATO = ("pidiendo", "dando", "hablando")
+_PASOS_HACIA_ALGUIEN = ("junto", "pedir", "aguardar", "dar", "negar", "contar")
+
+
+def _busca(objetivo) -> list | None:
+    """[persona, paso] si el paso en curso del plan se dirige a alguien concreto."""
+    if not objetivo:
+        return None
+    plan, i = objetivo.get("plan") or (), objetivo.get("i", 0)
+    if not 0 <= i < len(plan) or plan[i][0] not in _PASOS_HACIA_ALGUIEN:
+        return None
+    persona = objetivo.get("persona") or objetivo["porque"].get("persona")
+    if persona is None and len(plan[i]) > 1 and isinstance(plan[i][1], int):
+        persona = plan[i][1]
+    return [persona, plan[i][0]] if isinstance(persona, int) else None
 _MAX_TICKS_POR_TROZO = 48  # acota cuánto tiempo seguido se retiene el candado
 _TICKS_POR_TROZO_DE_SALTO = 24
 
 
 class Sesion:
-    def __init__(self, almacen: Almacen, mundo: Mundo) -> None:
+    def __init__(self, almacen: Almacen, mundo: Mundo, mente="auto") -> None:
         self._almacen = almacen
         self._mundo = mundo
+        # F5.0: el modelo local solo se conecta a partidas que lo activaron. Si no responde,
+        # el motor aplica la política habitual y el mundo sigue.
+        self.mente = None
+        if mundo.habitantes and mundo.habitantes.vidas and mundo.config.habitantes.mentes and mente is not None:
+            if mente == "auto":
+                from .mente_local import MenteOllama
+
+                mente = MenteOllama()
+                threading.Thread(target=mente.precargar, name="genesis-precarga", daemon=True).start()
+            self.mente = mente
+            mundo.habitantes.vidas.presencia.mente = mente
         self._candado = threading.RLock()
         self._fin = threading.Event()
         self._despertar = threading.Event()
@@ -165,6 +190,15 @@ class Sesion:
             s.vidas.presencia.intervenir(self._mundo,accion,x,y,cantidad)
             self._guardar()
 
+    def hablar(self, persona, texto):
+        """F5.2: la voz del jugador a una sola persona. Solo se registra al confirmar."""
+        with self._candado:
+            s = self._mundo.habitantes
+            if not s or not s.vidas or self._salto or self.error:
+                raise ValueError('Hablar requiere F5 activa y un salto terminado.')
+            s.vidas.presencia.hablar(self._mundo, persona, texto)
+            self._guardar()
+
     def favorito(self, persona, seguir):
         with self._candado:
             if type(persona) is not int or type(seguir) is not bool or not self._mundo.habitantes or not self._mundo.habitantes.por_id(persona):
@@ -173,20 +207,57 @@ class Sesion:
             (ids.add if seguir else ids.discard)(persona)
             self._almacen.favoritos(sorted(ids))
 
+    def _raiz_familiar(self, hecho, conocidos):
+        if hecho["tipo"] == "vidas.familia_objetivo":
+            return hecho["id"]
+        causa = hecho["causa_id"]
+        if hecho["tipo"] in ("vidas.familia_interrumpe", "vidas.familia_retoma"):
+            # Su causa directa es el contratiempo, que a su vez apunta al objetivo.
+            padre = conocidos.get(causa) or self._almacen.evento(causa)
+            if padre is not None:
+                return padre["causa_id"]
+        return causa
+
     def historias(self, raiz=None):
         with self._candado:
             if raiz is not None:
-                filas=self._eventos_de('historia',raiz,160)
-                hitos=self._eventos_de('historia',raiz,160,('vidas.nace','vidas.crece','vidas.solicita_relevo','vidas.relevo_efectivo','vidas.ayuda_aceptada','vidas.enseña','vidas.enseña_a_recoger','vidas.enseña_pesca','vidas.usa_leccion','vidas.aprende_observando'))
-                filas=sorted({e['id']:e for e in filas+hitos}.values(),key=lambda e:-e['id'])
                 inicio=self._almacen.evento(raiz) or next((e.a_dict() for e in self._mundo.bitacora.pendientes if e.id==raiz),None)
-                return {'inicio':inicio,'hechos':filas}
-            importantes=('presencia.orden','vidas.nace','vidas.esperan','vidas.crece','vidas.promete','vidas.juzga','vidas.repara','vidas.relata','vidas.inspecciona','vidas.enseña','vidas.nuevo_cuidado','vidas.entrega','vidas.interpreta','vidas.relevo_efectivo','vidas.solicita_relevo','vidas.ayuda_aceptada','vidas.duelo','vidas.usa_leccion','vidas.aprende_observando','vidas.descanso_compartido','vidas.acompaña_trayecto','vidas.plan_interrumpido','habitante.muere')
+                if inicio and inicio["tipo"].startswith("vidas.familia_"):
+                    filas = self._eventos_de("hogar", inicio["datos"]["hogar"], 160)
+                    conocidos = {e["id"]: e for e in filas}
+                    filas = [e for e in filas if self._raiz_familiar(e, conocidos) == raiz]
+                    return {"inicio": inicio, "hechos": filas, "familiar": True}
+                filas=self._eventos_de('historia',raiz,160)
+                tipos_hito = ('vidas.nace', 'vidas.crece', 'vidas.solicita_relevo', 'vidas.relevo_efectivo',
+                              'vidas.ayuda_aceptada', 'vidas.enseña', 'vidas.enseña_a_recoger', 'vidas.enseña_pesca',
+                              'vidas.usa_leccion', 'vidas.aprende_observando', 'vidas.oye', 'vidas.decide',
+                              'vidas.relata', 'vidas.pide_compania', 'vidas.acude', 'vidas.acompaña', 'vidas.inspecciona',
+                              'vidas.familia_objetivo', 'vidas.familia_tarea', 'vidas.familia_contratiempo',
+                              'vidas.familia_pesca_fallida', 'vidas.familia_interrumpe', 'vidas.familia_retoma',
+                              'vidas.familia_completa', 'vidas.familia_nota', 'vidas.familia_aviso', 'vidas.criterio_familias',
+                              'vidas.trato_propone', 'vidas.trato_acepta', 'vidas.trato_rechaza', 'vidas.trato_entrega',
+                              'vidas.trato_cumple', 'vidas.trato_falta', 'vidas.trato_explica', 'vidas.trato_observa',
+                              'vidas.trato_cambia_plan', 'vidas.trato_busca_otro', 'vidas.trato_engano', 'vidas.criterio_tratos_familia',
+                              # F6.3
+                              'vidas.trato_avisa','vidas.trato_prorroga','vidas.trato_mantiene','vidas.trato_reclama_adelanto','vidas.trato_devuelve','vidas.trato_no_devuelve','vidas.conflicto_reclama','vidas.conflicto_responde','vidas.conflicto_acuerdo','vidas.conflicto_acepta_disculpa','vidas.conflicto_mantiene_distancia','vidas.conflicto_se_calma','vidas.conflicto_se_aparta','vidas.conflicto_sube_tono','vidas.conflicto_media','vidas.conflicto_defiende','vidas.conflicto_forcejeo','vidas.conflicto_separa','vidas.conflicto_cierra','vidas.conflicto_perdona','vidas.conflicto_evita','vidas.conflicto_disculpa','vidas.conflicto_cuenta','vidas.conflicto_rectifica','vidas.conflicto_juzga_motivo','vidas.trato_ve_tarde')
+                hitos=self._eventos_de('historia',raiz,160,tipos_hito)
+                filas=sorted({e['id']:e for e in filas+hitos}.values(),key=lambda e:-e['id'])
+                es_trato = bool(inicio and (inicio["tipo"].startswith("vidas.trato_") or inicio["tipo"].startswith("vidas.conflicto_")))
+                return {'inicio':inicio,'hechos':filas,'trato':es_trato}
+            importantes=('presencia.orden','vidas.nace','vidas.esperan','vidas.crece','vidas.promete','vidas.juzga','vidas.repara','vidas.relata','vidas.inspecciona','vidas.decide','vidas.oye','presencia.voz','vidas.enseña','vidas.nuevo_cuidado','vidas.entrega','vidas.interpreta','vidas.relevo_efectivo','vidas.solicita_relevo','vidas.ayuda_aceptada','vidas.duelo','vidas.usa_leccion','vidas.aprende_observando','vidas.descanso_compartido','vidas.acompaña_trayecto','vidas.plan_interrumpido','habitante.muere',
+                         'vidas.familia_objetivo','vidas.familia_tarea','vidas.familia_contratiempo','vidas.familia_pesca_fallida','vidas.familia_interrumpe','vidas.familia_retoma','vidas.familia_completa','vidas.familia_nota','vidas.familia_aviso','vidas.criterio_familias',
+                         'vidas.trato_propone','vidas.trato_acepta','vidas.trato_rechaza','vidas.trato_entrega','vidas.trato_cumple','vidas.trato_falta','vidas.trato_explica','vidas.trato_observa','vidas.trato_cambia_plan','vidas.trato_busca_otro','vidas.trato_engano','vidas.criterio_tratos_familia',
+                         'vidas.trato_avisa','vidas.trato_prorroga','vidas.trato_mantiene','vidas.trato_reclama_adelanto','vidas.trato_devuelve','vidas.trato_no_devuelve','vidas.conflicto_reclama','vidas.conflicto_responde','vidas.conflicto_acuerdo','vidas.conflicto_acepta_disculpa','vidas.conflicto_mantiene_distancia','vidas.conflicto_se_calma','vidas.conflicto_se_aparta','vidas.conflicto_sube_tono','vidas.conflicto_media','vidas.conflicto_defiende','vidas.conflicto_forcejeo','vidas.conflicto_separa','vidas.conflicto_cierra','vidas.conflicto_perdona','vidas.conflicto_evita','vidas.conflicto_disculpa','vidas.conflicto_cuenta','vidas.conflicto_rectifica','vidas.conflicto_juzga_motivo','vidas.trato_ve_tarde')
             filas=self._almacen.eventos(limite=120,tipos=importantes)
             filas.extend(e.a_dict() for e in self._mundo.bitacora.pendientes if e.tipo in importantes)
+            conocidos = {e["id"]: e for e in filas}
             ultimas={}
             for e in sorted(filas,key=lambda e:-e['id']):
-                ultimas.setdefault(e['datos'].get('historia',e['id']),e)
+                if e["tipo"].startswith("vidas.familia_"):
+                    objetivo = self._raiz_familiar(e, conocidos)
+                    ultimas.setdefault(("objetivo", objetivo), dict(e, raiz=objetivo))
+                else:
+                    ultimas.setdefault(e['datos'].get('historia',e['id']),e)
             return list(ultimas.values())[:48]
 
     def guardar(self) -> None:
@@ -333,7 +404,7 @@ class Sesion:
                 anterior = time.perf_counter()
                 continue
             ahora = time.perf_counter()
-            credito += (ahora - anterior) * self.velocidad
+            credito += (ahora - anterior) * self._velocidad_efectiva()
             anterior = ahora
             ticks = min(int(credito), _MAX_TICKS_POR_TROZO)
             if ticks > 0:
@@ -344,6 +415,17 @@ class Sesion:
                         self._avanzar(ticks)
                         self._muestras.append((time.perf_counter(), self._mundo.tick))
             self._fin.wait(0.01 if self.velocidad <= 480 else 0.001)
+
+    def _velocidad_efectiva(self) -> float:
+        """F5.1: con una consulta al modelo abierta, el mundo sigue, pero a 1 h/s como mucho.
+
+        Así la respuesta (unas décimas de segundo) llega antes del plazo de 3 horas del mundo.
+        Los saltos no se frenan: en ellos, si vence el plazo, decide la regla habitual.
+        """
+        h = self._mundo.habitantes
+        if self.mente is not None and h and h.vidas and h.vidas.presencia.mente_estado.get("pendientes"):
+            return min(self.velocidad, 1)
+        return self.velocidad
 
     def _ritmo_real(self) -> float | None:
         if not self.en_marcha or len(self._muestras) < 2:
@@ -406,6 +488,9 @@ class Sesion:
                     "reglas": mundo.config.habitantes.reglas if habitantes else 0,
                     "crecimiento": mundo.config.habitantes.crecimiento,
                     "relaciones": mundo.config.habitantes.relaciones,
+                    "planes_familia": mundo.config.habitantes.planes_familia,
+                    "tratos_familia": mundo.config.habitantes.tratos_familia,
+                    "conflictos": getattr(mundo.config.habitantes, "conflictos", 0),
                     "activacion_crecimiento": mundo.config.habitantes.activacion_crecimiento,
                     "cuidados": mundo.config.habitantes.cuidados,
                     "activacion_cuidados": mundo.config.habitantes.activacion_cuidados,
@@ -417,6 +502,7 @@ class Sesion:
                     "activacion_correccion": mundo.config.habitantes.activacion_correccion,
                     "con_comunidades": bool(habitantes and habitantes.com is not None),
                     "version": VERSION,
+                    "mentes": self._mentes(),
                     "tick_guardado": self._tick_guardado,
                     "hash_eventos": mundo.hash_eventos[:12],
                 },
@@ -425,6 +511,7 @@ class Sesion:
                     "dias_por_estacion": mundo.calendario.dias_por_estacion,
                 },
                 "ultimo_evento_id": self._almacen.ultimo_evento_id,
+                "ultimo_hecho_id": mundo.bitacora.ultimo_id,
                 "error": self.error,
             }
 
@@ -479,15 +566,40 @@ class Sesion:
                         gesto = None
                 ficha = vidas.personas.get(str(h.id), {}) if vidas is not None else {}
                 emocion = ficha.get("emocion") or {}
+                busca = _busca(objetivo)
+                if busca is None and c.tratos_familia:
+                    bt = ficha.get("busca_trato")
+                    if bt and mundo.tick - bt.get("desde", -99) <= 8:
+                        busca = [bt["persona"], "junto"]
+                conflicto_resumen = None
+                if vidas is not None and getattr(c, "conflictos", 0):
+                    from .motor import conflictos as _conflictos
+
+                    conflicto_resumen = _conflictos.resumen_persona(vidas, h.id, mundo.tick)
+                    if busca is None:
+                        busca = _conflictos.busca_de(vidas, ficha, mundo.tick)
+                    elif conflicto_resumen is not None:
+                        busca = None
+                trato_resumen = None
+                if vidas is not None and c.tratos_familia:
+                    from .motor import tratos_familia
+
+                    trato_resumen = tratos_familia.resumen_persona(vidas, h.id)
                 lista.append({
                     "gesto": gesto[1] if gesto else None,
                     "animo": emocion.get("tipo") if emocion.get("hasta", -1) >= mundo.tick else None,
                     "animo_con": emocion.get("a") if emocion.get("hasta", -1) >= mundo.tick else None,
                     "evita": (ficha.get("distancia") or {}).get("a"),
                     "promete": (ficha.get("promesa") or {}).get("a"),
+                    "trato": trato_resumen,
+                    # F6.3: la discusión abierta en la que está (quién reclama, nivel, paso)
+                    "conflicto": conflicto_resumen,
                     "anios": sistema.edad(h, mundo.tick, mundo.calendario.ticks_por_anio),
                     'etapa':sistema.vidas.personas.get(str(h.id),{}).get('etapa','adulto') if sistema.vidas else 'adulto',
                     "objetivo": objetivo["tipo"] if objetivo else "",
+                    # F6.1: a quién se dirige el paso en curso de su plan (ir junto a, pedir, esperar
+                    # respuesta, dar, negar o contar), para que el visor muestre a quién busca
+                    "busca": busca,
                     # con quién trata en este momento, para señalarlo sobre el mapa
                     "con": gesto[0] if gesto else (objetivo["persona"] if objetivo and h.actividad in _ACTIVIDADES_DE_TRATO else None),
                     "id": h.id,
@@ -554,6 +666,35 @@ class Sesion:
             hay_mas = len(vida) > 200
             vida = vida[:200]
             vidas = deepcopy({k:v for k,v in sistema.vidas.personas.get(str(h.id),{}).items() if k!='visitas'}) if sistema.vidas else None
+            if vidas:
+                from .motor.familias import hogar_de
+                hogar = hogar_de(sistema.vidas, h.id)
+                if hogar is not None and hogar.get("objetivo") is not None:
+                    vidas["hogar"] = {
+                        "id": hogar["id"],
+                        "miembros": list(hogar["miembros"]),
+                        "fundadores": list(hogar.get("fundadores", [])),
+                        "objetivo": deepcopy(hogar["objetivo"]),
+                        "tarea": deepcopy(hogar.get("tareas", {}).get(str(h.id))),
+                        "contratiempo": deepcopy(hogar.get("contratiempo")),
+                    }
+                if getattr(sistema.cfg, "conflictos", 0):
+                    from .motor import conflictos as _conflictos
+
+                    caracter = _conflictos.caracter(sistema.vidas, h)
+                    vidas["caracter"] = caracter
+                    vidas["caracter_rasgos"] = _conflictos.describir(caracter)
+                    vidas["conflicto_abierto"] = _conflictos.resumen_persona(sistema.vidas, h.id, mundo.tick)
+                    vidas["conflictos_recientes"] = deepcopy(
+                        [x for x in sistema.vidas.conflictos if h.id in (x["a"], x["b"])][-4:]
+                    )
+                if sistema.cfg.tratos_familia:
+                    from .motor import tratos_familia
+
+                    vidas["trato_activo"] = tratos_familia.resumen_persona(sistema.vidas, h.id)
+                    vidas["tratos_recientes"] = deepcopy(
+                        [t for t in sistema.vidas.tratos_familia if t["ofrece"] == h.id or t["ayuda"] == h.id][-6:]
+                    )
             if vidas and vidas.get('responsabilidad'):
                 r=vidas['responsabilidad']
                 for i in (r.get('ayudante'),r.get('principal')):
@@ -591,11 +732,63 @@ class Sesion:
                 "aspecto": {"piel": h.piel, "pelo": h.pelo, "ropa": h.ropa},
                 'vidas': vidas,
                 "mente": self._mente(h),
+                "decisiones": self._decisiones(h),
                 "comunidad": self._f3(h),
                 "vida": vida,
                 "vida_hay_mas": hay_mas,
                 "vida_antes_de": vida[-1]["id"] if vida else None,
             }
+
+    # -- F5.0: decisiones pensadas con el modelo local -----------------------------
+
+    def _mentes(self) -> dict | None:
+        c = self._mundo.config.habitantes
+        if not c.mentes or not self._mundo.habitantes:
+            return None
+        h = self._mundo.habitantes.por_id(c.mente_de)
+        st = self._mundo.habitantes.vidas.presencia.mente_estado
+        return {"de": c.mente_de, "nombre": h.nombre if h else None, "desde": c.activacion_mentes,
+                "llamadas": st["llamadas"], "limite": c.mente_llamadas, "decisiones": st["decisiones"],
+                "modelo": getattr(self.mente, "modelo", None) if self.mente else None}
+
+    def _decisiones(self, h) -> list[dict] | None:
+        """Qué vio, qué recuerdo influyó, qué hizo y qué pasó después, enlazado a los sucesos."""
+        if not self._mundo.config.habitantes.mentes:
+            return None
+        pendientes = [e.a_dict() for e in self._mundo.bitacora.pendientes]
+        lista = self._almacen.eventos(limite=12, habitante=h.id, tipos=("vidas.decide",))
+        vistos = {e["id"] for e in lista}
+        lista += [e for e in pendientes if e["tipo"] == "vidas.decide" and e["datos"]["id"] == h.id and e["id"] not in vistos]
+        salida = []
+        for e in sorted(lista, key=lambda e: -e["id"])[:12]:
+            d = e["datos"]
+            directas = self._almacen.consecuencias(e["id"], 8) + [x for x in pendientes if x["causa_id"] == e["id"]]
+            # Lo que esta persona hizo después en la misma historia (F5.2: pedir compañía, ir, inspeccionar…).
+            siguientes = [x for x in self._eventos_de("historia", d["historia"], 120)
+                          if x["id"] > e["id"] and x["datos"].get("id") == h.id and x["tipo"] != "vidas.decide"]
+            despues = sorted({x["id"]: x for x in directas + siguientes}.values(), key=lambda x: x["id"])
+            # Conserva la petición inicial y el desenlace aunque haya muchos pasos por el camino.
+            if len(despues) > 24:
+                despues = despues[:12] + despues[-12:]
+            recuerdo = None
+            if d.get("recuerdo") is not None:
+                i = d["recuerdos"].index(d["recuerdo"]) if d["recuerdo"] in d["recuerdos"] else None
+                recuerdo = {"evento": d["recuerdo"], "texto": d["textos"][i] if i is not None else ""}
+            salida.append({"evento": e["id"], "tick": e["tick"], "historia": d["historia"], "visto": e["causa_id"],
+                           "vio": d["vio"], "recuerdos": [{"evento": a, "texto": t} for a, t in zip(d["recuerdos"], d["textos"])],
+                           "recuerdo": recuerdo, "eleccion": d["eleccion"], "opciones": d["opciones"], "razon": d["razon"],
+                           "fuente": d["fuente"], "motivo": d["motivo"], "politica": d["politica"], "ms": d["ms"],
+                           "relato": d.get("relato"), "de": self._persona(d.get("de")) if d.get("de") else None,
+                           "voz": d.get("voz"), "contexto_voz": d.get("contexto_voz", []), "pedida": d.get("pedida"), "por_voz": d.get("por_voz"),
+                           "abierta": d.get("abierta", e["tick"]), "aplicada": d.get("aplicada", e["tick"]),
+                           "consulta": d.get("consulta"),
+                           "despues": [{"id": x["id"], "tick": x["tick"], "tipo": x["tipo"], "datos": x["datos"]}
+                                       for x in despues]})
+        st = self._mundo.habitantes.vidas.presencia.mente_estado
+        pendientes = [{"abierta": x["abierta"], "plazo": x["plazo"], "vio": x["vio"], "consulta": x.get("consulta"),
+                       "historia": x["historia"], "opciones": x["opciones"]}
+                      for x in st.get("pendientes", {}).values() if x["id"] == h.id]
+        return [{"pendiente": True, **x} for x in pendientes] + salida
 
     # -- lo que una persona recuerda, cree y pretende ---------------------------
 
@@ -981,6 +1174,27 @@ class Sesion:
                 + ("habitante.aparece", "habitante.hallazgo", "habitante.se_repone"),
             )
             return {**salto, "destacados": destacados}
+
+    def observaciones(self, despues_de, antes_de=None, limite=100):
+        """Hechos para las señales en vivo, incluidos los de la jornada sin guardar."""
+        tipos = ("vidas.oye", "vidas.pide_compania", "vidas.acude", "vidas.acompaña", "vidas.acompaña_trayecto",
+                 "vidas.relata", "vidas.inspecciona", "vidas.descanso_compartido",
+                 # F6.1: los tratos cara a cara, para representarlos en el momento en que ocurren
+                 "habitante.pide", "habitante.da", "habitante.niega", "habitante.cuenta", "habitante.rehusa",
+                 # F6.2: tratos entre familias (propuesta, entrega, desenlace y cambio de plan)
+                 "vidas.trato_propone", "vidas.trato_acepta", "vidas.trato_rechaza", "vidas.trato_entrega",
+                 "vidas.trato_cumple", "vidas.trato_falta", "vidas.trato_explica", "vidas.trato_observa",
+                 "vidas.trato_cambia_plan", "vidas.trato_busca_otro",
+                 # F6.3: avisos, margen, discusiones, forcejeos y reconciliaciones
+                 "vidas.trato_avisa","vidas.trato_prorroga","vidas.trato_mantiene","vidas.trato_reclama_adelanto","vidas.trato_devuelve","vidas.trato_no_devuelve","vidas.conflicto_reclama","vidas.conflicto_responde","vidas.conflicto_acuerdo","vidas.conflicto_acepta_disculpa","vidas.conflicto_mantiene_distancia","vidas.conflicto_se_calma","vidas.conflicto_se_aparta","vidas.conflicto_sube_tono","vidas.conflicto_media","vidas.conflicto_defiende","vidas.conflicto_forcejeo","vidas.conflicto_separa","vidas.conflicto_cierra","vidas.conflicto_perdona","vidas.conflicto_evita","vidas.conflicto_disculpa","vidas.conflicto_cuenta","vidas.conflicto_rectifica","vidas.conflicto_juzga_motivo","vidas.trato_ve_tarde")
+        limite = max(1, min(limite, 500))
+        with self._candado:
+            recientes = [ev.a_dict() for ev in reversed(self._mundo.bitacora.pendientes)
+                         if ev.id > despues_de and (antes_de is None or ev.id < antes_de) and ev.tipo in tipos][:limite]
+            if len(recientes) < limite and despues_de < self._almacen.ultimo_evento_id:
+                recientes.extend(self._almacen.eventos(despues_de=despues_de, antes_de=antes_de,
+                                                        limite=limite-len(recientes), tipos=tipos))
+            return recientes
 
     def eventos(self, **filtros) -> list[dict]:
         with self._candado:

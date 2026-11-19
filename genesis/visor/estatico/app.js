@@ -7,7 +7,7 @@ import { Arte, PIEZA } from "/arte.js";
 import { ArteIlustrado } from "/sprites.js";
 import { aspecto, poseDe, dibujarPersona, dibujarPersonaRapida, pintarRetrato } from "/figuras.js";
 import * as mente from "/mente.js";
-import { fraseVida, esAvisoSeguido } from "/vidas.js";
+import { fraseVida, esAvisoSeguido, momento } from "/vidas.js";
 import { Poblacion } from "/habitantes.js";
 import { Lugares, fraseF3 } from "/lugares.js";
 
@@ -25,6 +25,7 @@ const ANUNCIABLES = new Set(["tiempo.anio", "tiempo.estacion", "clima.sequia_ini
   "sociedad.activada"]);
 // Tratos que se anuncian solo la primera vez que ocurren entre dos personas: lo nuevo antes que lo repetido.
 const ANUNCIO_DE_TRATO = new Set(["habitante.da", "habitante.niega", "habitante.comprueba"]);
+const GESTOS_SIN_ANUNCIO = new Set(["habitante.da", "habitante.niega"]);
 // Lo rutinario se agrupa por día en la crónica; al pulsar el grupo se ve cada acontecimiento.
 const RUTINA = {
   'vidas.deja_racion': ['reserva de comida','reservas de comida'],
@@ -226,7 +227,7 @@ function pintarMuelle() {
       const corto = v < hpd ? `${v} h` : `${dias} d`;
       const largo = v < hpd ? `${v} ${v === 1 ? "hora" : "horas"} por segundo` : `${dias} ${dias === 1 ? "día" : "días"} por segundo`;
       caja.append(el("button", { type: "button", text: corto, title: largo, "aria-label": largo, "data-velocidad": v,
-                                 onclick: () => ordenar({ accion: "velocidad", velocidad: v }) }));
+                                 onclick: () => { lentoPrevio = null; ordenar({ accion: "velocidad", velocidad: v }); } }));
     }
   }
   for (const boton of caja.children) boton.setAttribute("aria-pressed", String(Number(boton.dataset.velocidad) === e.control.velocidad));
@@ -394,10 +395,12 @@ function pintarGrafica() {
   caja.replaceChildren(dibujo);
 }
 
-function plegarMundo(plegado) {
+function plegarMundo(plegado, recordar=true) {
   $("panel-mundo").classList.toggle("plegado", plegado);
   $("abrir-mundo").setAttribute("aria-expanded", String(!plegado));
-  try { localStorage.setItem("genesis.mundo", plegado ? "0" : "1"); } catch (error) { /* sin almacenamiento */ }
+  if (recordar) {
+    try { localStorage.setItem("genesis.mundo", plegado ? "0" : "1"); } catch (error) { /* sin almacenamiento */ }
+  }
   mundo.fijarMargenes(margenes());
   if (!plegado) requestAnimationFrame(pintarGrafica);
 }
@@ -863,9 +866,10 @@ async function cargarHitos() {
     const nuevos = await api(`/api/eventos?filtro=hitos&limite=40&despues_de=${S.hitoVisto}`);
     if (nuevos.length) {
       S.hitoVisto = nuevos[0].id;
-      for (const ev of nuevos) if (S.estado.tick - ev.tick <= 2) mundo.senalar(ev);
+      for (const ev of nuevos) if (S.estado.tick-ev.tick <= 2 && !momento(ev,nombreMapa)) mundo.senalar(ev);
       const rapido = S.estado.control.en_marcha && S.estado.control.velocidad >= 120;
       const anunciar = nuevos.filter((ev) => {
+        if (mundo.siguiendo && mundo.ambiente && GESTOS_SIN_ANUNCIO.has(ev.tipo)) return false;
         if (esAvisoSeguido(ev,S.estado.favoritos || [])) return true;
         if (ANUNCIABLES.has(ev.tipo)) return true;
         if (!ANUNCIO_DE_TRATO.has(ev.tipo) || rapido) return false;
@@ -893,11 +897,14 @@ async function cargarHitos() {
 }
 
 function siguienteAnuncio() {
-  if (S.anunciando || !S.anuncios.length) return;
+  if (S.anunciando) return;
+  if (mundo.siguiendo && mundo.ambiente) S.anuncios = S.anuncios.filter((ev) => !GESTOS_SIN_ANUNCIO.has(ev.tipo));
+  if (!S.anuncios.length) return;
   const ev = S.anuncios.shift();
   const anuncio = $("anuncio");
   const rapido = S.estado.control.en_marcha && S.estado.control.velocidad >= 120;
   S.anunciando = true;
+  anuncio.classList.toggle("de-encuentro", mundo.ambiente && GESTOS_SIN_ANUNCIO.has(ev.tipo));
   anuncio.textContent = frase(ev);
   anuncio.onclick = () => { if (!S.cronicaAbierta) abrirCronica(true); abrirDetalle(ev.id); };
   anuncio.classList.add("visible");
@@ -916,7 +923,7 @@ function margenes() {
   const ancho = window.innerWidth;
   const ancha = ancho >= 1100;
   const mundoAbierto = !$("panel-mundo").classList.contains("plegado");
-  const derAbierto = !$("inspector").hidden || !$("cronica").hidden || !$("ficha").hidden;
+  const derAbierto = !$("inspector").hidden || !$("cronica").hidden || !$("ficha").hidden || !$("historias").hidden || !$("panel-intervenir").hidden;
   const limpia = document.body.classList.contains("limpia");
   return {
     izq: ancha && mundoAbierto && !limpia ? 348 : 16,
@@ -940,7 +947,7 @@ function prepararTeclado() {
     const enControl = destino instanceof HTMLElement && destino.closest("button, select, input, textarea, a");
     if (evento.key === "Escape") {
       if (mundo.interviniendo) modoIntervenir(false);
-      else if (!$('historias').hidden) $('historias').hidden=true;
+      else if (!$('historias').hidden) $("cerrar-historias").click();
       else if (document.body.classList.contains("limpia")) poblacion.vistaLimpia(false);
       else if (S.detalle) { S.detalle = null; pintarEventos(); }
       else if (!$("resumen").hidden) $("resumen").hidden = true;
@@ -978,6 +985,7 @@ function prepararTeclado() {
         mundo.mostrar(celda);
         pintarInspector();
       } else {
+        if (poblacion.siguiendo) poblacion.seguir(false);
         const salto = Math.max(1, 90 / mundo.pixelesPorCelda);
         mundo.meta.x = Math.max(0, Math.min(S.mapa.ancho, mundo.meta.x + paso[0] * salto));
         mundo.meta.y = Math.max(0, Math.min(S.mapa.alto, mundo.meta.y + paso[1] * salto));
@@ -987,29 +995,121 @@ function prepararTeclado() {
   });
 }
 
-let objetivoF4=null, lecturaHistorias=0;
+let objetivoF4=null, lecturaHistorias=0, oyenteF5=null;
+const hablando=()=>$("tipo-intervencion").value==="hablar";
+let reaccion = null, ultimoObservado = 0, leyendoMapa = false;
+async function observarHasta(fin) {
+  if (leyendoMapa || fin <= ultimoObservado) return;
+  leyendoMapa = true;
+  try {
+    let antes = fin+1;
+    const lotes = [];
+    for (;;) {
+      const lote = await api(`/api/observaciones?despues_de=${ultimoObservado}&antes_de=${antes}`);
+      lotes.push(lote);
+      if (lote.length < 100) break;
+      antes = lote.at(-1).id;
+    }
+    for (const lote of lotes.reverse()) for (const ev of lote.reverse()) {
+      if (ev.tipo !== "vidas.oye" && S.estado.tick-ev.tick > 2) continue;
+      const retraso = mundo.senalar(ev);
+      if (ev.tipo.startsWith("habitante.") || ev.tipo.startsWith("vidas.trato_") || ev.tipo.startsWith("vidas.conflicto_")) poblacion.anotarTrato(ev, retraso || 0);
+      mostrarReaccion(ev);
+    }
+    ultimoObservado = fin;
+  } catch { /* El siguiente refresco retoma el mismo intervalo. */ }
+  finally { leyendoMapa = false; }
+}
+const nombreMapa = id => poblacion.porId.get(id)?.nombre || "otra persona";
+
+function mostrarReaccion(ev) {
+  const d = ev.datos, titulo = momento(ev,nombreMapa);
+  if (!titulo) return;
+  const misma = reaccion && d.historia != null && reaccion.historia === d.historia;
+  const elegido = poblacion.elegido;
+  const observado = elegido != null && (d.id === elegido || d.a === elegido);
+  if (ev.tipo !== "vidas.oye" && !observado && !(misma && (d.id === reaccion.persona || d.a === reaccion.persona || ev.tipo === "vidas.acude" && ev.causa_id === reaccion.evento))) return;
+  const persona = ev.tipo === "vidas.oye" ? d.id : observado ? elegido : reaccion.persona;
+  const otro = persona === d.id ? d.a : d.id;
+  const peticion = ev.tipo === "vidas.pide_compania" ? titulo : misma && persona === reaccion.persona ? reaccion.peticion : null;
+  reaccion = {persona, historia:d.historia || ev.id, evento:ev.id,peticion};
+  $("reaccion-personas").textContent = nombreMapa(persona) + (otro != null ? " · "+nombreMapa(otro) : "");
+  $("reaccion-accion").textContent = peticion || titulo;
+  $("reaccion-resultado").textContent = peticion && titulo !== peticion ? titulo : "";
+  $("reaccion-seguir").textContent = "Seguir a "+nombreMapa(persona);
+  $("reaccion").hidden = false;
+}
+
+/* F6.1: al seguir a alguien que va a tratar con otra persona, el mundo pasa a 1 h/s mientras dura
+   el encuentro y después recupera la velocidad elegida (salvo que el jugador la cambie). */
+let lentoPrevio = null, lentoTemporizador = null;
+function encuentroLento(activo) {
+  const c = S.estado?.control;
+  if (!c) return;
+  clearTimeout(lentoTemporizador);
+  if (activo) {
+    if (!poblacion.lento || !poblacion.siguiendo || !c.en_marcha || c.velocidad <= 1 || lentoPrevio != null) return;
+    lentoPrevio = c.velocidad;
+    ordenar({ accion: "velocidad", velocidad: 1 });
+  } else if (lentoPrevio != null) {
+    lentoTemporizador = setTimeout(() => {
+      const v = lentoPrevio;
+      lentoPrevio = null;
+      if (S.estado.control.velocidad === 1 && v) ordenar({ accion: "velocidad", velocidad: v });
+    }, 1500);
+  }
+}
+
+function seguirEnMapa(id) {
+  plegarMundo(true,false);
+  poblacion.elegir(id,{seguir:true,soloMapa:true});
+}
+
+function hablarA(id) {
+  $("tipo-intervencion").value="hablar";
+  modoIntervenir(true);
+  $("tipo-intervencion").onchange();
+  previaVoz(id);
+  $("mensaje-voz").focus();
+}
+
 function modoIntervenir(activo) {
   mundo.interviniendo=activo;
-  objetivoF4=null;
+  mundo.hablando=activo && hablando();
+  objetivoF4=null; oyenteF5=null;
   mundo.seleccionar(null);
   $("panel-intervenir").hidden=!activo;
   $("confirmar").disabled=true;
-  $("previa").textContent="Elige una celda del mapa.";
+  $("previa").textContent=hablando() ? "Elige a quién hablar: haz clic en un habitante del mapa." : "Elige una celda del mapa.";
   if(activo){
-    poblacion.elegir(null); elegirCelda(null); abrirCronica(false);
+    if (poblacion.siguiendo) { $("ficha").hidden=true; poblacion.alPaneles(); }
+    else poblacion.elegir(null);
+    elegirCelda(null); abrirCronica(false);
     $("historias").hidden=true;
   }
+  mundo.fijarMargenes(margenes());
+}
+// F5.2: la voz va a una sola persona; hasta confirmar no se envía nada.
+function previaVoz(id) {
+  if(id!=null) oyenteF5=id;
+  const texto=$("mensaje-voz").value.trim(), quien=poblacion.porId.get(oyenteF5);
+  $("confirmar").disabled=!(quien && texto);
+  $("previa").textContent=!quien ? "Elige a quién hablar: haz clic en un habitante del mapa."
+    : !texto ? "Escribe lo que quieres decirle a "+quien.nombre+"."
+    : "Solo "+quien.nombre+" oirá: «"+texto+"». No sabrá de dónde viene la voz.";
 }
 function previaF4(celda) {
+  if(hablando()) return;
   objetivoF4=celda; mundo.seleccionar(celda);
   $("confirmar").disabled=!celda;
   const efecto={agujero:"La celda quedará bloqueada",cerrar:"La celda volverá a admitir paso",ofrenda:"Aparecerán "+$("cantidad-bayas").value+" bayas"};
   $("previa").textContent=celda ? efecto[$("tipo-intervencion").value]+" en ("+celda.x+", "+celda.y+")." : "Elige una celda del mapa.";
 }
-async function verHistorias(id=null) {
+async function verHistorias(id=null, protagonista=null) {
   const turno=++lecturaHistorias;
-  modoIntervenir(false); poblacion.elegir(null); elegirCelda(null); abrirCronica(false);
+  modoIntervenir(false); $("ficha").hidden=true; elegirCelda(null); abrirCronica(false);
   $("historias").hidden=false;
+  mundo.fijarMargenes(margenes());
   const caja=$("relatos");
   const boton=(rotulo,accion)=>el("button",{type:"button",class:"evento",text:rotulo,onclick:accion});
   caja.textContent="Leyendo la historia…";
@@ -1021,25 +1121,45 @@ async function verHistorias(id=null) {
       contenido.push(boton("‹ Todas las historias",()=>verHistorias()));
       const eventos=[...datos.hechos].reverse();
       if(datos.inicio && !eventos.some(e=>e.id===id)) eventos.unshift(datos.inicio);
-      if(eventos.length) contenido.push(el("p",{text:fechaCorta(eventos[0].tick)+" — "+fechaCorta(eventos.at(-1).tick)}));
-      const grupos=new Map();
+      const quien = (datos.familiar || datos.trato) ? null : protagonista;
+      const vinculos = new Set(eventos.filter(ev=>quien != null && (ev.datos.id === quien || ev.datos.a === quien)).map(ev=>ev.id));
+      const delProtagonista = ev => quien == null || vinculos.has(ev.id) || vinculos.has(ev.causa_id);
+      const decisivos = eventos.filter(ev => delProtagonista(ev) && (momento(ev,nombreMapa) || ev.tipo === "vidas.decide"));
+      const peticion = eventos.findLast(ev => ev.tipo === "vidas.pide_compania" && (quien == null || ev.datos.id === quien));
+      const reparto = new Set([quien,peticion?.datos.a,...decisivos.flatMap(ev=>[ev.datos.id,ev.datos.a])]
+        .filter(pid=>pid!=null && poblacion.porId.has(pid)));
+      if (reparto.size) {
+        const personas=el("div",{class:"ficha-botones"});
+        for(const pid of reparto) personas.append(el("button",{type:"button",class:"boton-ficha",
+          onclick:()=>{ $("cerrar-historias").click(); seguirEnMapa(pid); }}, "Seguir a "+nombreMapa(pid)));
+        contenido.push(el("h3",{text:"Protagonistas"}),personas);
+      }
+      const foco = peticion || decisivos.at(-1) || eventos.at(-1);
+      if (foco) contenido.push(el("p",{class:"momento",text:momento(foco,nombreMapa) || frase(foco)}));
+      const registro = el("details",{},el("summary",{text:"Ver horas y acontecimientos"}));
+      let anterior = null;
       for(const ev of eventos) {
         const fila=boton(fechaCorta(ev.tick)+" · "+frase(ev),()=>{
-          $("historias").hidden=true; abrirCronica(true); abrirDetalle(ev.id);
+          $("cerrar-historias").click(); abrirCronica(true); abrirDetalle(ev.id);
         });
-        if(!RUTINA[ev.tipo]) { contenido.push(fila); continue; }
-        const dia=Math.floor(ev.tick/S.estado.calendario.horas_por_dia);
-        const clave=ev.tipo+"-"+dia;
-        if(!grupos.has(clave)) {
-          const titulo=el("summary",{}), caja=el("details",{},titulo);
-          grupos.set(clave,{caja,titulo,total:0});
+        registro.append(fila);
+        if (!delProtagonista(ev)) continue;
+        const texto = momento(ev,nombreMapa) || (ev.tipo === "vidas.decide" ? ev.datos.nombre+" decidió "+({pedir_compania:"pedir compañía",evitar:"rodear el agujero",acercarse:"acercarse a mirar"}[ev.datos.eleccion] || ev.datos.eleccion)
+          : ev.tipo === "vidas.investigar" || !decisivos.length ? frase(ev) : null);
+        if (!texto) continue;
+        const clave = [ev.tipo,ev.datos.id,ev.datos.a,ev.datos.eleccion].join("/");
+        if (anterior?.clave === clave) {
+          anterior.total++;
+          anterior.titulo.textContent=texto+" · "+anterior.total+" veces";
+        } else {
+          const titulo=el("summary",{text:texto});
+          const caja=el("details",{},titulo);
           contenido.push(caja);
+          anterior={clave,caja,titulo,total:1};
         }
-        const grupo=grupos.get(clave);
-        grupo.total++;
-        grupo.titulo.textContent=grupo.total+" "+RUTINA[ev.tipo][grupo.total===1?0:1]+" · día "+(dia+1);
-        grupo.caja.append(fila);
+        anterior.caja.append(boton(fechaCorta(ev.tick)+" · "+frase(ev),()=>fila.click()));
       }
+      contenido.push(registro);
     } else {
       if(S.estado.favoritos?.length){
         contenido.push(el("h3",{text:"Favoritos"}));
@@ -1048,7 +1168,7 @@ async function verHistorias(id=null) {
         }));
       }
       contenido.push(el("h3",{text:"Últimos cambios"}));
-      for(const ev of datos) contenido.push(boton(fechaCorta(ev.tick)+" · "+frase(ev),()=>verHistorias(ev.datos.historia || ev.id)));
+      for(const ev of datos) contenido.push(boton(momento(ev,nombreMapa) || frase(ev),()=>verHistorias(ev.raiz || ev.datos.historia || ev.id,ev.datos.id)));
       if(!datos.length) contenido.push(el("p",{text:"Todavía no hay historias registradas."}));
     }
     caja.replaceChildren(...contenido);
@@ -1058,10 +1178,23 @@ function prepararControles() {
   $("intervenir").onclick=()=>modoIntervenir(!mundo.interviniendo);
   $("cancelar-intervencion").onclick=()=>modoIntervenir(false);
   $("tipo-intervencion").onchange=()=>{
-    $("campo-bayas").hidden=$("tipo-intervencion").value!=="ofrenda"; previaF4(objetivoF4);
+    $("campo-bayas").hidden=$("tipo-intervencion").value!=="ofrenda";
+    $("campo-voz").hidden=!hablando(); mundo.hablando=mundo.interviniendo && hablando();
+    objetivoF4=null; mundo.seleccionar(null);
+    if(hablando()) previaVoz(oyenteF5); else previaF4(null);
   };
+  $("mensaje-voz").oninput=()=>previaVoz(null);
   $("cantidad-bayas").oninput=()=>previaF4(objetivoF4);
   $("confirmar").onclick=async()=>{
+    if(hablando()){
+      if(oyenteF5==null || $("confirmar").disabled) return;
+      $("confirmar").disabled=true;
+      try {
+        aplicarEstado(await api("/api/control",{accion:"hablar",id:oyenteF5,texto:$("mensaje-voz").value}));
+        $("mensaje-voz").value=""; modoIntervenir(false);
+      } catch(error){$("previa").textContent=error.message; $("confirmar").disabled=false;}
+      return;
+    }
     if(!objetivoF4 || $("confirmar").disabled) return;
     $("confirmar").disabled=true;
     const tipo=$("tipo-intervencion").value;
@@ -1071,7 +1204,10 @@ function prepararControles() {
     } catch(error){$("previa").textContent=error.message; $("confirmar").disabled=false;}
   };
   $("abrir-vidas").onclick=()=>verHistorias();
-  $("cerrar-historias").onclick=()=>{$("historias").hidden=true; ++lecturaHistorias;};
+  $("cerrar-historias").onclick=()=>{$("historias").hidden=true; ++lecturaHistorias; mundo.fijarMargenes(margenes());};
+  $("cerrar-reaccion").onclick=()=>{reaccion=null; $("reaccion").hidden=true;};
+  $("reaccion-seguir").onclick=()=>{if(reaccion) seguirEnMapa(reaccion.persona);};
+  $("reaccion-historia").onclick=()=>{if(reaccion) verHistorias(reaccion.historia,reaccion.persona);};
   $("marcha").addEventListener("click", alternarMarcha);
   for (const boton of document.querySelectorAll("[data-avance]")) {
     boton.addEventListener("click", () => {
@@ -1083,6 +1219,17 @@ function prepararControles() {
     });
   }
   $("cerrar-mundo").addEventListener("click", () => plegarMundo(true));
+  $("siguiendo-lento").addEventListener("click", () => {
+    poblacion.lento = !poblacion.lento;
+    try { localStorage.setItem("genesis.encuentros-lentos", poblacion.lento ? "1" : "0"); } catch (error) { /* sin almacenamiento */ }
+    if (!poblacion.lento) encuentroLento(false);
+    poblacion._pintarSiguiendo();
+  });
+  // el menú «Avanzar» se cierra al elegir un salto o al pulsar fuera
+  document.addEventListener("click", (e) => {
+    const menu = $("avanzar");
+    if (menu.open && (!menu.contains(e.target) || e.target.closest("[data-avance]"))) menu.open = false;
+  });
   $("abrir-mundo").addEventListener("click", () => plegarMundo(false));
   $("abrir-cronica").addEventListener("click", () => abrirCronica(!S.cronicaAbierta));
   $("cerrar-cronica").addEventListener("click", () => abrirCronica(false));
@@ -1164,6 +1311,7 @@ function aplicarEstado(nuevo) {
     cargarSeries();
   }
   if (anterior && anterior.clima.rio_helado !== c.rio_helado) pintarInspector();
+  observarHasta(nuevo.ultimo_hecho_id);
   if (!anterior || anterior.ultimo_evento_id !== nuevo.ultimo_evento_id) {
     cargarEventos(false);
     if (anterior) cargarHitos();
@@ -1236,8 +1384,14 @@ async function iniciar() {
       if (poblacion.elegido != null && celda) poblacion.elegir(null);
       elegirCelda(celda);
     },
-    alElegirHabitante: (id) => { $("etiqueta").hidden = true; poblacion.elegir(poblacion.elegido === id ? null : id); },
-    alDejarDeSeguir: () => poblacion.dejoDeSeguir(),
+    alElegirHabitante: (id) => {
+      if (mundo.interviniendo) { previaVoz(id); return; }
+      $("etiqueta").hidden = true; poblacion.elegir(poblacion.elegido === id && !$("ficha").hidden ? null : id);
+    },
+    alHistoria: (historia,persona) => verHistorias(historia,persona),
+    alDejarDeSeguir: () => { poblacion.dejoDeSeguir(); encuentroLento(false); },
+    alEncuentro: (activo) => encuentroLento(activo),
+    alGesto: () => poblacion.pintarGesto(),
     alMover: pintarEscala,
   }, { Arte, PIEZA, aspecto, poseDe, dibujarPersona, dibujarPersonaRapida, pintarRetrato });
   // F4.4: el arte ilustrado llega aparte; mientras tanto (o si falta) se dibuja el de código
@@ -1275,16 +1429,18 @@ async function iniciar() {
     alPaneles: () => mundo.fijarMargenes(margenes()),
     abrirCronica: () => { if (!S.cronicaAbierta) abrirCronica(true); },
     abrirEvento: async (id) => { if (!S.cronicaAbierta) abrirCronica(true); await abrirDetalle(id); },
-    abrirLugar,
+    abrirLugar, hablarA, abrirHistoria:verHistorias,
     abrirComunidad: (id) => lugares.abrirComunidad(id),
   });
   // desde una ficha de lugar o de comunidad se puede ir a otro lugar con su enlace
   lugares.abrirLugarDesdeFicha = abrirLugar;
   window.genesis = { mundo, estado: S, lugares }; // para depurar desde la consola
-  let plegado = window.innerWidth < 1100;
-  try { if (localStorage.getItem("genesis.mundo") === "0") plegado = true; } catch (error) { /* sin almacenamiento */ }
+  // F6.1: el mapa es lo primero; el panel de datos del mundo se abre a voluntad y se recuerda
+  let plegado = true;
+  try { if (localStorage.getItem("genesis.mundo") === "1" && window.innerWidth >= 1100) plegado = false; } catch (error) { /* sin almacenamiento */ }
   $("panel-mundo").classList.toggle("plegado", plegado);
   $("abrir-mundo").setAttribute("aria-expanded", String(!plegado));
+  try { poblacion.lento = localStorage.getItem("genesis.encuentros-lentos") !== "0"; } catch (error) { /* sin almacenamiento */ }
   prepararControles();
   prepararTeclado();
   pintarFiltros();
@@ -1294,9 +1450,10 @@ async function iniciar() {
     S.mapa = mapa;
     S.recurso = mapa.recursos[0].nombre;
     S.hitoVisto = hitos.length ? hitos[0].id : 0;
+    ultimoObservado = estado.ultimo_hecho_id;
     S.estado = estado;
     // la fase que se ve es la de las reglas de esta partida (una partida F1 o F2 conserva las suyas)
-    document.querySelector(".marca-fase").textContent = estado.partida.reglas === 3 && estado.partida.correccion
+    document.querySelector(".marca-fase").textContent = estado.partida.conflictos ? "F6.3" : estado.partida.tratos_familia ? "F6.2" : estado.partida.planes_familia ? "F6.0" : estado.partida.reglas === 3 && estado.partida.correccion
       ? "F3.1" : { 1: "F1", 2: "F2", 3: "F3", 4:estado.partida.relaciones?"F4.3":estado.partida.crecimiento?"F4.2":estado.partida.cuidados?"F4.1":"F4" }[estado.partida.reglas] || "F3";
     mundo.fijarMargenes(margenes());
     mundo.fijarEstado({ estacion: estado.fecha.estacion, hora: estado.fecha.hora, cielo: estado.clima.cielo, lluvia: estado.clima.lluvia_mm,

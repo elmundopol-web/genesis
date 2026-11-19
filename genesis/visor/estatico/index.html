@@ -141,16 +141,31 @@
   </aside>
 
   <div class="siguiendo hud" id="siguiendo" hidden>
-    <svg class="icono"><use href="#i-seguir"/></svg>
-    <span id="siguiendo-texto"></span>
-    <button type="button" id="dejar-de-seguir">Dejar de seguir</button>
+    <canvas class="siguiendo-retrato" id="siguiendo-retrato" width="88" height="88" aria-hidden="true"></canvas>
+    <div class="siguiendo-quien">
+      <button type="button" id="siguiendo-texto" title="Abrir la ficha del habitante seguido"></button>
+      <span class="siguiendo-intencion" id="siguiendo-intencion" aria-live="polite"></span>
+      <span class="siguiendo-promesa" id="siguiendo-promesa" aria-live="polite" hidden></span>
+      <span class="siguiendo-reciente" id="siguiendo-reciente" aria-live="polite" hidden></span>
+    </div>
+    <button type="button" class="siguiendo-lento" id="siguiendo-lento" aria-pressed="true"
+            title="Al seguir a alguien, sus encuentros se ven a 1 hora por segundo y después vuelve la velocidad elegida">Encuentros a 1 h/s</button>
+    <button type="button" class="icono-boton" id="dejar-de-seguir" aria-label="Dejar de seguir" title="Dejar de seguir"><svg class="icono"><use href="#i-cerrar"/></svg></button>
   </div>
+
+  <aside id="reaccion" class="reaccion hud" aria-label="Reacción en el mapa" hidden>
+    <div><span id="reaccion-personas"></span><strong id="reaccion-accion" aria-live="polite"></strong><span id="reaccion-resultado"></span></div>
+    <div class="reaccion-acciones"><button id="reaccion-seguir" type="button">Seguir</button>
+      <button id="reaccion-historia" type="button">Ver historia</button>
+      <button id="cerrar-reaccion" type="button" aria-label="Cerrar reacción">×</button></div>
+  </aside>
 
   <div class="lateral-der">
     <section class="panel f4-panel" id="panel-intervenir" hidden>
       <div class="panel-cabecera"><h2>Intervenir en el mundo</h2></div>
       <div class="f4-interior">
-        <label>Acción <select id="tipo-intervencion"><option value="agujero">Abrir un agujero</option><option value="cerrar">Cerrar un agujero</option><option value="ofrenda">Dejar una ofrenda</option></select></label>
+        <label>Acción <select id="tipo-intervencion"><option value="agujero">Abrir un agujero</option><option value="cerrar">Cerrar un agujero</option><option value="ofrenda">Dejar una ofrenda</option><option value="hablar">Hablar a un habitante</option></select></label>
+        <label id="campo-voz" hidden>Mensaje <textarea id="mensaje-voz" maxlength="120" rows="3" placeholder="Ten cuidado cerca de ese agujero"></textarea></label>
         <label id="campo-bayas" hidden>Bayas <input id="cantidad-bayas" type="number" min="1" max="12" value="6"></label>
         <p id="previa" aria-live="polite">Elige una celda del mapa.</p>
         <button class="boton-ficha" id="confirmar" disabled>Confirmar</button>
@@ -164,10 +179,11 @@
     <section class="panel ficha" id="ficha" aria-labelledby="ficha-nombre" hidden>
       <div class="panel-cabecera">
         <div class="ficha-quien">
-          <canvas class="retrato" id="ficha-retrato" width="184" height="184"></canvas>
-          <div>
+          <canvas class="retrato" id="ficha-retrato" width="240" height="240"></canvas>
+          <div class="ficha-nombre-caja">
             <h2 id="ficha-nombre"></h2>
             <p class="panel-sub" id="ficha-sub"></p>
+            <p class="ficha-chips" id="ficha-chips"></p>
           </div>
         </div>
         <button type="button" class="icono-boton" id="cerrar-ficha" aria-label="Cerrar la ficha"><svg class="icono"><use href="#i-cerrar"/></svg></button>
@@ -203,12 +219,15 @@
       </button>
       <div class="velocidades" id="velocidades" role="group" aria-label="Velocidad, en tiempo simulado por segundo"></div>
       <span class="muelle-nota" id="ritmo">por segundo</span>
-      <div class="pasos" role="group" aria-label="Avanzar una cantidad exacta">
-        <button type="button" data-avance="hora">+1 hora</button>
-        <button type="button" data-avance="dia">+1 día</button>
-        <button type="button" data-avance="estacion">+1 estación</button>
-        <button type="button" data-avance="anio">+1 año</button>
-      </div>
+      <details class="avanzar" id="avanzar">
+        <summary aria-label="Avanzar una cantidad exacta">Avanzar<svg class="icono"><use href="#i-mas"/></svg></summary>
+        <div class="pasos" role="group" aria-label="Avanzar una cantidad exacta">
+          <button type="button" data-avance="hora">+1 hora</button>
+          <button type="button" data-avance="dia">+1 día</button>
+          <button type="button" data-avance="estacion">+1 estación</button>
+          <button type="button" data-avance="anio">+1 año</button>
+        </div>
+      </details>
     </div>
     <div class="salto" id="salto" hidden>
       <div class="salto-texto"><span id="salto-titulo">Avanzando</span><span id="salto-detalle"></span></div>

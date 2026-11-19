@@ -14,6 +14,7 @@
 
 import { dibujarLugar, luzDeLugar, caja } from "./construcciones.js";
 import { PIEL, PELO, ROPA } from "./paleta.js";
+import { Encuentros, racion, TIPOS_ESCENA, textoPaso } from "./encuentros.js";
 
 const TEX = 1280; // lado de la textura del mundo
 const SUB = 4; // submuestras por celda en los campos suavizados
@@ -23,6 +24,12 @@ const TAU = Math.PI * 2;
 
 const mezcla = (a, b, t) => a + (b - a) * t;
 const limitar = (v, a, b) => (v < a ? a : v > b ? b : v);
+/* F6.1: un paso no es lineal. Quien se pone en marcha arranca despacio y quien llega frena:
+   tramo de Hermite con la velocidad de salida `v0` y la de llegada `v1` (1 = marcha normal). */
+const tramo = (k, v0, v1) => {
+  const k2 = k * k, k3 = k2 * k;
+  return (k3 - 2 * k2 + k) * v0 + (-2 * k3 + 3 * k2) + (k3 - k2) * v1;
+};
 const suave = (a, b, x) => {
   const t = limitar((x - a) / (b - a), 0, 1);
   return t * t * (3 - 2 * t);
@@ -164,9 +171,17 @@ const pausa = () => new Promise((resolver) => {
 });
 
 // Gestos del motor que son entregas reales y rechazos: el trazo lo distingue (F4.3).
-const DAR = new Set(["entrega", "alimenta", "da_agua", "corresponde", "repara", "deja_racion", "dar"]);
-const RECHAZO = new Set(["rechaza_promesa", "rehusa", "negar"]);
+// F6.1: con el dibujo de código (sin arte ilustrado), el gesto equivalente que ya existía
+const POSE_CODIGO = { pide: "pide", recibe: "recibe", ofrece: "da", niega: "rechaza", cabizbajo: "abatido", escucha: "quieto", increpa: "rechaza", forcejea: "pide" };
+const DAR = new Set(["entrega", "alimenta", "da_agua", "corresponde", "repara", "deja_racion", "dar", "trato_acepta", "trato_entrega"]);
+const RECHAZO = new Set(["rechaza_promesa", "rehusa", "negar", "trato_rechaza"]);
 const DURA_SENAL = 5200;
+const DURA_SENAL_CORTA = 1300; // F6.1: las señales de un encuentro solo acompañan al gesto
+const SIN_ENCUENTROS = new Encuentros(); // para mapas creados sin constructor (pruebas)
+const TRATO_EN_VIVO = new Set([
+  "habitante.pide", "habitante.da", "habitante.niega", "habitante.cuenta", "habitante.rehusa",
+  "vidas.trato_propone", "vidas.trato_acepta", "vidas.trato_rechaza", "vidas.trato_entrega",
+]);
 const COLOR_SENAL = {
   promesa: "rgb(214,200,246)", cumple: "rgb(168,214,150)", rota: "rgb(232,118,96)", reservas: "rgb(226,190,110)",
   rechazo: "rgb(232,118,96)", enfado: "rgb(232,118,96)", perdona: "rgb(150,206,128)", justifica: "rgb(196,214,150)",
@@ -176,6 +191,12 @@ const COLOR_SENAL = {
 export function SENAL_DE(ev) {
   const d = ev.datos || {};
   switch (ev.tipo) {
+    case "vidas.oye": return [[d.id,"voz","Oyó tu voz"]];
+    case "vidas.pide_compania": return [[d.id,"compania","Pide compañía"]];
+    case "vidas.acude": return [[d.id,"pasos","Acude"]];
+    case "vidas.acompaña": return [[d.id,"compania","A su lado"]];
+    case "vidas.acompaña_trayecto": return [[d.id,"pasos","Camina en compañía"]];
+    case "vidas.descanso_compartido": return [[d.id,"compania","Descansan juntos"]];
     case "vidas.promete": return [[d.id, "promesa", "promete"], [d.a, "promesa", "espera"]];
     case "vidas.entrega":
       return d.motivo === "cumplir la palabra" ? [[d.id, "cumple", "cumple su palabra"], [d.a, "cumple", "recibe"]]
@@ -192,7 +213,35 @@ export function SENAL_DE(ev) {
     case "vidas.nace": return [[d.id, "nace", "nace"]];
     case "habitante.niega":
       return ["no_quiere", "desconfianza"].includes(d.razon) ? [[d.id, "rechazo", "se niega"]] : null;
-    default: return null;
+    case "vidas.trato_propone":
+      return [[d.id, "promesa", d.modalidad === "garantia" ? "pide garantía" : "propone trato"]];
+    case "vidas.trato_acepta":
+      return d.entregado ? [[d.a, "cumple", "da comida"], [d.id, "promesa", "reparará mañana"]] : [[d.id, "promesa", "ayudará primero"]];
+    case "vidas.trato_entrega":
+      return [[d.id, "cumple", "entrega comida"], [d.a, "cumple", "recibe"]];
+    case "vidas.trato_rechaza":
+      return [[d.id, "rechazo", "rechaza el trato"]];
+    case "vidas.trato_cumple":
+      return [[d.id, "cumple", "cumple el trato"]];
+    case "vidas.trato_falta":
+      return [[d.id, "rota", "la ayuda no llegó"]];
+    case "vidas.trato_explica":
+      return [[d.id, "justifica", "explica la ausencia"]];
+    case "vidas.trato_observa":
+      return [[d.id, d.motivo === "engano" ? "rota" : "justifica", d.motivo === "engano" ? "ve el engaño" : "ve el motivo"]];
+    case "vidas.trato_cambia_plan":
+      return [[d.id, "pasos", "cambia de plan"]];
+    case "vidas.trato_busca_otro":
+      return [[d.id, "pasos", "busca a otra persona"]];
+    case "vidas.trato_ve_tarde":
+      return [[d.id, "justifica", "reparó, aunque tarde"]];
+    case "vidas.conflicto_juzga_motivo":
+      return [[d.id, d.juicio === "ablanda" ? "justifica" : "reservas", d.juicio === "ablanda" ? "lo entiende" : "no le basta"]];
+    default: {
+      // F6.3: avisos, discusiones y disculpas (sin arte ilustrado, como señal breve)
+      const tp = TIPOS_ESCENA.has(ev.tipo) ? textoPaso(ev.tipo.replace("vidas.", ""), d) : null;
+      return tp ? [[d.id, tp[0], tp[1]]] : null;
+    }
   }
 }
 
@@ -249,6 +298,9 @@ export class MapaVivo {
     this.rutaElegido = null;
     this.creencias = null; // lo que cree el habitante elegido, para señalarlo sobre el mapa
     this.lugares = []; // refugios y depósitos (F3), ordenados de norte a sur
+    this.encuentros = new Encuentros(); // F6.1: pedir, dar y negar, como gestos
+    this.encuentros.alEmpezar = (e, ahora) => this._juntarParaEncuentro(e, ahora);
+    this._intervalo = 1000;
     this.ambiente = !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     this.sucia = true;
@@ -1151,7 +1203,11 @@ export class MapaVivo {
       if (era === 1 && this._arrastre) {
         if (!this._arrastre.movido && e.type === "pointerup") {
           const quien = this._habitanteEn(e);
-          if (quien != null && !this.interviniendo) {
+          const marco = l.getBoundingClientRect();
+          const x = (e.clientX-marco.left)*this.dpr, y = (e.clientY-marco.top)*this.dpr;
+          const rotulo = !this.interviniendo && this.rotulosHistoria?.find(r=>x>=r.izq && x<=r.der && Math.abs(y-r.y)<=r.alto && performance.now()<r.hasta);
+          if (rotulo) this.avisos.alHistoria?.(rotulo.historia,rotulo.persona);
+          else if (quien != null && (!this.interviniendo || this.hablando)) {
             if (this.avisos.alElegirHabitante) this.avisos.alElegirHabitante(quien);
           } else if (this.avisos.alElegir) this.avisos.alElegir(this._celdaDe(e));
         }
@@ -1216,22 +1272,52 @@ export class MapaVivo {
     if (document.hidden) return;
 
     const animando = this._moverGente(t);
+    if (t - (this._ultimoImplicado || 0) > 250) {
+      this._ultimoImplicado = t;
+      const implicado = this._implicado();
+      if (implicado !== Boolean(this._implicadoAntes)) {
+        this._implicadoAntes = implicado;
+        if (this.avisos.alEncuentro) this.avisos.alEncuentro(implicado);
+      }
+    }
+    // F6.1: la tarjeta de quien se sigue cambia con el gesto (llegada, respuesta, salida),
+    // no solo cuando llegan datos del motor: se repinta en cuanto cambia la fase del encuentro.
+    if (this.elegido != null && this.avisos.alGesto) {
+      const ahoraG = performance.now();
+      const eG = (this.encuentros || SIN_ENCUENTROS).de(this.elegido, ahoraG);
+      const firma = eG ? `${eG.pide}>${eG.otro}|${eG.resultado || ""}|${ahoraG >= eG.t0}|${eG.tR != null && ahoraG >= eG.tR}|${this.juntoEnPantalla(eG.pide, eG.otro, false)}` : "";
+      if (firma !== this._firmaGesto) {
+        this._firmaGesto = firma;
+        this.avisos.alGesto();
+      }
+    }
     if (this.siguiendo) {
       const figura = this.gente.get(this.elegido);
       if (figura) {
         // si trata con alguien, encuadra a los dos; si camina, mira un poco hacia donde va
-        const otro = figura.d && figura.d.con != null ? this.gente.get(figura.d.con) : null;
+        const otro = this.interlocutor(figura,performance.now());
+        // F6.1: si va a buscar a alguien, el encuadre se adelanta hacia esa persona
+        const buscado = !otro && figura.d.busca ? this.gente.get(figura.d.busca[0]) : null;
         let x = figura.rx + (figura.ax || 0);
         let y = figura.ry + (figura.ay || 0);
+        const enGesto = (this.encuentros || SIN_ENCUENTROS).de(figura.id, performance.now());
         if (otro && Math.hypot(otro.rx - figura.rx, otro.ry - figura.ry) < 4) {
-          x += (otro.rx + (otro.ax || 0) - x) * 0.4;
-          y += (otro.ry + (otro.ay || 0) - y) * 0.4;
+          // los dos en el centro, con sitio para los gestos y las señales encima
+          const peso = enGesto ? 0.5 : 0.4;
+          x += (otro.rx + (otro.ax || 0) - x) * peso;
+          y += (otro.ry + (otro.ay || 0) - y) * peso;
+          if (enGesto) y -= 0.25;
+        } else if (buscado && buscado.d.vivo && Math.hypot(buscado.rx - figura.rx, buscado.ry - figura.ry) < 9) {
+          x += (buscado.rx - x) * 0.4;
+          y += (buscado.ry - y) * 0.4;
         } else if (figura.anda) {
           x += (figura.hx - figura.rx) * 0.35;
           y += (figura.hy - figura.ry) * 0.35;
         }
-        this.meta.x = x;
-        this.meta.y = y;
+        // El centro del espacio visible cambia al abrir o cerrar una ficha.
+        const m = this.margenes;
+        this.meta.x = x - (m.izq-m.der)*this.dpr/(2*this.cam.z);
+        this.meta.y = y - (m.arr-m.aba)*this.dpr/(2*this.cam.z) - .35;
         this.ancla = null;
         this.libre = false;
       }
@@ -1240,7 +1326,7 @@ export class MapaVivo {
     // cámara
     const cam = this.cam;
     const meta = this.meta;
-    const k = 1 - Math.exp(-dt * 13);
+    const k = 1 - Math.exp(-dt * (this.siguiendo ? 6 : 13));
     let movida = false;
     if (Math.abs(meta.z - cam.z) > cam.z * 0.0006) {
       cam.z += (meta.z - cam.z) * k;
@@ -2100,6 +2186,7 @@ export class MapaVivo {
     if (this._arbolVivo && vida > 0.02) this._arbolesVivos(c, t);
     c.globalAlpha = 1;
     this._genteCuerpos(c, gente, t, 1);
+    this._racionesEnElAire(c, gente.s);
 
     if (this.ambiente && vida > 0.02) {
       // sombras de nubes que cruzan el mundo
@@ -2258,24 +2345,24 @@ export class MapaVivo {
       const transicion = this.ambiente ? Math.min(220, intervalo * 0.28) : 0;
       const bebe = d.vivo && d.actividad === "bebiendo";
       if (f.bebe && !bebe) f.seAlzaHasta = ahora + transicion;
-      if (hx !== f.hx || hy !== f.hy) {
-        const vx = d.x - f.d.x;
-        const vy = d.y - f.d.y;
-        const salto = Math.hypot(hx - f.rx, hy - f.ry);
-        const duracion = !this.ambiente || salto > 6 ? 0 : intervalo;
-        const alzarse = duracion ? Math.max(0, (f.seAlzaHasta || 0) - ahora) : 0;
-        f.dx = f.rx;
-        f.dy = f.ry;
-        f.hx = hx;
-        f.hy = hy;
-        f.t0 = ahora + alzarse;
-        f.dur = Math.max(0, duracion - alzarse);
-        f.vista = Math.abs(vx) > Math.abs(vy) ? "perfil" : vy < 0 ? "espalda" : "frente";
-        if (vx) f.mira = Math.sign(vx);
-        if (!duracion) {
-          f.rx = hx;
-          f.ry = hy;
-          f.seAlzaHasta = 0;
+      if (hx !== f.hx || hy !== f.hy || f.pendiente) {
+        const previa = f.d;
+        const paso = { hx, hy, vx: d.x - (f.pendiente ? f.pendiente.desdeX : previa.x), vy: d.y - (f.pendiente ? f.pendiente.desdeY : previa.y),
+                       desdeX: f.pendiente ? f.pendiente.desdeX : previa.x, desdeY: f.pendiente ? f.pendiente.desdeY : previa.y,
+                       arranca: f.pendiente ? f.pendiente.arranca : previa.actividad !== "caminando",
+                       llega: this._llega(d), intervalo };
+        // F6.1: si está en mitad de un gesto (pedir, dar, negar), lo siguiente que decidió el motor espera
+        // nunca a más de cuatro celdas de donde está de verdad: entonces se suelta y anda
+        const desfase = Math.hypot(hx - f.rx, hy - f.ry);
+        // F6.3: en una discusión (varios pasos seguidos) se tolera algo más de desfase
+        const tope = (this.encuentros || SIN_ENCUENTROS).de(d.id, ahora)?.escena ? 9 : 4;
+        if (this.ambiente && (f.retenHasta || 0) > ahora && desfase <= tope) {
+          if (hx !== f.hx || hy !== f.hy) f.pendiente = Object.assign(paso, { diferido: true });
+        } else {
+          if (f.pendiente || (f.retenHasta || 0) > ahora) paso.diferido = true;
+          f.pendiente = null;
+          f.retenHasta = 0;
+          if (hx !== f.hx || hy !== f.hy) this._empezarPaso(f, paso, ahora);
         }
       }
       if (bebe && (!f.bebe || d.x !== f.d?.x || d.y !== f.d?.y)) {
@@ -2288,9 +2375,83 @@ export class MapaVivo {
       f.bebe = bebe;
       f.d = d;
     }
+    this._intervalo = ritmo.enMarcha ? limitar(1000 / ritmo.velocidad, 110, 1050) : 1000;
+    (this.encuentros || SIN_ENCUENTROS).ritmo(this._intervalo);
+    if (ritmo.enMarcha && this.ambiente) {
+      (this.encuentros || SIN_ENCUENTROS).desdeHabitantes(lista, ahora, ritmo.tick);
+      this._retener(ahora);
+    }
     for (const id of [...this.gente.keys()]) if (!vistos.has(id)) this.gente.delete(id);
     this.ordenGente = [...this.gente.values()];
     this.recomponer = true;
+  }
+
+  /* Un paso de una celda a otra, con su curva: arranca suave si estaba parado y frena si llega. */
+  _empezarPaso(f, paso, ahora) {
+    const salto = Math.hypot(paso.hx - f.rx, paso.hy - f.ry);
+    // tras un gesto quizá queda más de una celda por recorrer: se recorre algo más deprisa, sin saltos
+    // quien se está poniendo al día tras un gesto también anda hasta su sitio, aunque sean varias celdas
+    let duracion = !this.ambiente || salto > (paso.diferido || f.rezagado ? 14 : 6) ? 0 : paso.intervalo;
+    if (duracion && salto > 1.6) duracion = Math.min(paso.intervalo * salto * 0.6, 2200);
+    f.rezagado = Boolean(duracion) && salto > 1.6;
+    // F6.1: al salir de un gesto, un instante de frente antes de andar: el cuerpo se vuelve hacia donde va
+    if (duracion && f.ultimoGesto && ahora < f.ultimoGesto.hasta && (paso.vx || paso.vy)) f.giroSalidaHasta = ahora + 170;
+    const alzarse = duracion ? Math.max(0, (f.seAlzaHasta || 0) - ahora, (f.giroSalidaHasta || 0) - ahora) : 0;
+    f.dx = f.rx;
+    f.dy = f.ry;
+    f.hx = paso.hx;
+    f.hy = paso.hy;
+    f.t0 = ahora + alzarse;
+    f.dur = Math.max(0, duracion - alzarse);
+    f.v0 = paso.arranca ? 0.25 : 1;
+    f.v1 = paso.llega ? 0 : 1;
+    f.vista = Math.abs(paso.vx) > Math.abs(paso.vy) ? "perfil" : paso.vy < 0 ? "espalda" : "frente";
+    if (paso.vx) f.mira = Math.sign(paso.vx);
+    if (!duracion) {
+      f.rx = paso.hx;
+      f.ry = paso.hy;
+      f.seAlzaHasta = 0;
+    }
+  }
+
+  /* Si con este paso llega: a su destino, junto a quien busca o deja de caminar. */
+  _llega(d) {
+    if (d.actividad !== "caminando") return true;
+    if (d.destino && d.destino[0] === d.x && d.destino[1] === d.y) return true;
+    const otro = d.busca ? this.gente.get(d.busca[0]) : null;
+    return Boolean(otro && otro.d && Math.max(Math.abs(otro.d.x - d.x), Math.abs(otro.d.y - d.y)) <= 1);
+  }
+
+  /* F6.1: un encuentro nuevo no puede empezar con alguien dibujado lejos de donde está: los pasos
+     que tuvieran aplazados se dan ya, y el gesto empieza cuando los dos han llegado. */
+  _juntarParaEncuentro(e, ahora) {
+    let llegada = ahora;
+    for (const id of [e.pide, e.otro]) {
+      const f = this.gente.get(id);
+      if (!f) continue;
+      f.retenHasta = 0;
+      if (f.pendiente) {
+        const paso = f.pendiente;
+        f.pendiente = null;
+        this._empezarPaso(f, paso, ahora);
+      }
+      if (f.rx !== f.hx || f.ry !== f.hy) llegada = Math.max(llegada, f.t0 + f.dur);
+    }
+    return llegada;
+  }
+
+  /* F6.1: quien está en mitad de un encuentro espera a terminar el gesto para seguir. */
+  _retener(ahora) {
+    if (!this.encuentros) return;
+    for (const f of this.ordenGente && this.ordenGente.length ? this.ordenGente : this.gente.values()) {
+      f.retenHasta = this.encuentros.retener(f.id, ahora);
+    }
+  }
+
+  juntoEnPantalla(id, otro, ambosQuietos = true) {
+    const a = this.gente.get(id), b = this.gente.get(otro);
+    return Boolean(a && b && !a.anda && (!ambosQuietos || !b.anda) &&
+      Math.max(Math.abs(a.rx - b.rx), Math.abs(a.ry - b.ry)) < 1.45);
   }
 
   /* Construcciones del motor: se dibujan con las personas, en orden de profundidad. */
@@ -2346,6 +2507,7 @@ export class MapaVivo {
 
   elegirHabitante(id) {
     this.elegido = id;
+    if (this.encuentros) this.encuentros.prioridad = id;
     if (id == null) {
       this.siguiendo = false;
       this.rutaElegido = null;
@@ -2358,10 +2520,24 @@ export class MapaVivo {
     if (this.siguiendo) {
       this.libre = false;
       this.ancla = null;
-      const minimo = 26 * this.dpr; // seguir de lejos no deja ver nada: se acerca si hace falta
+      const minimo = 40 * this.dpr; // La escala habitual deja leer las posturas.
       if (this.meta.z < minimo) this.meta.z = minimo;
     }
     this.recomponer = true;
+  }
+
+  /* F6.1: la persona seguida está en un encuentro, va junto a alguien o alguien va junto a ella. */
+  _implicado() {
+    if (!this.siguiendo || this.elegido == null) return false;
+    const f = this.gente.get(this.elegido);
+    if (!f || !f.d || !f.d.vivo) return false;
+    const ahora = performance.now();
+    if ((this.encuentros || SIN_ENCUENTROS).de(f.id, ahora)) return true;
+    const cerca = (otro, max) => otro && otro.d && otro.d.vivo && Math.hypot(otro.rx - f.rx, otro.ry - f.ry) <= max;
+    if (f.d.busca && ["junto", "pedir", "aguardar", "dar", "negar", "contar"].includes(f.d.busca[1])
+        && cerca(this.gente.get(f.d.busca[0]), 6)) return true;
+    for (const g of this.ordenGente) if (g.d.busca && g.d.busca[0] === f.id && g.d.busca[1] !== "junto" && cerca(g, 2)) return true;
+    return false;
   }
 
   _soltarSeguimiento() {
@@ -2424,9 +2600,13 @@ export class MapaVivo {
   /* Un trato entre dos personas: un arco discreto que las une mientras dura. */
   _tratos(c, z, ox, oy, s) {
     const dpr = this.dpr;
+    const ahora = performance.now();
+    this._busquedas(c, s, ahora);
     for (const f of this.ordenGente) {
       const d = f.d;
       if (!d.vivo || d.con == null) continue;
+      // el gesto ya lo cuenta; y un arco hacia alguien en mitad de otro gesto se confundiría con él
+      if (f.papel || (this.encuentros || SIN_ENCUENTROS).de(f.id, ahora) || (this.encuentros || SIN_ENCUENTROS).de(d.con, ahora)) continue;
       const otro = this.gente.get(d.con);
       if (!otro) continue;
       const x1 = f.sx;
@@ -2458,6 +2638,59 @@ export class MapaVivo {
     }
   }
 
+  /* F6.1: quien va junto a alguien concreto (para pedirle, darle o contestarle) deja ver a quién:
+     un trazo de pasos que sale de sus pies y acaba en un anillo bajo los pies del otro. */
+  _busquedas(c, s, ahora) {
+    if (!this.ordenGente.length) return;
+    const dpr = this.dpr;
+    for (const f of this.ordenGente) {
+      const b = f.d.busca;
+      if (!f.d.vivo || !b || b[1] !== "junto" || f.oculto || (this.encuentros || SIN_ENCUENTROS).de(f.id, ahora)) continue;
+      const otro = this.gente.get(b[0]);
+      if (!otro || !otro.d.vivo || otro.oculto) continue;
+      const lejos = Math.hypot(otro.rx - f.rx, otro.ry - f.ry);
+      if (lejos > 14 || lejos < 0.6) continue;
+      const foco = f.id === this.elegido || otro.id === this.elegido || f.id === this.sobre;
+      const x1 = f.sx, y1 = f.sy, x2 = otro.sx, y2 = otro.sy;
+      const largo = Math.hypot(x2 - x1, y2 - y1);
+      if (largo < s * 0.5) continue;
+      const ux = (x2 - x1) / largo, uy = (y2 - y1) / largo;
+      const alfa = (foco ? 0.92 : 0.5) * limitar(lejos / 1.4, 0.35, 1);
+      c.save();
+      // pasos: pequeñas marcas alternas a lo largo del camino, que avanzan con el tiempo
+      const paso = Math.max(7 * dpr, s * 0.16);
+      const fase = this.ambiente ? (ahora / 650) % 1 : 0;
+      const inicio = s * 0.32, final = largo - s * 0.42;
+      for (let i = 0, dist = inicio + fase * paso; dist < final; i++, dist += paso) {
+        const lado = i % 2 ? 1 : -1;
+        const px = x1 + ux * dist - uy * lado * s * 0.045;
+        const py = y1 + uy * dist + ux * lado * s * 0.045;
+        const borde = Math.min(1, (dist - inicio) / paso, (final - dist) / paso);
+        c.globalAlpha = alfa * Math.max(0, borde);
+        c.fillStyle = "rgba(28,24,18,0.55)";
+        c.beginPath();
+        c.ellipse(px + dpr * 0.6, py + dpr * 0.6, s * 0.032, s * 0.019, Math.atan2(uy, ux), 0, TAU);
+        c.fill();
+        c.fillStyle = foco ? "rgb(250,228,170)" : "rgb(244,236,214)";
+        c.beginPath();
+        c.ellipse(px, py, s * 0.03, s * 0.017, Math.atan2(uy, ux), 0, TAU);
+        c.fill();
+      }
+      // a quién busca: un anillo que late bajo sus pies
+      const pulso = this.ambiente ? 0.5 + 0.5 * Math.sin(ahora / 260) : 0.5;
+      c.globalAlpha = alfa;
+      c.lineWidth = 3.2 * dpr;
+      c.strokeStyle = "rgba(20,16,12,0.45)";
+      c.beginPath();
+      c.ellipse(x2, y2, s * (0.3 + 0.04 * pulso), s * (0.105 + 0.014 * pulso), 0, 0, TAU);
+      c.stroke();
+      c.lineWidth = 1.6 * dpr;
+      c.strokeStyle = foco ? "rgb(250,214,140)" : "rgb(240,232,210)";
+      c.stroke();
+      c.restore();
+    }
+  }
+
   _tamanoFigura() {
     // Una persona mide algo más de una celda de alto; de lejos no baja de un tamaño visible.
     // F4.4: figuras de tres cuartos algo mayores, legibles a la escala habitual
@@ -2466,19 +2699,30 @@ export class MapaVivo {
 
   _moverGente(t) {
     let animando = false;
+    const ahora = performance.now();
+    if ((this.encuentros || SIN_ENCUENTROS).activos(ahora)) {
+      animando = true;
+      this._retener(ahora);
+    }
     for (const f of this.ordenGente) {
+      if (f.pendiente && ahora >= (f.retenHasta || 0)) {
+        const paso = f.pendiente;
+        f.pendiente = null;
+        this._empezarPaso(f, paso, ahora);
+      }
       if (f.rx === f.hx && f.ry === f.hy) {
         f.anda = false;
         continue;
       }
-      const k = f.dur > 0 ? limitar((t - f.t0) / f.dur, 0, 1) : 1;
+      const lineal = f.dur > 0 ? limitar((t - f.t0) / f.dur, 0, 1) : 1;
+      const k = lineal >= 1 ? 1 : tramo(lineal, f.v0 ?? 1, f.v1 ?? 1);
       const anteriorX = f.rx;
       const anteriorY = f.ry;
       f.rx = f.dx + (f.hx - f.dx) * k;
       f.ry = f.dy + (f.hy - f.dy) * k;
       f.recorrido += Math.hypot(f.rx - anteriorX, f.ry - anteriorY);
-      f.anda = t >= f.t0 && k < 1;
-      if (k >= 1) {
+      f.anda = t >= f.t0 && lineal < 1;
+      if (lineal >= 1) {
         f.rx = f.hx;
         f.ry = f.hy;
       }
@@ -2617,10 +2861,67 @@ export class MapaVivo {
         }
       }
     }
+    // F6.1: los dos de un encuentro, frente a frente y con hueco para los brazos y lo que se dan
+    const ahoraE = performance.now();
+    const colocados = new Set();
+    for (const f of figuras) {
+      if (!f.d.vivo || f.anda || colocados.has(f.id)) continue;
+      const e = (this.encuentros || SIN_ENCUENTROS).de(f.id, ahoraE);
+      if (!e || ahoraE < e.t0) continue;
+      const otro = this.gente.get(e.pide === f.id ? e.otro : e.pide);
+      if (!otro || !otro.d.vivo || otro.anda || colocados.has(otro.id) || this.encuentros.de(otro.id, ahoraE) !== e) continue;
+      if (Math.hypot(otro.rx - f.rx, otro.ry - f.ry) > 2.2) continue;
+      const cx = (f.rx + otro.rx) / 2, cy = (f.ry + otro.ry) / 2;
+      const izq = otro.rx > f.rx + 0.05 || (Math.abs(otro.rx - f.rx) <= 0.05 && f.id < otro.id);
+      // F6.3: en el forcejeo se agarran (muy juntos y con un temblor); en la discusión, un paso más lejos
+      const papelF = e.escena ? this.encuentros.papel(f.id, ahoraE) : null;
+      const junto = papelF && papelF.junto;
+      const media = (s * (junto ? 0.2 : e.escena ? 0.5 : 0.46)) / z;
+      const tiembla = junto ? Math.sin(ahoraE / 45) * 0.035 : 0;
+      for (const [a, lado] of [[f, izq ? -1 : 1], [otro, izq ? 1 : -1]]) {
+        a.mx = cx + lado * media - a.rx + tiembla * lado;
+        a.my = cy - a.ry + (junto ? Math.cos(ahoraE / 60) * 0.02 : 0);
+        colocados.add(a.id);
+      }
+      // quien calma o defiende se pone delante de los dos
+      for (const id of e.extra || []) {
+        const t = this.gente.get(id);
+        if (!t || !t.d.vivo || t.anda || colocados.has(id) || Math.hypot(t.rx - cx, t.ry - cy) > 3.2) continue;
+        const lado = t.rx >= cx ? 1 : -1;
+        t.mx = cx + lado * media * 0.4 - t.rx;
+        t.my = cy + 0.62 - t.ry;
+        colocados.add(id);
+      }
+    }
+    // quien no participa y está en medio sale por el lado más cercano: el encuentro tiene su sitio
+    if (colocados.size) {
+      const pares = [];
+      for (const f of figuras) {
+        if (!colocados.has(f.id)) continue;
+        const x = f.rx + f.mx, y = f.ry + f.my;
+        const par = pares.find((p) => Math.abs(p.y - y) < 0.05 && Math.abs((p.izq + p.der) / 2 - x) < 1.3);
+        if (par) { par.izq = Math.min(par.izq, x); par.der = Math.max(par.der, x); } else pares.push({ izq: x, der: x, y });
+      }
+      for (const f of figuras) {
+        if (colocados.has(f.id) || !f.d.vivo || f.anda) continue;
+        const x = f.rx + f.mx, y = f.ry + f.my;
+        for (const p of pares) {
+          if (x < p.izq - 0.45 || x > p.der + 0.45 || Math.abs(y - p.y) > 0.8) continue;
+          const destino = x - p.izq < p.der - x ? p.izq - 0.62 : p.der + 0.62;
+          f.mx += destino - x;
+          f.my += -0.3 - (y - p.y) * 0.3;
+          break;
+        }
+      }
+    }
+    // F6.3: el acercamiento se suaviza por tiempo (no por cuadro): igual de rápido a 60 que a 10 cuadros por segundo
+    const dtE = Math.min(250, Math.max(0, ahoraE - (this._ultimoAcerque ?? ahoraE)));
+    this._ultimoAcerque = ahoraE;
+    const kE = 1 - Math.exp(-Math.max(dtE, 16.7) / 90); // como mínimo, lo de un cuadro a 60 por segundo
     for (const f of figuras) {
       // el acercamiento entra y sale suavemente, sin saltos
-      f.ax = f.ax == null ? f.mx : f.ax + (f.mx - f.ax) * 0.16;
-      f.ay = f.ay == null ? f.my : f.ay + (f.my - f.ay) * 0.16;
+      f.ax = f.ax == null ? f.mx : f.ax + (f.mx - f.ax) * kE;
+      f.ay = f.ay == null ? f.my : f.ay + (f.my - f.ay) * kE;
       f.ox = f.ax * z;
       f.oy = f.ay * z;
     }
@@ -3271,6 +3572,7 @@ export class MapaVivo {
     // quien recibe una entrega real tiende las manos mientras el otro da
     const reciben = new Set();
     for (const f of gente.figuras) if (f.d.vivo && f.d.con != null && (f.d.actividad === "dando" || DAR.has(f.d.gesto))) reciben.add(f.d.con);
+    const ahora = performance.now();
     const lugares = pasada === 0 ? gente.lugares : [];
     let siguiente = 0;
     const opciones = { dpr: this.dpr, nieve: this.estado.estacion === 3 ? 1 : this.escarcha * 0.35, ilustrado: this.ilustrado, adulto: this._tamanoFigura(),
@@ -3290,14 +3592,48 @@ export class MapaVivo {
       }
       if (pasada === 1 && !f.capa) continue;
       if (!f.aspecto) f.aspecto = p.aspecto(f.d, paletas);
-      c.globalAlpha = pasada === 1 && f.capa === 2 ? 0.52 : 1;
-      const talla = gente.s * (f.d.etapa === 'infancia' ? .58 : f.d.etapa === 'aprendiz' ? .79 : 1);
-      const pose = p.poseDe(f.d, f.anda && this.ambiente, reciben.has(f.id) && !f.anda);
+      const trato = (this.encuentros || SIN_ENCUENTROS).de(f.id, ahora);
+      const enFoco = f.id === this.elegido || (f.encuentro && f.encuentro.con === this.elegido && f.encuentro.hasta > performance.now())
+        || Boolean(trato && (trato.pide === this.elegido || trato.otro === this.elegido));
+      // F6.1: a quien se sigue (y a quien trata con él) se le ve a través de las copas
+      c.globalAlpha = pasada === 1 && f.capa === 2 ? (enFoco ? 0.94 : 0.52) : 1;
+      const talla = gente.s * (f.d.etapa === 'infancia' ? .58 : f.d.etapa === 'aprendiz' ? .79 : 1) * (enFoco ? 1.08 : 1);
+      // F6.1: en mitad de un encuentro, el gesto que le toca (pedir, escuchar, ofrecer, recoger, negar)
+      const papel = !f.anda && this.ambiente ? (this.encuentros || SIN_ENCUENTROS).papel(f.id, ahora) : null;
+      const pareja = papel ? this.gente.get(papel.otro) : null;
+      f.papel = papel && (this.juntoEnPantalla(f.id, papel.otro) || (papel.tercero && pareja && !f.anda
+        && Math.max(Math.abs(pareja.rx - f.rx), Math.abs(pareja.ry - f.ry)) < 3.4)) ? papel : null;
+      // F6.1: recuerda el gesto recién terminado para girar el cuerpo antes de emprender la marcha
+      if (f.papel) f.ultimoGesto = { otro: f.papel.otro, hasta: ahora + 1200 };
+      let pose = p.poseDe(f.d, f.anda && this.ambiente, reciben.has(f.id) && !f.anda);
+      const otro = f.papel ? pareja : this.interlocutor(f,ahora);
+      f.miraSocial = otro && !f.anda && Math.abs(otro.sx-f.sx)>1 && Math.hypot(otro.rx-f.rx,otro.ry-f.ry)<4
+        ? Math.sign(otro.sx-f.sx) : 0;
+      if (f.papel?.espalda && f.miraSocial) f.miraSocial = -f.miraSocial;
+      const cambiaDePersona = trato?.pide === f.id && ahora < trato.t0 && f.ultimoGesto?.hasta > ahora
+        && f.ultimoGesto.otro !== trato.otro && this.juntoEnPantalla(f.id, trato.otro, false);
+      f.enGiro = this.ambiente && (cambiaDePersona || ahora < (f.giroSalidaHasta || 0));
+      if (f.papel && !this.ilustrado) pose = POSE_CODIGO[f.papel.pose] || pose;
       if (this.ilustrado) this.ilustrado.persona(c, f.sx, f.sy, talla, f.aspecto, pose, f, tiempo);
-      else (p.dibujarPersonaRapida || p.dibujarPersona)(c, f.sx, f.sy, talla, f.aspecto, pose, f.mira, tiempo, f.fase);
+      else (p.dibujarPersonaRapida || p.dibujarPersona)(c, f.sx, f.sy, talla, f.aspecto, pose, f.miraSocial || f.mira, tiempo, f.fase);
     }
     c.globalAlpha = 1;
     lugarHasta(Infinity);
+  }
+
+  /* F6.1: la comida que pasa de unas manos a otras, en un arco corto. */
+  _racionesEnElAire(c, s) {
+    if (!this.ambiente) return;
+    for (const v of (this.encuentros || SIN_ENCUENTROS).vuelos(performance.now())) {
+      const de = this.gente.get(v.de), a = this.gente.get(v.a);
+      if (!de || !a || de.fuera || a.fuera || !de.papel || !a.papel) continue;
+      const [x0, y0] = de.mano || [de.sx, de.sy - s * 0.55];
+      const [x1, y1] = a.mano || [a.sx, a.sy - s * 0.5];
+      const p = v.p * v.p * (3 - 2 * v.p);
+      const x = x0 + (x1 - x0) * p;
+      const y = y0 + (y1 - y0) * p - Math.sin(Math.PI * p) * s * 0.3;
+      racion(c, x, y, s * 0.1, v.recursos);
+    }
   }
 
   /* Fuego y humo de los refugios con gente: después de la luz del día, para que de noche se vean. */
@@ -3348,16 +3684,66 @@ export class MapaVivo {
   }
 
   /* Un acontecimiento importante de alguien a la vista: una señal breve sobre su cabeza. */
+  interlocutor(f, ahora) {
+    const trato = (this.encuentros || SIN_ENCUENTROS).de(f.id, ahora);
+    if (trato) return this.gente.get(trato.pide === f.id ? trato.otro : trato.pide);
+    const encuentro = f.encuentro;
+    const id = encuentro && ahora < encuentro.hasta ? encuentro.con : f.d.con;
+    if (id != null) return this.gente.get(id);
+    if (f.id !== this.elegido) return null;
+    return this.ordenGente.find(otro=>otro.d.con === f.id && otro.d.vivo);
+  }
+
   senalar(ev) {
+    if (ev.tipo && (TRATO_EN_VIVO.has(ev.tipo) || TIPOS_ESCENA.has(ev.tipo) || ev.tipo === "vidas.conflicto_juzga_motivo")) {
+      // F6.1: el trato se representa como encuentro, con sus señales breves de apoyo
+      const ahora = performance.now();
+      if (!this.ambiente) {
+        const que = SENAL_DE(ev);
+        if (que) this._ponerSenales(que.map(([id, icono, texto]) => [id, icono, texto, 0]), ev, ahora);
+        return;
+      }
+      (this.encuentros || SIN_ENCUENTROS).ritmo(this._intervalo);
+      const senales = (this.encuentros || SIN_ENCUENTROS).suceso(ev, ahora);
+      this._retener(ahora);
+      // las etiquetas acompañan a quien se sigue; los demás encuentros se cuentan solo con gestos
+      const pareja = (this.encuentros || SIN_ENCUENTROS).pareja || [];
+      if (this.elegido == null || pareja.includes(this.elegido)) this._ponerSenales(senales, ev, ahora);
+      this.recomponer = true;
+      return senales.length ? Math.max(0, senales[0][3] || 0) : 0;
+    }
     const que = SENAL_DE(ev);
     if (!que) return;
     const ahora = performance.now();
     this.senales = (this.senales || []).filter((x) => ahora - x.t0 < DURA_SENAL);
+    const {id: actor, a: otro} = ev.datos;
+    const figura = this.gente.get(actor), pareja = this.gente.get(otro);
+    const gesto = que[0][1];
+    if (figura && ["voz","compania","pasos"].includes(gesto)) {
+      figura.gestoBreve = {tipo:gesto, hasta:ahora+2000};
+      if (pareja && gesto !== "voz") {
+        figura.encuentro = {con:otro,hasta:ahora+DURA_SENAL};
+        pareja.encuentro = {con:actor,hasta:ahora+DURA_SENAL};
+      }
+    }
     for (const [id, icono, texto] of que) {
       if (id == null) continue;
-      this.senales.push({ id, icono, texto, t0: ahora + this.senales.filter((x) => x.id === id).length * 900 });
+      this.senales.push({ id, icono, texto, historia:ev.datos.historia, t0: ahora + this.senales.filter((x) => x.id === id).length * 900 });
     }
     this.sucia = true;
+  }
+
+  _ponerSenales(lista, ev, ahora) {
+    this.senales = (this.senales || []).filter((x) => ahora - x.t0 < DURA_SENAL);
+    const pareja = [ev.datos.id, ev.datos.a];
+    for (const [id, icono, texto, retraso, escena] of lista) {
+      if (id == null) continue;
+      // lo anterior de estas dos personas se apaga cuando aparece lo nuevo: una etiqueta cada vez
+      const llega = ahora + Math.max(0, retraso || 0);
+      for (const x of this.senales) if (x.corta && pareja.includes(x.id) && x.t0 < llega) x.corte = Math.min(x.corte ?? Infinity, llega);
+      this.senales.push({ id, icono, texto, historia: ev.datos.historia, corta: true, t0: llega, escena });
+    }
+    this.recomponer = true;
   }
 
   _acontecimientos(c, s, detalle) {
@@ -3365,15 +3751,18 @@ export class MapaVivo {
     const dpr = this.dpr;
     const vivas = (this.senales || []).filter((x) => ahora - x.t0 < DURA_SENAL);
     this.senales = vivas;
+    this.rotulosHistoria = [];
     const r = Math.max(8 * dpr, Math.min(s * 0.2, 14 * dpr));
     const puestas = [];
     for (const x of vivas) {
-      const k = (ahora - x.t0) / DURA_SENAL;
-      if (k < 0) continue;
+      if (x.escena && (ahora > x.escena.fin || (this.siguiendo && this.encuentros.de(this.elegido, ahora) !== x.escena))) continue;
+      const desde = x.icono === "pidiendo" && x.escena ? x.escena.t0 : x.t0;
+      const k = (ahora - desde) / (x.corta ? DURA_SENAL_CORTA : DURA_SENAL);
+      if (k < 0 || k > 1 || (x.corte != null && ahora > x.corte + 260)) continue;
       const f = this.gente.get(x.id);
-      if (!f || f.fuera || f.oculto || !f.d) continue;
+      if (!f || f.fuera || (f.oculto && x.icono !== "voz") || !f.d) continue;
       const entra = Math.min(1, k * 8);
-      const sale = k > 0.8 ? (1 - k) / 0.2 : 1;
+      const sale = Math.min(k > 0.8 ? (1 - k) / 0.2 : 1, x.corte != null && ahora > x.corte ? 1 - (ahora - x.corte) / 260 : 1);
       c.globalAlpha = entra * sale;
       const px = f.sx - s * 0.22;
       let py = f.sy - s * 1.25 - r * 1.2 - k * s * 0.18;
@@ -3387,6 +3776,8 @@ export class MapaVivo {
         c.textAlign = "left";
         c.textBaseline = "middle";
         const w = c.measureText(x.texto).width + 10 * dpr;
+        if (x.historia != null) this.rotulosHistoria.push({historia:x.historia,persona:f.id,izq:px-r,der:px+r*1.2+w,
+          y:py,alto:r,hasta:x.t0+DURA_SENAL});
         c.fillStyle = "rgba(14,17,13,0.78)";
         rectRedondo(c, px + r * 1.2, py - tam * 0.75, w, tam * 1.5, tam * 0.75);
         c.fill();
@@ -3395,7 +3786,9 @@ export class MapaVivo {
       }
     }
     c.globalAlpha = 1;
-    if (vivas.length) this.sucia = true;
+    // F6.1: las señales se dibujan sobre el paisaje ya pintado; basta con recomponer el cuadro
+    // (marcar la escena como sucia la repintaba entera en cada cuadro mientras hubiera una viva)
+    if (vivas.length) this.recomponer = true;
   }
 
   _tumba(c, f, sx, sy, s) {
@@ -3480,8 +3873,11 @@ export class MapaVivo {
     }
 
     // lo que le pasa, encima: solo de cerca, si está elegido, si es grave o si trata con alguien
-    const trato = act === "pidiendo" || act === "dando" || act === "hablando";
-    if (detalle || elegido || d.grave || trato) {
+    const enGesto = Boolean(f.papel);
+    const trato = enGesto || act === "pidiendo" || act === "dando" || act === "hablando";
+    // con alguien elegido, los demás solo muestran lo grave y sus tratos: menos ruido alrededor
+    const ruido = this.elegido != null && !elegido && !d.grave;
+    if ((detalle || elegido || d.grave || trato) && !enGesto && !ruido) {
       let aviso = null;
       if (trato) aviso = act;
       else if (act === "durmiendo") aviso = "dormir";
@@ -3498,7 +3894,8 @@ export class MapaVivo {
     }
 
     // nombre, en una placa bajo los pies; si pisaría otra placa, se omite (salvo el elegido)
-    if (elegido || sobre || trato || this.cam.z >= 46 * dpr) {
+    const pareja = this.gente.get(this.elegido);
+    if (elegido || sobre || trato || (pareja && this.interlocutor(pareja,performance.now()) === f) || this.cam.z >= 46 * dpr) {
       const tam = Math.round((elegido ? 13 : 12) * dpr);
       c.font = `600 ${tam}px "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif`;
       c.textAlign = "center";
@@ -3538,7 +3935,20 @@ export class MapaVivo {
     c.lineCap = "round";
     c.lineJoin = "round";
     c.lineWidth = Math.max(1.2, r * 0.17);
-    if (que === "sed") {
+    if (que === "voz" || que === "compania" || que === "pasos") {
+      c.strokeStyle = que === "voz" ? "#f2cf85" : "#d3e4bc";
+      c.beginPath();
+      if (que === "voz") {
+        for (const k of [.32,.70]) { c.moveTo(x-r*.4+k*r*.7,y-r*k*.7); c.arc(x-r*.4,y,r*k,-.8,.8); }
+      } else if (que === "pasos") {
+        c.ellipse(x-r*.27,y+r*.15,r*.15,r*.35,-.3,0,TAU);
+        c.moveTo(x+r*.48,y-r*.18); c.ellipse(x+r*.30,y-r*.18,r*.15,r*.35,.25,0,TAU);
+      } else {
+        c.moveTo(x-r*.55,y+r*.22); c.lineTo(x-r*.24,y-r*.12); c.lineTo(x,y+r*.07);
+        c.lineTo(x+r*.24,y-r*.12); c.lineTo(x+r*.55,y+r*.22);
+      }
+      c.stroke();
+    } else if (que === "sed") {
       c.fillStyle = "rgb(109,187,216)";
       c.beginPath();
       c.moveTo(x, y - r * 0.6);
@@ -3575,6 +3985,18 @@ export class MapaVivo {
         c.arc(x + r * 0.2, y - r * 0.3, r * 0.17, 0, TAU);
         c.fill();
       }
+    } else if (que === "silencio") {
+      c.fillStyle = "rgb(178,186,190)";
+      for (let k = -1; k <= 1; k++) {
+        c.beginPath();
+        c.arc(x + k * r * 0.34, y + r * 0.1, r * 0.1, 0, TAU);
+        c.fill();
+      }
+      c.strokeStyle = "rgb(178,186,190)";
+      c.beginPath();
+      c.moveTo(x - r * 0.5, y - r * 0.45);
+      c.lineTo(x + r * 0.5, y + r * 0.45);
+      c.stroke();
     } else if (que === "hablando") {
       c.fillStyle = "rgb(240,237,227)";
       for (let k = -1; k <= 1; k++) {

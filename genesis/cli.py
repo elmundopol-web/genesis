@@ -40,13 +40,25 @@ HABITANTES_INICIALES = 25
 def _crear(
     carpeta: Path, nombre: str, semilla: int, habitantes: int = HABITANTES_INICIALES, abundancia: float = 1.0,
     reglas: int = REGLAS_ACTUALES, limite_poblacion: int = 48, cuidados: bool = True, crecimiento: bool = True,
-    relaciones: bool = True,
+    relaciones: bool = True, mente_de: int = 0, familias: bool = False,
+    percepcion_familiar: bool = True, tratos_familia: bool = True, conflictos: bool = True,
 ) -> tuple[Almacen, Mundo]:
+    planes = int(familias and relaciones and crecimiento and cuidados and bool(habitantes) and reglas == 4)
+    percepcion = int(bool(planes) and percepcion_familiar)
+    tratos = int(bool(percepcion) and tratos_familia)
+    conflicto = int(bool(tratos) and conflictos)
     config = ConfigMundo(
         semilla=semilla,
         recursos=recursos_con_abundancia(abundancia),
-        habitantes=ConfigHabitantes(cantidad=habitantes, reglas=reglas if habitantes else 1, limite_poblacion=limite_poblacion, cuidados=int(cuidados and bool(habitantes) and reglas == 4), crecimiento=int(crecimiento and cuidados and bool(habitantes) and reglas==4), relaciones=int(relaciones and crecimiento and cuidados and bool(habitantes) and reglas==4)),
+        habitantes=ConfigHabitantes(cantidad=habitantes, reglas=reglas if habitantes else 1, limite_poblacion=limite_poblacion, cuidados=int(cuidados and bool(habitantes) and reglas == 4), crecimiento=int(crecimiento and cuidados and bool(habitantes) and reglas==4), relaciones=int(relaciones and crecimiento and cuidados and bool(habitantes) and reglas==4),
+                                     mentes=int(bool(mente_de)), mente_de=mente_de,
+                                     planes_familia=planes,
+                                     percepcion_familiar=percepcion,
+                                     tratos_familia=tratos,
+                                     conflictos=conflicto),
     )
+    if mente_de and not 1 <= mente_de <= habitantes:
+        raise ValueError(f"F5.0: no hay un fundador con el número {mente_de}")
     mundo = Mundo.crear(config)
     return Almacen.crear(_ruta(carpeta, nombre), mundo, nombre), mundo
 
@@ -71,7 +83,7 @@ def _fase_de(archivo: Path) -> tuple[int, int]:
         return (0, 0)
     try:
         h = almacen.config.habitantes
-        return ((4, 1 + h.cuidados + h.crecimiento + h.relaciones) if h.reglas == 4 else (h.reglas, h.correccion)) if h.cantidad > 0 else (0, 0)
+        return ((4, 1 + h.cuidados + h.crecimiento + h.relaciones + h.planes_familia + h.tratos_familia + h.conflictos) if h.reglas == 4 else (h.reglas, h.correccion)) if h.cantidad > 0 else (0, 0)
     finally:
         almacen.cerrar()
 
@@ -91,6 +103,7 @@ def _abrir(carpeta: Path, nombre: str) -> tuple[Almacen, Mundo]:
 
 def _abrir_o_crear(
     carpeta: Path, nombre: str | None, semilla: int | None, abundancia: float = 1.0,
+    familias: bool = False,
 ) -> tuple[Almacen, Mundo, bool]:
     """Devuelve (almacén, mundo, creada). La abundancia solo cuenta si la partida se crea ahora."""
     if nombre is None and semilla is None:
@@ -140,7 +153,7 @@ def _abrir_o_crear(
     if semilla is None:
         raise ErrorPartida(f"no existe la partida {nombre!r}; para crearla indica --semilla")
     try:
-        return (*_crear(carpeta, nombre, semilla, abundancia=abundancia), True)
+        return (*_crear(carpeta, nombre, semilla, abundancia=abundancia, familias=familias), True)
     except ValueError as error:
         raise ErrorPartida(str(error)) from error
 
@@ -156,14 +169,17 @@ def _fecha_legible(mundo: Mundo) -> str:
 def cmd_nueva(args) -> int:
     nombre = args.nombre or f"semilla-{args.semilla}"
     try:
-        almacen, mundo = _crear(args.carpeta, nombre, args.semilla, args.habitantes, args.abundancia, args.reglas, args.limite_poblacion, not getattr(args,'f4_original',False), not getattr(args,'f41_original',False))
+        almacen, mundo = _crear(args.carpeta, nombre, args.semilla, args.habitantes, args.abundancia, args.reglas, args.limite_poblacion, not getattr(args,'f4_original',False), not getattr(args,'f41_original',False), mente_de=getattr(args,'mente',0) or 0, familias=not (getattr(args,'f4_original',False) or getattr(args,'f41_original',False)))
     except ValueError as error:
         raise ErrorPartida(str(error)) from error
+    elegido = mundo.habitantes.por_id(args.mente) if getattr(args, "mente", 0) and mundo.habitantes else None
     almacen.cerrar()
     print(
         f"Partida {nombre!r} creada con la semilla {args.semilla} y {args.habitantes} habitantes:"
         f" {_ruta(args.carpeta, nombre)}"
     )
+    if elegido:
+        print(f"F5.0 activa: {elegido.nombre} (#{elegido.id}) decide con el modelo local qué hacer ante un agujero.")
     return 0
 
 
@@ -191,7 +207,17 @@ def cmd_listar(args) -> int:
             if info["activacion"]:
                 poblacion += f", ampliada de {info['ampliada_de']!r} el día {info['activacion'] // fecha.horas_por_dia + 1}"
         elif info['reglas']==4:
-            poblacion = f"{info['habitantes']} fundadores, vidas y generaciones ({'F4.3' if fecha.habitantes.relaciones else 'F4.2' if fecha.habitantes.crecimiento else 'F4.1' if fecha.habitantes.cuidados else 'F4'})"
+            poblacion = f"{info['habitantes']} fundadores, vidas y generaciones ({'F6.3' if fecha.habitantes.conflictos else 'F6.2' if fecha.habitantes.tratos_familia else 'F6.0' if fecha.habitantes.planes_familia else 'F4.3' if fecha.habitantes.relaciones else 'F4.2' if fecha.habitantes.crecimiento else 'F4.1' if fecha.habitantes.cuidados else 'F4'})"
+            if fecha.habitantes.planes_familia:
+                poblacion += f", planes familiares desde la hora {fecha.habitantes.activacion_planes_familia}"
+            if fecha.habitantes.percepcion_familiar:
+                poblacion += f", percepción familiar desde la hora {fecha.habitantes.activacion_percepcion_familiar}"
+            if fecha.habitantes.tratos_familia:
+                poblacion += f", tratos entre familias desde la hora {fecha.habitantes.activacion_tratos_familia}"
+            if fecha.habitantes.conflictos:
+                poblacion += f", carácter y conflictos desde la hora {fecha.habitantes.activacion_conflictos}"
+            if fecha.habitantes.mentes:
+                poblacion += f", F5.0 para el habitante #{fecha.habitantes.mente_de} desde la hora {fecha.habitantes.activacion_mentes}"
         elif info["activacion_comunidad"]:
             poblacion = (
                 f"{info['habitantes']} habitantes al inicio, ampliada a F3 de {info['ampliada_de']!r}"
@@ -208,6 +234,54 @@ def cmd_listar(args) -> int:
 
 
 def cmd_ampliar(args) -> int:
+    if getattr(args, "conflictos", False):
+        destino = args.nombre or f"{args.partida}-f63"
+        informe = ampliar_partida(
+            _ruta(args.carpeta, args.partida), _ruta(args.carpeta, destino), destino,
+            reglas=4, cuidados=True, crecimiento=True, relaciones=True, conflictos=True,
+        )
+        print(f"Partida {destino!r} creada a partir de {informe['origen']!r}, que no se ha modificado.")
+        print(f"El carácter y los conflictos F6.3 rigen tras la hora {informe['tick']}: avisos, prórrogas, reclamaciones y reconciliaciones.")
+        print(f"Para abrirla: iniciar.bat {destino}")
+        return 0
+    if getattr(args, "tratos_familia", False):
+        destino = args.nombre or f"{args.partida}-f62"
+        informe = ampliar_partida(
+            _ruta(args.carpeta, args.partida), _ruta(args.carpeta, destino), destino,
+            reglas=4, cuidados=True, crecimiento=True, relaciones=True, tratos_familia=True,
+        )
+        print(f"Partida {destino!r} creada a partir de {informe['origen']!r}, que no se ha modificado.")
+        print(f"Los tratos entre familias F6.2 empiezan tras la hora {informe['tick']}: comida a cambio de ayuda para reparar.")
+        print(f"Para abrirla: iniciar.bat {destino}")
+        return 0
+    if getattr(args, "percepcion_familiar", False):
+        destino = args.nombre or f"{args.partida}-f60p"
+        informe = ampliar_partida(
+            _ruta(args.carpeta, args.partida), _ruta(args.carpeta, destino), destino,
+            reglas=4, cuidados=True, crecimiento=True, relaciones=True, percepcion_familiar=True,
+        )
+        print(f"Partida {destino!r} creada a partir de {informe['origen']!r}, que no se ha modificado.")
+        print(f"Los hogares se enteran por lo que ven o les cuentan tras la hora {informe['tick']}.")
+        print(f"Para abrirla: iniciar.bat {destino}")
+        return 0
+    if getattr(args, "familias", False):
+        destino = args.nombre or f"{args.partida}-f60"
+        informe = ampliar_partida(
+            _ruta(args.carpeta, args.partida), _ruta(args.carpeta, destino), destino,
+            reglas=4, cuidados=True, crecimiento=True, relaciones=True, familias=True,
+        )
+        print(f"Partida {destino!r} creada a partir de {informe['origen']!r}, que no se ha modificado.")
+        print(f"Los planes familiares F6.0 empiezan tras la hora {informe['tick']}: cada hogar fijará su objetivo de invierno.")
+        print(f"Para abrirla: iniciar.bat {destino}")
+        return 0
+    if getattr(args, "mente", 0):
+        destino = args.nombre or f"{args.partida}-f50"
+        informe = ampliar_partida(_ruta(args.carpeta, args.partida), _ruta(args.carpeta, destino), destino, reglas=4,
+                                  cuidados=True, crecimiento=True, relaciones=True, mente_de=args.mente)
+        print(f"Partida {destino!r} creada a partir de {informe['origen']!r}, que no se ha modificado.")
+        print(f"F5.0 empieza tras la hora {informe['tick']}: el habitante #{args.mente} decide ante los agujeros con el modelo local.")
+        print(f"Para abrirla: iniciar.bat {destino}")
+        return 0
     sufijo = 'f43' if _fase_de(_ruta(args.carpeta,args.partida)) >= (4,3) else 'f42' if _fase_de(_ruta(args.carpeta,args.partida)) >= (4,2) else 'f41' if _reglas_de(_ruta(args.carpeta,args.partida)) == 4 else 'f4'
     destino = args.nombre or f"{args.partida}-{sufijo}"
     informe = ampliar_partida(_ruta(args.carpeta, args.partida), _ruta(args.carpeta, destino), destino, reglas=4, cuidados=True, crecimiento=True, relaciones=True)
@@ -225,7 +299,7 @@ def cmd_ampliar(args) -> int:
 
 
 def cmd_simular(args) -> int:
-    almacen, mundo, creada = _abrir_o_crear(args.carpeta, args.nombre, args.semilla)
+    almacen, mundo, creada = _abrir_o_crear(args.carpeta, args.nombre, args.semilla, familias=True)
     try:
         cal = mundo.calendario
         ticks = args.dias * cal.ticks_por_dia
@@ -274,8 +348,8 @@ def cmd_verificar(args) -> int:
 def cmd_visor(args) -> int:
     from .visor import crear_servidor
 
-    almacen, mundo, creada = _abrir_o_crear(args.carpeta, args.nombre, args.semilla, args.abundancia)
-    sesion = Sesion(almacen, mundo)
+    almacen, mundo, creada = _abrir_o_crear(args.carpeta, args.nombre, args.semilla, args.abundancia, familias=True)
+    sesion = Sesion(almacen, mundo, mente=None if getattr(args, "sin_modelo", False) else "auto")
     try:
         servidor = crear_servidor(sesion, args.puerto)
     except OSError as error:
@@ -298,6 +372,21 @@ def cmd_visor(args) -> int:
             )
     else:
         print("Este mundo es de la fase F0 y no tiene habitantes. Para uno habitado, usa --semilla.")
+    if mundo.config.habitantes.mentes and mundo.habitantes:
+        h = mundo.habitantes.por_id(mundo.config.habitantes.mente_de)
+        if sesion.mente is None:
+            estado = "modelo desactivado (--sin-modelo): se usa la regla habitual"
+        elif sesion.mente.disponible():
+            estado = f"modelo {sesion.mente.modelo} en Ollama"
+        else:
+            estado = f"Ollama no responde o no tiene {sesion.mente.modelo}: se usa la regla habitual"
+        print(f"F5.0: {h.nombre if h else '?'} decide ante los agujeros · {estado}")
+    if mundo.config.habitantes.planes_familia:
+        print("F6.0: los hogares fijan objetivos de invierno y reparten tareas; Historias y las fichas muestran los cambios.")
+    if mundo.config.habitantes.conflictos:
+        print("F6.3: cada habitante decide con su carácter y su historia: avisa, da margen, reclama, discute o se aparta.")
+    if mundo.config.habitantes.tratos_familia:
+        print("F6.2: los hogares pueden pactar comida hoy a cambio de ayuda para reparar un refugio mañana.")
     print(f"Visor en {url}")
     print("Para cerrar, pulsa Ctrl+C en esta ventana.")
     if not args.sin_navegador:
@@ -335,6 +424,7 @@ def _analizador() -> argparse.ArgumentParser:
     )
     p.add_argument("--puerto", type=int, default=8765)
     p.add_argument("--sin-navegador", action="store_true", help="no abrir el navegador automáticamente")
+    p.add_argument("--sin-modelo", action="store_true", help="F5.0: no llamar al modelo local (se usa la regla habitual)")
     p.set_defaults(funcion=cmd_visor)
 
     p = sub.add_parser("nueva", parents=[comun], help="crea una partida")
@@ -349,11 +439,17 @@ def _analizador() -> argparse.ArgumentParser:
     )
     p.add_argument('--f41-original',action='store_true',help='usar crianza y transición históricas de F4.1')
     p.add_argument('--f4-original',action='store_true',help='usar el criterio histórico de crianza de F4')
+    p.add_argument("--mente", type=int, default=0, help="F5.0: número del fundador que decide con el modelo local ante un agujero")
     p.set_defaults(funcion=cmd_nueva)
 
-    p = sub.add_parser("ampliar", parents=[comun], help="copia una partida anterior y activa F4.2")
-    p.add_argument("partida", help="partida anterior a F4.2; se conserva")
-    p.add_argument("--nombre", help="nombre de la copia (sufijo -f42 desde F4.1, -f41 desde F4 y -f4 desde fases anteriores)")
+    p = sub.add_parser("ampliar", parents=[comun], help="copia una partida anterior y activa las reglas nuevas")
+    p.add_argument("partida", help="partida anterior; se conserva")
+    p.add_argument("--nombre", help="nombre de la copia (sufijo -f60 con --familias; -f43, -f42, -f41 o -f4 según la fase)")
+    p.add_argument("--mente", type=int, default=0, help="F5.0: copia de una partida F4.3 en la que este habitante decide con el modelo local")
+    p.add_argument("--familias", action="store_true", help="F6.0: activa en la copia los objetivos familiares de preparación para el invierno")
+    p.add_argument("--percepcion-familiar", action="store_true", help="F6.0.1: en una copia F6.0, los hogares solo se enteran de un contratiempo al verlo o recibir un aviso")
+    p.add_argument("--tratos-familia", action="store_true", help="F6.2: activa en una copia con familias los tratos de comida a cambio de ayuda para reparar")
+    p.add_argument("--conflictos", action="store_true", help="F6.3: activa en una copia con familias el carácter y los conflictos alrededor de los tratos (y F6.2 si faltaba)")
     p.set_defaults(funcion=cmd_ampliar)
 
     p = sub.add_parser("simular", parents=[comun], help="avanza una partida sin interfaz")

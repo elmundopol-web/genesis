@@ -213,6 +213,9 @@ class Almacen:
 
     def cargar(self) -> Mundo:
         """Reconstruye el mundo desde la última instantánea."""
+        return Mundo.restaurar(self.config, self.mapa(), self._estado_guardado())
+
+    def _estado_guardado(self) -> dict:
         fila = self._con.execute(
             "SELECT tick, ultimo_evento_id, hash_estado, estado FROM instantaneas ORDER BY tick DESC LIMIT 1"
         ).fetchone()
@@ -227,7 +230,7 @@ class Almacen:
             raise ErrorPartida(f"la instantánea del tick {tick} no coincide con su hash")
         if ultimo_evento_id != self.ultimo_evento_id:
             raise ErrorPartida("el registro de eventos no llega exactamente hasta la última instantánea")
-        return Mundo.restaurar(self.config, self.mapa(), json.loads(crudo))
+        return json.loads(crudo)
 
     # -- consulta de eventos -------------------------------------------------
 
@@ -288,7 +291,7 @@ class Almacen:
 
         Con ``tipos`` solo se buscan esos tipos (usa el índice por tipo: no recorre toda la bitácora).
         """
-        if clave not in ("estructura", "comunidad", "acuerdo", "historia"):
+        if clave not in ("estructura", "comunidad", "acuerdo", "historia", "hogar"):
             raise ValueError(f"clave no válida: {clave!r}")
         filtro = ""
         if tipos:
@@ -383,7 +386,8 @@ class Almacen:
 
 
 def ampliar_partida(origen: Path, destino: Path, nombre: str, reglas: int = 3, *, cuidados: bool = False, crecimiento: bool = False,
-                    relaciones: bool = False) -> dict:
+                    relaciones: bool = False, mente_de: int = 0, familias: bool = False,
+                     percepcion_familiar: bool = False, tratos_familia: bool = False, conflictos: bool = False) -> dict:
     """Crea una copia de una partida F1, F2 o F3 en la que, desde ahora, rigen las reglas actuales (3 con F3.1).
 
     La partida original no se abre para escribir ni se modifica: queda como
@@ -398,6 +402,10 @@ def ampliar_partida(origen: Path, destino: Path, nombre: str, reglas: int = 3, *
     Una partida F3 creada antes de F3.1 ya tiene las reglas 3: la copia conserva toda su
     historia y activa desde la hora de la copia el criterio de cesión de F3.1
     (``activacion_correccion``); hasta entonces se repite con el criterio de F3.
+
+    Con ``percepcion_familiar`` una copia F6.0 activa desde la hora de la copia el
+    criterio F6.0.1: los hogares solo se enteran de un contratiempo del menor por
+    lo que alguien ve o por un aviso de otra persona. La original sigue igual.
     """
     origen, destino = Path(origen), Path(destino)
     if destino.exists():
@@ -410,7 +418,27 @@ def ampliar_partida(origen: Path, destino: Path, nombre: str, reglas: int = 3, *
             raise ErrorPartida("esa partida no tiene habitantes (F0): no hay vida que ampliar")
         if reglas not in (3,4) or (cuidados and reglas != 4) or (crecimiento and not cuidados) or (relaciones and not crecimiento):
             raise ErrorPartida('Fase de destino desconocida')
-        if config.habitantes.reglas >= reglas and config.habitantes.correccion >= 1 and not (cuidados and not config.habitantes.cuidados) and not (crecimiento and not config.habitantes.crecimiento) and not (relaciones and not config.habitantes.relaciones):
+        if familias and (reglas != 4 or not relaciones):
+            raise ErrorPartida('los planes familiares F6.0 necesitan las reglas F4.3')
+        if familias and config.habitantes.planes_familia:
+            raise ErrorPartida('esa partida ya tiene planes familiares F6.0')
+        if percepcion_familiar and not config.habitantes.planes_familia:
+            raise ErrorPartida('la percepción familiar F6.0.1 necesita una partida con planes F6.0')
+        if percepcion_familiar and config.habitantes.percepcion_familiar:
+            raise ErrorPartida('esa partida ya usa la percepción familiar F6.0.1')
+        if tratos_familia and not (config.habitantes.planes_familia or familias):
+            raise ErrorPartida('los tratos entre familias F6.2 necesitan una partida con planes familiares F6.0')
+        if conflictos and config.habitantes.conflictos:
+            raise ErrorPartida('esa partida ya tiene el carácter y los conflictos F6.3')
+        if conflictos and not (config.habitantes.planes_familia or familias):
+            raise ErrorPartida('el carácter y los conflictos F6.3 necesitan una partida con planes familiares F6.0')
+        if conflictos and not config.habitantes.tratos_familia:
+            tratos_familia = True  # F6.3 se apoya en los tratos F6.2: si faltan, empiezan a la vez
+        if tratos_familia and config.habitantes.tratos_familia:
+            raise ErrorPartida('esa partida ya tiene tratos entre familias F6.2')
+        if mente_de and (reglas != 4 or not relaciones or config.habitantes.mentes):
+            raise ErrorPartida('F5.0 se activa una sola vez, sobre una copia con las reglas F4.3')
+        if not familias and not mente_de and not percepcion_familiar and not tratos_familia and not conflictos and config.habitantes.reglas >= reglas and config.habitantes.correccion >= 1 and not (cuidados and not config.habitantes.cuidados) and not (crecimiento and not config.habitantes.crecimiento) and not (relaciones and not config.habitantes.relaciones):
             raise ErrorPartida("esa partida ya usa las reglas actuales")
         if info["tick"] < 1:
             raise ErrorPartida("la partida aún no ha avanzado ninguna hora; crea una nueva en su lugar")
@@ -434,8 +462,18 @@ def ampliar_partida(origen: Path, destino: Path, nombre: str, reglas: int = 3, *
                 habitantes = replace(habitantes, cuidados=1, activacion_cuidados=habitantes.activacion_cuidados if anterior.cuidados else tick, crecimiento=1, activacion_crecimiento=tick)
         elif cuidados:
             habitantes = replace(habitantes, cuidados=1, activacion_cuidados=tick)
-        if relaciones:
+        if relaciones and not anterior.relaciones:
             habitantes = replace(habitantes, relaciones=1, activacion_relaciones=tick)
+        if familias and not anterior.planes_familia:
+            habitantes = replace(habitantes, planes_familia=1, activacion_planes_familia=tick)
+        if percepcion_familiar or (tratos_familia and not habitantes.percepcion_familiar):
+            habitantes = replace(habitantes, percepcion_familiar=1, activacion_percepcion_familiar=tick)
+        if tratos_familia and not anterior.tratos_familia:
+            habitantes = replace(habitantes, tratos_familia=1, activacion_tratos_familia=tick)
+        if conflictos and not anterior.conflictos:
+            habitantes = replace(habitantes, conflictos=1, activacion_conflictos=tick)
+        if mente_de:
+            habitantes = replace(habitantes, mentes=1, activacion_mentes=tick, mente_de=mente_de)
         etapas = json.loads(fuente._meta.get("etapas") or "[]")
         if not etapas and fuente._meta.get("ampliada_de"):
             # una copia hecha antes de F3 solo anotaba su origen inmediato
@@ -449,6 +487,17 @@ def ampliar_partida(origen: Path, destino: Path, nombre: str, reglas: int = 3, *
             etapas[-1]['crecimiento'] = 1
         if relaciones:
             etapas[-1]['relaciones'] = 1
+        if familias:
+            etapas[-1]['familias'] = 1
+        if percepcion_familiar or (tratos_familia and not anterior.percepcion_familiar):
+            etapas[-1]['percepcion_familiar'] = 1
+        if tratos_familia:
+            etapas[-1]['tratos_familia'] = 1
+        if conflictos:
+            etapas[-1]['conflictos'] = 1
+        if mente_de:
+            etapas[-1]['mentes'] = 1
+            etapas[-1]['mente_de'] = mente_de
         copia = sqlite3.connect(destino)
         try:
             fuente._con.backup(copia)  # copia coherente aunque haya escrituras sin consolidar
@@ -491,11 +540,37 @@ def verificar_reproduccion(ruta: Path) -> dict:
 
         for evento in almacen.eventos_de_tipo('presencia.orden'):
             ordenes.setdefault(evento['tick'], []).append(evento)
-        mundo = Mundo.crear(almacen.config)
+        for evento in almacen.eventos_de_tipo('presencia.voz'):  # F5.2: lo que dijo el jugador
+            ordenes.setdefault(evento['tick'], []).append(evento)
+        config = almacen.config
+        # Una copia recién ampliada conserva la instantánea original hasta el primer guardado.
+        etapas = [e for e in info["etapas"] if e["desde_tick"] == info["tick"]]
+        if any(e.get("mentes") or e.get("familias") or e.get("tratos_familia") or e.get("conflictos") for e in etapas):
+            vidas = almacen._estado_guardado()["sistemas"]["habitantes"].get("vidas") or {}
+            habitantes = config.habitantes
+            if any(e.get("mentes") for e in etapas) and "mente" not in vidas:
+                habitantes = replace(habitantes, mentes=0, mente_de=0)
+            if any(e.get("familias") for e in etapas) and "hogares" not in vidas:
+                habitantes = replace(habitantes, planes_familia=0, percepcion_familiar=0, tratos_familia=0, conflictos=0)
+            elif any(e.get("tratos_familia") for e in etapas) and "tratos_familia" not in vidas:
+                habitantes = replace(habitantes, tratos_familia=0, conflictos=0)
+            elif any(e.get("conflictos") for e in etapas) and "conflictos" not in vidas:
+                habitantes = replace(habitantes, conflictos=0)
+            config = replace(config, habitantes=habitantes)
+        mundo = Mundo.crear(config)
+        if mundo.habitantes and mundo.habitantes.vidas:
+            # F5.0: las decisiones tomadas con el modelo se repiten desde el registro, sin llamarlo.
+            mundo.habitantes.vidas.presencia.registro = {
+                f'{e["datos"]["id"]}:{e["datos"]["historia"]}': {"aplicada": e["tick"], **e["datos"]}
+                for e in almacen.eventos_de_tipo("vidas.decide")
+            }
 
         def aplicar_ordenes() -> None:
             for evento in sorted(ordenes.get(mundo.tick, ()), key=lambda ev: ev['id']):
                 d = evento["datos"]
+                if evento['tipo'] == 'presencia.voz':
+                    mundo.habitantes.vidas.presencia.hablar(mundo, d['id'], d['texto'])
+                    continue
                 if evento['tipo']=='presencia.orden':
                     mundo.habitantes.vidas.presencia.intervenir(mundo,d['accion'],d['x'],d['y'],d['cantidad'])
                     continue
@@ -518,6 +593,7 @@ def verificar_reproduccion(ruta: Path) -> dict:
             "tick": info["tick"],
             "eventos": info["eventos"],
             "ordenes_repetidas": sum(len(v) for v in ordenes.values()),
+            "decisiones_repetidas": len(mundo.habitantes.vidas.presencia.registro or {}) if mundo.habitantes and mundo.habitantes.vidas else 0,
         }
     finally:
         almacen.cerrar()

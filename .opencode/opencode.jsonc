@@ -1,0 +1,12 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  // Mantener el agente incorporado Build, sin crear otro programador.
+  // Las sesiones existentes conservan su selección de modelo.
+  "default_agent": "build",
+  "model": "openai/gpt-6.1-sol",
+  "agents": {
+    "build": {
+      "model": "openai/gpt-6.1-sol"
+    }
+  }
+}

@@ -1,0 +1,431 @@
+{
+ "modelo": "qwen2.5:7b",
+ "fecha": "2026-11-18 01:20",
+ "plazo_horas": 3,
+ "variantes": [
+  {
+   "con": {
+    "eleccion": "acercarse",
+    "fuente": "modelo",
+    "motivo": null,
+    "razon": "Unai me contó sobre el hueco, fío un poco de él",
+    "ms": 483,
+    "abierta": 177,
+    "aplicada": 178,
+    "relato": 512,
+    "politica": "acercarse",
+    "despues": [
+     "investigar",
+     "investigar",
+     "investigar",
+     "inspecciona"
+    ],
+    "textos": [
+     "Unai te contó hace 21 horas que en este mismo sitio hay un hueco: «hendidura estable»; dijo que lo había mirado de cerca y no le pasó nada. Tú no lo habías visto. Te fías algo de Unai."
+    ]
+   },
+   "sin": {
+    "eleccion": "evitar",
+    "fuente": "modelo",
+    "motivo": null,
+    "razon": "hueco nuevo, podría ser peligroso",
+    "ms": 304,
+    "abierta": 177,
+    "aplicada": 178,
+    "relato": null,
+    "politica": "acercarse",
+    "despues": [
+     "mantiene_distancia"
+    ],
+    "textos": []
+   }
+  },
+  {
+   "con": {
+    "eleccion": "acercarse",
+    "fuente": "modelo",
+    "motivo": null,
+    "razon": "Unai me contó sobre el hueco, fío un poco de él",
+    "ms": 367,
+    "abierta": 177,
+    "aplicada": 178,
+    "relato": 512,
+    "politica": "acercarse",
+    "despues": [
+     "investigar",
+     "investigar",
+     "investigar",
+     "inspecciona"
+    ],
+    "textos": [
+     "Unai te contó hace 21 horas que en este mismo sitio hay un hueco: «hendidura estable»; dijo que lo había mirado de cerca y no le pasó nada. Tú no lo habías visto. Te fías algo de Unai."
+    ]
+   },
+   "sin": {
+    "eleccion": "evitar",
+    "fuente": "modelo",
+    "motivo": null,
+    "razon": "hueco nuevo, podría ser peligroso",
+    "ms": 295,
+    "abierta": 177,
+    "aplicada": 178,
+    "relato": null,
+    "politica": "acercarse",
+    "despues": [
+     "mantiene_distancia"
+    ],
+    "textos": []
+   }
+  },
+  {
+   "con": {
+    "eleccion": "acercarse",
+    "fuente": "modelo",
+    "motivo": null,
+    "razon": "Unai me contó sobre el hueco, fío un poco de él",
+    "ms": 369,
+    "abierta": 177,
+    "aplicada": 178,
+    "relato": 512,
+    "politica": "acercarse",
+    "despues": [
+     "investigar",
+     "investigar",
+     "investigar",
+     "inspecciona"
+    ],
+    "textos": [
+     "Unai te contó hace 21 horas que en este mismo sitio hay un hueco: «hendidura estable»; dijo que lo había mirado de cerca y no le pasó nada. Tú no lo habías visto. Te fías algo de Unai."
+    ]
+   },
+   "sin": {
+    "eleccion": "evitar",
+    "fuente": "modelo",
+    "motivo": null,
+    "razon": "hueco nuevo, podría ser peligroso",
+    "ms": 307,
+    "abierta": 177,
+    "aplicada": 178,
+    "relato": null,
+    "politica": "acercarse",
+    "despues": [
+     "mantiene_distancia"
+    ],
+    "textos": []
+   }
+  },
+  {
+   "con": {
+    "eleccion": "acercarse",
+    "fuente": "modelo",
+    "motivo": null,
+    "razon": "Unai me contó sobre el hueco, fío un poco de él",
+    "ms": 369,
+    "abierta": 177,
+    "aplicada": 178,
+    "relato": 512,
+    "politica": "acercarse",
+    "despues": [
+     "investigar",
+     "investigar",
+     "investigar",
+     "inspecciona"
+    ],
+    "textos": [
+     "Unai te contó hace 21 horas que en este mismo sitio hay un hueco: «hendidura estable»; dijo que lo había mirado de cerca y no le pasó nada. Tú no lo habías visto. Te fías algo de Unai."
+    ]
+   },
+   "sin": {
+    "eleccion": "evitar",
+    "fuente": "modelo",
+    "motivo": null,
+    "razon": "hueco nuevo, podría ser peligroso",
+    "ms": 298,
+    "abierta": 177,
+    "aplicada": 178,
+    "relato": null,
+    "politica": "acercarse",
+    "despues": [
+     "mantiene_distancia"
+    ],
+    "textos": []
+   }
+  },
+  {
+   "con": {
+    "eleccion": "acercarse",
+    "fuente": "modelo",
+    "motivo": null,
+    "razon": "Unai me contó sobre el hueco, fío un poco de él",
+    "ms": 392,
+    "abierta": 177,
+    "aplicada": 178,
+    "relato": 512,
+    "politica": "acercarse",
+    "despues": [
+     "investigar",
+     "investigar",
+     "investigar",
+     "inspecciona"
+    ],
+    "textos": [
+     "Unai te contó hace 21 horas que en este mismo sitio hay un hueco: «hendidura estable»; dijo que lo había mirado de cerca y no le pasó nada. Tú no lo habías visto. Te fías algo de Unai."
+    ]
+   },
+   "sin": {
+    "eleccion": "evitar",
+    "fuente": "modelo",
+    "motivo": null,
+    "razon": "hueco nuevo, podría ser peligroso",
+    "ms": 313,
+    "abierta": 177,
+    "aplicada": 178,
+    "relato": null,
+    "politica": "acercarse",
+    "despues": [
+     "mantiene_distancia"
+    ],
+    "textos": []
+   }
+  },
+  {
+   "con": {
+    "eleccion": "acercarse",
+    "fuente": "modelo",
+    "motivo": null,
+    "razon": "Unai me contó sobre el hueco, fío un poco de él",
+    "ms": 392,
+    "abierta": 177,
+    "aplicada": 178,
+    "relato": 512,
+    "politica": "acercarse",
+    "despues": [
+     "investigar",
+     "investigar",
+     "investigar",
+     "inspecciona"
+    ],
+    "textos": [
+     "Unai te contó hace 21 horas que en este mismo sitio hay un hueco: «hendidura estable»; dijo que lo había mirado de cerca y no le pasó nada. Tú no lo habías visto. Te fías algo de Unai."
+    ]
+   },
+   "sin": {
+    "eleccion": "evitar",
+    "fuente": "modelo",
+    "motivo": null,
+    "razon": "hueco nuevo, podría ser peligroso",
+    "ms": 313,
+    "abierta": 177,
+    "aplicada": 178,
+    "relato": null,
+    "politica": "acercarse",
+    "despues": [
+     "mantiene_distancia"
+    ],
+    "textos": []
+   }
+  },
+  {
+   "con": {
+    "eleccion": "acercarse",
+    "fuente": "modelo",
+    "motivo": null,
+    "razon": "Unai me contó sobre el hueco, fío un poco de él",
+    "ms": 387,
+    "abierta": 177,
+    "aplicada": 178,
+    "relato": 512,
+    "politica": "acercarse",
+    "despues": [
+     "investigar",
+     "investigar",
+     "investigar",
+     "inspecciona"
+    ],
+    "textos": [
+     "Unai te contó hace 21 horas que en este mismo sitio hay un hueco: «hendidura estable»; dijo que lo había mirado de cerca y no le pasó nada. Tú no lo habías visto. Te fías algo de Unai."
+    ]
+   },
+   "sin": {
+    "eleccion": "evitar",
+    "fuente": "modelo",
+    "motivo": null,
+    "razon": "hueco nuevo, podría ser peligroso",
+    "ms": 317,
+    "abierta": 177,
+    "aplicada": 178,
+    "relato": null,
+    "politica": "acercarse",
+    "despues": [
+     "mantiene_distancia"
+    ],
+    "textos": []
+   }
+  },
+  {
+   "con": {
+    "eleccion": "acercarse",
+    "fuente": "modelo",
+    "motivo": null,
+    "razon": "Unai me contó sobre el hueco, fío un poco de él",
+    "ms": 381,
+    "abierta": 177,
+    "aplicada": 178,
+    "relato": 512,
+    "politica": "acercarse",
+    "despues": [
+     "investigar",
+     "investigar",
+     "investigar",
+     "inspecciona"
+    ],
+    "textos": [
+     "Unai te contó hace 21 horas que en este mismo sitio hay un hueco: «hendidura estable»; dijo que lo había mirado de cerca y no le pasó nada. Tú no lo habías visto. Te fías algo de Unai."
+    ]
+   },
+   "sin": {
+    "eleccion": "evitar",
+    "fuente": "modelo",
+    "motivo": null,
+    "razon": "hueco nuevo, podría ser peligroso",
+    "ms": 298,
+    "abierta": 177,
+    "aplicada": 178,
+    "relato": null,
+    "politica": "acercarse",
+    "despues": [
+     "mantiene_distancia"
+    ],
+    "textos": []
+   }
+  },
+  {
+   "con": {
+    "eleccion": "acercarse",
+    "fuente": "modelo",
+    "motivo": null,
+    "razon": "Unai me contó sobre el hueco, fío un poco de él",
+    "ms": 387,
+    "abierta": 177,
+    "aplicada": 178,
+    "relato": 512,
+    "politica": "acercarse",
+    "despues": [
+     "investigar",
+     "investigar",
+     "investigar",
+     "inspecciona"
+    ],
+    "textos": [
+     "Unai te contó hace 21 horas que en este mismo sitio hay un hueco: «hendidura estable»; dijo que lo había mirado de cerca y no le pasó nada. Tú no lo habías visto. Te fías algo de Unai."
+    ]
+   },
+   "sin": {
+    "eleccion": "evitar",
+    "fuente": "modelo",
+    "motivo": null,
+    "razon": "hueco nuevo, podría ser peligroso",
+    "ms": 318,
+    "abierta": 177,
+    "aplicada": 178,
+    "relato": null,
+    "politica": "acercarse",
+    "despues": [
+     "mantiene_distancia"
+    ],
+    "textos": []
+   }
+  },
+  {
+   "con": {
+    "eleccion": "acercarse",
+    "fuente": "modelo",
+    "motivo": null,
+    "razon": "Unai me contó sobre el hueco, fío un poco de él",
+    "ms": 364,
+    "abierta": 177,
+    "aplicada": 178,
+    "relato": 512,
+    "politica": "acercarse",
+    "despues": [
+     "investigar",
+     "investigar",
+     "investigar",
+     "inspecciona"
+    ],
+    "textos": [
+     "Unai te contó hace 21 horas que en este mismo sitio hay un hueco: «hendidura estable»; dijo que lo había mirado de cerca y no le pasó nada. Tú no lo habías visto. Te fías algo de Unai."
+    ]
+   },
+   "sin": {
+    "eleccion": "evitar",
+    "fuente": "modelo",
+    "motivo": null,
+    "razon": "hueco nuevo, podría ser peligroso",
+    "ms": 295,
+    "abierta": 177,
+    "aplicada": 178,
+    "relato": null,
+    "politica": "acercarse",
+    "despues": [
+     "mantiene_distancia"
+    ],
+    "textos": []
+   }
+  }
+ ],
+ "recuento": {
+  "con": {
+   "acercarse": 10,
+   "evitar": 0,
+   "pedir_compania": 0
+  },
+  "sin": {
+   "acercarse": 0,
+   "evitar": 10,
+   "pedir_compania": 0
+  }
+ },
+ "peticion_con_relato": "Eres Brisa. Vives con otros en un mundo primitivo.\nAhora percibes: Un hueco en el suelo que antes no estaba, a 8 pasos. Tu primera impresión: «posible hueco natural» (duda). Cerca de ti: Unai. Además, es de día.\nTus recuerdos pertinentes:\n1. Unai te contó hace 21 horas que en este mismo sitio hay un hueco: «hendidura estable»; dijo que lo había mirado de cerca y no le pasó nada. Tú no lo habías visto. Te fías algo de Unai.\nOpciones:\n- acercarse: acercarte despacio y mirarlo de cerca\n- evitar: rodearlo de lejos y seguir con lo tuyo",
+ "tardia": {
+  "fuente": "politica",
+  "motivo": "vencida",
+  "abierta": 177,
+  "aplicada": 180,
+  "eleccion": "acercarse",
+  "decisiones": 1,
+  "pendientes": {},
+  "recogida_tarde": null
+ },
+ "reproduccion": {
+  "decision": {
+   "eleccion": "acercarse",
+   "fuente": "modelo",
+   "ms": 418,
+   "abierta": 177,
+   "aplicada": 178,
+   "relato": 512
+  },
+  "verificacion": {
+   "correcto": true,
+   "comprobaciones": {
+    "mapa": true,
+    "registro_integro": true,
+    "eventos": true,
+    "estado": true
+   },
+   "tick": 186,
+   "eventos": 590,
+   "ordenes_repetidas": 1,
+   "decisiones_repetidas": 1
+  },
+  "segundos": 0.69
+ },
+ "coste": {
+  "llamadas": 23,
+  "correctas": 23,
+  "ms_medio": 355,
+  "ms_max": 483,
+  "tokens_medio": 286
+ }
+}
