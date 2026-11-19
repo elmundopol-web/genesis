@@ -7,6 +7,7 @@ Al retomar, contrasta este documento con Git; no necesitas conversaciones anteri
 ## Estado y fase activa
 
 - Versión declarada: `0.6.3-f63`, en [genesis/__init__.py](genesis/__init__.py).
+- Capturas, GIF y vídeos de desarrollo archivados fuera del repo en `genesis-evidencias/docs/`. Los informes siguen en el proyecto y los comparadores cargan los medios desde la carpeta hermana. El ZIP para compartir conserva código y arte del visor. Las evidencias ya publicadas se consultan en el [archivo histórico de GitHub](https://github.com/elmundopol-web/genesis/tree/cbff73da3b4b63d451320d4e6426f4be3d3faf3c/docs).
 - Las nuevas partidas con reglas actuales incluyen los planes familiares F6.0, la percepción familiar F6.0.1, los tratos entre familias F6.2 y el carácter y los conflictos F6.3 sobre la conducta F4.3. Las anteriores pueden activar F6.0 con `ampliar --familias`, F6.0.1 con `ampliar --percepcion-familiar`, F6.2 con `ampliar --tratos-familia` o F6.3 con `ampliar --conflictos` en una copia.
   F5.0 solo si se pide con `--mente ID` (nueva o `ampliar`).
 - **F6.3, personalidad, conflictos y peleas, entregada el 19/11/2026.** Esta actualización de `main` recoge las fases desarrolladas desde F4.4 hasta F6.3.
@@ -54,7 +55,7 @@ Al retomar, contrasta este documento con Git; no necesitas conversaciones anteri
   [Comparar antes y después](docs/f6.1/comparar.html).
   Remate visual entregado. Al seguir a Unai, los tres desenlaces se ven en sus horas (852, 856 y 857),
   y gira hacia Gala mientras se acerca a su misma casilla. Ficha y tarjeta acompañan el gesto en curso.
-  [Vídeo continuo sin rótulos](docs/f6.1/remate/despues-sin-rotulos.mp4) · [Comparación y comprobaciones](docs/f6.1/remate/informe.md).
+  [Vídeo continuo sin rótulos](https://github.com/elmundopol-web/genesis/blob/cbff73da3b4b63d451320d4e6426f4be3d3faf3c/docs/f6.1/remate/despues-sin-rotulos.mp4) · [Comparación y comprobaciones](docs/f6.1/remate/informe.md).
 - **F5.2, la voz divina, entregada el 18/11/2026, sin commit, pendiente de que el usuario la pruebe.**
   La pasada de observación está entregada. [Comparar el visor](docs/f5.2/observar/comparar.html) · [Informe](docs/F5.2-ESTADO.md).
 
@@ -162,8 +163,8 @@ Recursos incorporados:
 - [sprites.js](genesis/visor/estatico/sprites.js), [arte preparado](genesis/visor/estatico/arte/)
   y [preparar_arte.py](herramientas/preparar_arte.py).
 - Imágenes y prompts nuevos de personajes, agua y nieve en [assets/](assets/).
-- [antes-arte/](docs/f4.4/antes-arte/), [arte/](docs/f4.4/arte/),
-  [estaciones/](docs/f4.4/estaciones/) y comparaciones `comparacion-arte-*.jpg`
+- [antes-arte/](https://github.com/elmundopol-web/genesis/tree/cbff73da3b4b63d451320d4e6426f4be3d3faf3c/docs/f4.4/antes-arte), [arte/](docs/f4.4/arte/),
+  [estaciones/](https://github.com/elmundopol-web/genesis/tree/cbff73da3b4b63d451320d4e6426f4be3d3faf3c/docs/f4.4/estaciones) y comparaciones `comparacion-arte-*.jpg`
   en [docs/f4.4/](docs/f4.4/).
 
 Corrección F6.0.1 (conservar): `genesis/motor/familias.py`, `genesis/motor/vidas.py`,
@@ -193,7 +194,7 @@ F6.2 (conservar): `genesis/motor/tratos_familia.py` (nuevo), `genesis/motor/conf
 `genesis/motor/familias.py`, `genesis/motor/habitantes.py`, `genesis/almacen/almacen.py`, `genesis/cli.py`,
 `genesis/sesion.py`, `genesis/__init__.py`, `genesis/visor/estatico/{encuentros.js,mapa.js,habitantes.js,vidas.js,app.js,index.html,estilo.css}`,
 `probar.bat`, [escena_f62.py](herramientas/escena_f62.py), `pruebas/test_tratos_f62.py`,
-`pruebas/test_tratos_f62.mjs`, [docs/F6.2-ESTADO.md](docs/F6.2-ESTADO.md) y [docs/f6.2/](docs/f6.2/).
+`pruebas/test_tratos_f62.mjs`, [docs/F6.2-ESTADO.md](docs/F6.2-ESTADO.md) y [docs/f6.2/](https://github.com/elmundopol-web/genesis/tree/cbff73da3b4b63d451320d4e6426f4be3d3faf3c/docs/f6.2).
 
 Consulta `git status --short` para el inventario vigente.
 Las partidas, las copias locales y la configuración de herramientas se conservan aparte.
@@ -235,7 +236,7 @@ Explicación: [F3, §7](docs/F3-ESTADO.md).
   `py -3 -B -m unittest discover -s pruebas -t .` **400 correctas** (10 nuevas en `pruebas/test_tratos_f62.py`);
   `node --test pruebas/test_interfaz.mjs pruebas/test_interfaz_f43.mjs pruebas/test_interfaz_f52.mjs pruebas/test_encuentros_f61.mjs pruebas/test_tratos_f62.mjs` **50 correctas** (5 nuevas en `pruebas/test_tratos_f62.mjs`).
   CLI verificada en carpeta temporal (`nueva`, `simular --dias 28`, `verificar` con reproducción exacta de 672 h / 4844 eventos, `listar`) y copia ampliada (`ampliar_partida(..., tratos_familia=True)`) conservando el original byte a byte.
-  Escena libre verificada y grabada en el visor real (`--sin-modelo`): semilla 5, guardada en hora 652, siguiendo a Hesk (#3) con ficha cerrada a 1 h/s (`docs/f6.2/trato-libre-entrega.mp4` y `docs/f6.2/trato-libre-reparacion.mp4`); capturas y consola limpia (`errores: []`) a 1280×720, 1440×900 y 1920×1080 en [docs/f6.2/](docs/f6.2/).
+  Escena libre verificada y grabada en el visor real (`--sin-modelo`): semilla 5, guardada en hora 652, siguiendo a Hesk (#3) con ficha cerrada a 1 h/s (`docs/f6.2/trato-libre-entrega.mp4` y `docs/f6.2/trato-libre-reparacion.mp4`); capturas y consola limpia (`errores: []`) a 1280×720, 1440×900 y 1920×1080 en [docs/f6.2/](https://github.com/elmundopol-web/genesis/tree/cbff73da3b4b63d451320d4e6426f4be3d3faf3c/docs/f6.2).
 
 - Remate de F6.1 (2026-11-18, Chrome en Windows, sin modelo): 45 pruebas JS y 18 Python de sesión, servidor y comandos.
   Apertura de ficha y crónica con clics a 1280 × 720, 1440 × 900 y 1920 × 1080, consola limpia.

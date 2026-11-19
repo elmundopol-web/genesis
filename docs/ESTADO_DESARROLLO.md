@@ -48,7 +48,7 @@ El 18/11/2026 el usuario dio por bueno el acabado de **F4.4** para seguir con el
 
 - Escena fija: semilla 14, día 98 a las 10 h, cámara en (39,5; 26,5), a 40 px por celda.
 - Integrado el arte ilustrado de `assets/`, preparado por `herramientas/preparar_arte.py` en `genesis/visor/estatico/arte/` y colocado por `sprites.js`:
-  - **Habitantes.** Marcha frontal, de perfil y de espaldas, con los colores de cada persona. En la ribera giran, se agachan, beben de rodillas y se incorporan. [Clip de Nura](f4.4/habitantes/nura-en-el-rio.mp4).
+  - **Habitantes.** Marcha frontal, de perfil y de espaldas, con los colores de cada persona. En la ribera giran, se agachan, beben de rodillas y se incorporan. [Clip de Nura](https://github.com/elmundopol-web/genesis/blob/cbff73da3b4b63d451320d4e6426f4be3d3faf3c/docs/f4.4/habitantes/nura-en-el-rio.mp4).
   - **Construcciones:** dos chozas y el depósito, lleno o vacío.
   - **Naturaleza.** Cinco siluetas de árbol, claros con suelo visible, hierbas agrupadas y transiciones de tierra húmeda en la ribera. [Comparar a dos escalas y en invierno](f4.4/paisaje/comparar.html).
 - Corrección posterior, a petición del usuario:
@@ -57,9 +57,9 @@ El 18/11/2026 el usuario dio por bueno el acabado de **F4.4** para seguir con el
   - El bosque es más ligero, la orilla es una curva continua con su franja húmeda y el río se hiela cuando el motor lo dice.
   - Los habitantes llevan un contorno fino.
 - Rendimiento final en la máquina de prueba (RTX 5070, 1440 × 900): 88,9 fps en el claro a escala habitual y 81,1 fps en la vista general.
-- Capturas: [cuatro momentos del año](f4.4/estaciones/cuatro-momentos.jpg) y [todas las de F4.4](f4.4/).
+- Capturas: [cuatro momentos del año](https://github.com/elmundopol-web/genesis/blob/cbff73da3b4b63d451320d4e6426f4be3d3faf3c/docs/f4.4/estaciones/cuatro-momentos.jpg) y [todas las de F4.4](f4.4/).
 
-**Última pasada visual.** El cauce muestra bajíos y pinceladas de corriente. Los senderos llegan hasta los umbrales y las chozas proyectan una sombra suave sobre el prado. [Comparar las cuatro vistas](f4.4/acabado/comparar.html) · [Recorrer el prado, el río y el bosque](f4.4/acabado/despues/prado-ribera-bosque.mp4).
+**Última pasada visual.** El cauce muestra bajíos y pinceladas de corriente. Los senderos llegan hasta los umbrales y las chozas proyectan una sombra suave sobre el prado. [Comparar las cuatro vistas](f4.4/acabado/comparar.html) · [Recorrer el prado, el río y el bosque](https://github.com/elmundopol-web/genesis/blob/cbff73da3b4b63d451320d4e6426f4be3d3faf3c/docs/f4.4/acabado/despues/prado-ribera-bosque.mp4).
 
 **Mejoras visuales para futuras pasadas.** Poses específicas para recoger, pescar, construir, cuidar y hablar. Acabado ilustrado de obras, ruinas y edificios abandonados. Variantes de edad y ajustes de la vegetación por estación.
 
@@ -70,7 +70,7 @@ El 18/11/2026 el usuario dio por bueno el acabado de **F4.4** para seguir con el
 - Demostración: `py -3 herramientas/demo_f52.py` y después `iniciar.bat f52-demo --carpeta partidas/f52`.
 - Resultados: [F5.2-ESTADO.md](F5.2-ESTADO.md).
 
-La pasada de observación permite seguir la reacción en el mapa y abrir la historia desde el encuentro. [Antes y después](f5.2/observar/comparar.html) · [Recorrido de Brisa](f5.2/observar/brisa-y-unai.mp4).
+La pasada de observación permite seguir la reacción en el mapa y abrir la historia desde el encuentro. [Antes y después](f5.2/observar/comparar.html) · [Recorrido de Brisa](https://github.com/elmundopol-web/genesis/blob/cbff73da3b4b63d451320d4e6426f4be3d3faf3c/docs/f5.2/observar/brisa-y-unai.mp4).
 
 ## Copias de seguridad
 

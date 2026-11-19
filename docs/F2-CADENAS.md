@@ -27,7 +27,7 @@ Son 97 horas entre ambas entregas. Aquí sí existe un vínculo causal explícit
 además de la sucesión temporal. En el visor, el recuerdo abre la primera entrega;
 «Qué provocó» lleva a la devolución. Los botones de participantes abren las dos vidas.
 
-![Elai recuerda la ayuda al dar comida a Zael](f2-trato.jpg)
+[Elai recuerda la ayuda al dar comida a Zael](https://github.com/elmundopol-web/genesis/blob/cbff73da3b4b63d451320d4e6426f4be3d3faf3c/docs/f2-trato.jpg)
 
 ## Ayuda recordada que se corresponde con información
 

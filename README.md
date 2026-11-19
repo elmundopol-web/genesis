@@ -4,6 +4,8 @@
 
 Abre **iniciar.bat** y usa **Intervenir** para elegir una celda, revisar el efecto y confirmar. **Historias** reúne las consecuencias de cada intervención, promesa y crianza. En la ficha de un habitante, **Familia y vínculos** muestra sus razones, sus maestros y el botón para añadirlo a favoritos.
 
+Las capturas y vídeos del desarrollo se guardan en la carpeta hermana `genesis-evidencias`. Los comparadores se pueden abrir desde esa carpeta o desde el proyecto si ambas carpetas están juntas. Los informes siguen en `docs/`. [Consultar las evidencias anteriores a la separación](https://github.com/elmundopol-web/genesis/tree/cbff73da3b4b63d451320d4e6426f4be3d3faf3c/docs).
+
 **F5.0 (opcional):** un habitante decide con un modelo local (Qwen vía Ollama) qué hacer ante un agujero, y su ficha muestra en «Decisiones» qué vio, qué recuerdo influyó, qué hizo y qué pasó después. Se activa solo a petición (`ejecutar.py nueva --semilla N --mente ID` o `ejecutar.py ampliar PARTIDA --mente ID`); sin Ollama se usa la regla habitual y la partida se reproduce igual. Demostración: `py -3 herramientas/demo_f50.py` y después `iniciar.bat f50-demo --carpeta partidas/f50`. [Informe de F5.0](docs/F5.0-ESTADO.md).
 
 **F5.1:** lo que un habitante cuenta cambia lo que otro hace. Unai inspecciona el agujero y se lo cuenta a Brisa, que después decide con el modelo teniendo en cuenta el relato y su confianza en Unai. La consulta no detiene el mundo. Demostración: `py -3 herramientas/demo_f51.py` y después `iniciar.bat f51-demo --carpeta partidas/f51`; abre un agujero en (33, 34) y avanza hasta el día 8. [Informe de F5.1](docs/F5.1-ESTADO.md).
@@ -94,7 +96,7 @@ mismo mundo y la misma historia.
 
 El mundo ocupa toda la ventana y la interfaz flota encima.
 
-![Refugio del Prado y su ficha: quién lo empezó, quién aportó, quién lo usa (invierno, semilla 3)](docs/f3/r1440-ficha-refugio.jpg)
+[Refugio del Prado y su ficha: quién lo empezó, quién aportó, quién lo usa (invierno, semilla 3)](https://github.com/elmundopol-web/genesis/blob/cbff73da3b4b63d451320d4e6426f4be3d3faf3c/docs/f3/r1440-ficha-refugio.jpg)
 
 - **Moverse por el mapa.** Arrastra para desplazarte y usa la rueda para
   acercarte o alejarte (doble clic también acerca). Abajo a la derecha están
@@ -153,7 +155,7 @@ flechas (mover la celda elegida o la vista), Esc (cerrar).
 - Un año del modelo son **40 días / 960 horas**. Los saltos procesan todas las
   horas: no cambian únicamente la fecha. La velocidad real depende del equipo.
 
-![Habitantes y seguimiento](docs/f1-seguimiento.jpg)
+[Habitantes y seguimiento](https://github.com/elmundopol-web/genesis/blob/cbff73da3b4b63d451320d4e6426f4be3d3faf3c/docs/f1-seguimiento.jpg)
 
 ### Entender una vida: qué recuerda, qué cree y qué pretende
 
@@ -198,7 +200,7 @@ reparaciones, estancias a cubierto, veces sin sitio, lo guardado y lo sacado,
 compromisos sin cumplir, comunidades formadas, incorporaciones, salidas y
 acuerdos. El filtro «Comunidades» de la crónica muestra solo esos sucesos.
 
-![Ficha con objetivo y trato en curso](docs/f2-trato.jpg)
+[Ficha con objetivo y trato en curso](https://github.com/elmundopol-web/genesis/blob/cbff73da3b4b63d451320d4e6426f4be3d3faf3c/docs/f2-trato.jpg)
 
 Las [cadenas causales comprobadas](docs/F2-CADENAS.md) explican cómo repetir
 la devolución de ayuda de la captura, con sus acontecimientos de origen.

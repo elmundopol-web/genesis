@@ -146,7 +146,7 @@ archivo de origen. No hay usos de esa API en el proyecto; no se ha atribuido
 ese aviso a la simulación. La revisión no equivale a una consola global libre
 de errores. No apareció un error de simulación en la sesión.
 
-![Creencias y conocidos de Elai](f2-creencias.jpg)
+[Creencias y conocidos de Elai](https://github.com/elmundopol-web/genesis/blob/cbff73da3b4b63d451320d4e6426f4be3d3faf3c/docs/f2-creencias.jpg)
 
 Las [cadenas causales](F2-CADENAS.md) incluyen ejecuciones libres y pruebas
 controladas, identificadas por separado. Hay reciprocidad espontánea de

@@ -374,14 +374,14 @@ de sucesos en disco, que es lo que explica el aumento de coste con los años.
 ## 7. Capturas, uso, compatibilidad y archivos
 
 ### Capturas reales (`docs/f3/`)
-- [r1280-ficha-refugio.jpg](f3/r1280-ficha-refugio.jpg),
-  [r1440-ficha-refugio.jpg](f3/r1440-ficha-refugio.jpg),
-  [r1920-ficha-refugio.jpg](f3/r1920-ficha-refugio.jpg): la ficha del Refugio
+- [r1280-ficha-refugio.jpg](https://github.com/elmundopol-web/genesis/blob/cbff73da3b4b63d451320d4e6426f4be3d3faf3c/docs/f3/r1280-ficha-refugio.jpg),
+  [r1440-ficha-refugio.jpg](https://github.com/elmundopol-web/genesis/blob/cbff73da3b4b63d451320d4e6426f4be3d3faf3c/docs/f3/r1440-ficha-refugio.jpg),
+  [r1920-ficha-refugio.jpg](https://github.com/elmundopol-web/genesis/blob/cbff73da3b4b63d451320d4e6426f4be3d3faf3c/docs/f3/r1920-ficha-refugio.jpg): la ficha del Refugio
   del Prado a tres resoluciones (semilla 3, invierno del año 1).
-- [cerca-dia.jpg](f3/cerca-dia.jpg): chozas y depósitos de cerca, con nieve.
-- [noche-refugios.jpg](f3/noche-refugios.jpg): de noche, luz solo en los
+- [cerca-dia.jpg](https://github.com/elmundopol-web/genesis/blob/cbff73da3b4b63d451320d4e6426f4be3d3faf3c/docs/f3/cerca-dia.jpg): chozas y depósitos de cerca, con nieve.
+- [noche-refugios.jpg](https://github.com/elmundopol-web/genesis/blob/cbff73da3b4b63d451320d4e6426f4be3d3faf3c/docs/f3/noche-refugios.jpg): de noche, luz solo en los
   refugios ocupados y una marca por persona.
-- [movimiento-obra.gif](f3/movimiento-obra.gif): 98 cuadros (560×352) de una
+- [movimiento-obra.gif](https://github.com/elmundopol-web/genesis/blob/cbff73da3b4b63d451320d4e6426f4be3d3faf3c/docs/f3/movimiento-obra.gif): 98 cuadros (560×352) de una
   obra que crece mientras la gente trabaja (semilla 3, otoño del año 1).
 
 Estas capturas se tomaron antes de un último cambio menor: muestran «F2.5» en

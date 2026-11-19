@@ -1,6 +1,6 @@
 # F6.1 · Remate de la escena de Unai
 
-[Escena final sin rótulos · 8,9 s](despues-sin-rotulos.mp4) · [Escena anterior sin rótulos · 10,8 s](antes-sin-rotulos.mp4)
+[Escena final sin rótulos · 8,9 s](https://github.com/elmundopol-web/genesis/blob/cbff73da3b4b63d451320d4e6426f4be3d3faf3c/docs/f6.1/remate/despues-sin-rotulos.mp4) · [Escena anterior sin rótulos · 10,8 s](https://github.com/elmundopol-web/genesis/blob/cbff73da3b4b63d451320d4e6426f4be3d3faf3c/docs/f6.1/remate/antes-sin-rotulos.mp4)
 
 Los dos vídeos son tomas continuas del visor en Chrome, sobre el mundo libre de la semilla 13 con 24 fundadores. La partida empieza en la hora 849. La cámara sigue a Unai (#25) a 44 píxeles por celda y una hora simulada por segundo. Grabé a 1440 × 900 y recorté los mismos márgenes para acercar la atención al encuentro. El tamaño de las figuras en píxeles se conserva. La captura anterior tiene menor cadencia de origen.
 

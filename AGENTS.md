@@ -27,7 +27,7 @@ Flujo: CLI → motor/almacén; visor → sesión → motor/almacén.
 - [estatico/](genesis/visor/estatico/): interfaz JavaScript nativa y Canvas.
 - [assets/](assets/): originales gráficos; [herramientas/](herramientas/):
   preparación, auditorías y mediciones; [pruebas/](pruebas/): regresiones.
-- [docs/](docs/): evidencias históricas; `partidas/`: datos locales del usuario.
+- [docs/](docs/): informes, datos de revisión y comparadores. Guarda las capturas y grabaciones en la carpeta hermana `genesis-evidencias`, con las mismas rutas bajo `docs/`. `partidas/` contiene los datos locales del usuario.
 
 Mundo ejecuta clima, recursos y habitantes en orden fijo.
 Los subsistemas sociales y familiares se integran dentro de habitantes.

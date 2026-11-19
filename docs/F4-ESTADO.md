@@ -79,8 +79,8 @@ La comprobación gráfica opcional `py -3 herramientas/capturas_f4.py` usa Chrom
 
 ### Capturas reales
 
-- [1280 × 720 · Previsualización del cierre de un agujero](f4/1280x720-intervencion.jpg)
-- [1440 × 900 · Descubrimiento de Nilo en la crónica](f4/1440x900-historia.jpg)
-- [1920 × 1080 · Familia de Mira Suni y su maestra](f4/1920x1080-familia.jpg)
-- [Muestra de movimiento · GIF](f4/movimiento.gif)
+- [1280 × 720 · Previsualización del cierre de un agujero](https://github.com/elmundopol-web/genesis/blob/cbff73da3b4b63d451320d4e6426f4be3d3faf3c/docs/f4/1280x720-intervencion.jpg)
+- [1440 × 900 · Descubrimiento de Nilo en la crónica](https://github.com/elmundopol-web/genesis/blob/cbff73da3b4b63d451320d4e6426f4be3d3faf3c/docs/f4/1440x900-historia.jpg)
+- [1920 × 1080 · Familia de Mira Suni y su maestra](https://github.com/elmundopol-web/genesis/blob/cbff73da3b4b63d451320d4e6426f4be3d3faf3c/docs/f4/1920x1080-familia.jpg)
+- [Muestra de movimiento · GIF](https://github.com/elmundopol-web/genesis/blob/cbff73da3b4b63d451320d4e6426f4be3d3faf3c/docs/f4/movimiento.gif)
 
